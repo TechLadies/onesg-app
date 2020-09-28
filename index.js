@@ -32,16 +32,11 @@ const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
   : http.createServer(app)
 
-// TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
+app.use(express.json())
 
-/**
- * Middleware setup
- */
-// CORS
-const corsOptions = {
-  origin: CORS_CONFIG.ALLOWED_ORIGINS,
-  methods: CORS_CONFIG.ALLOWED_METHODS,
-}
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 app.use(cors(corsOptions))
 
