@@ -1,6 +1,6 @@
 'use strict'
 
-const tableName = require('../models/user.js')
+const {tableName} = require('../src/models/user.js')
 
 exports.up = function (knex) {
     return knex.schema.createTable(tableName, (table) => {

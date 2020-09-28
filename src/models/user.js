@@ -3,19 +3,8 @@
 const  { Model } = require('objection')
 const Knex = require("knex")
 
-// Initialize knex.
-const knex = Knex({
-    client: 'sqlite3',
-    useNullAsDefault: true,
-    connection: {
-        filename: 'one-sg.db3'
-    }
-});
-
-Model.knex(knex)
-
 const tableName = 'users'
-//@akshata, this is the issue. Error said:  migration failed with error: Class constructor User cannot be invoked without 'new'
+
 class User extends Model {
     static get tableName () {
         return tableName

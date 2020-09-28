@@ -1,8 +1,8 @@
-const tableName = require('../models/user')
+const {tableName} = require('../src/models/user')
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex(tableName).del()
     .then(function () {
       // Inserts seed entries
       return knex(tableName).insert([
