@@ -4,10 +4,9 @@
 <br/>
 
 ## Table of Contents
-- [Requirements](#core-development-requirements)
+- [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [Project Structure](#project-structure)
-- [Naming Conventions](#naming-conventions)
 <br/>
 <br/>
 
@@ -51,13 +50,3 @@ onesg-app
 ```
 <br/>
 <br/>
-
-## Naming Conventions
-### Branches
-Write branch names in small caps in this convention:
-* features: feature/\<ticket-id>-\<ticket-name>
-    * e.g.: `feature/on-36-case-creation-progress-bar`
-* tasks: chore/\<ticket-id>-\<ticket-name>
-    * e.g.: `chore/on-33-express-server-setup`
-* bugs:
-
