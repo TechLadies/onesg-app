@@ -17,7 +17,7 @@
 <br/>
 
 ## Quick Start
-WIP
+Install cors using: npm install --save cors
 <br/>
 <br/>
 
