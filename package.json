@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --write src/**/*.{js,css}"
   },
   "repository": {
     "type": "git",
@@ -35,8 +36,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test",
-      "pre-push": "npm test",
+      "pre-commit": "npx prettier .",
+      "pre-push": "npx prettier .",
       "...": "..."
     }
   }
