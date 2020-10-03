@@ -12,17 +12,13 @@
  * Module dependencies.
  */
 const express = require('express');
-// ÷const beneficiariesController???/?
+const {beneficiariesController} = require('../controllers');
 
 
 const router = express.Router();
 
 // GET /v1/beneficiaries
-router.get('/', function (req, res) {
-  res.status(200).json({
-    message: 'Handling GET requests to /products',
-  });
-});
+router.get('/', beneficiariesController.getAll);
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiariesController.create);
