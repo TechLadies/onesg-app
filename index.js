@@ -14,15 +14,15 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const morgan = require('morgan');
 
+// Custom modules
+const { SERVER_CONFIG } = require('./config/env');
+
 /* routers */
 const homeRouter = require('./routers');
 const userRouter = require('./routers/users');
 const healthRouter = require('./routers/healthcheck');
 
 const app = express();
-
-/* port number */
-const port = 3000;
 
 /* cors, bodyparser and morgan */
 app.use((req, res, next) => {
@@ -51,6 +51,8 @@ app.use('/', homeRouter);
 app.use('/api/users', userRouter);
 app.use('/api/healthcheck', healthRouter);
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(SERVER_CONFIG.PORT, () => {
+  console.log(
+    `Example app listening at http://localhost:${SERVER_CONFIG.PORT}`
+  );
 });
