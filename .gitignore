@@ -1,5 +1,6 @@
 /node_modules/
 .vscode
+<<<<<<< HEAD
 # env files
 /config/env/development.js
 /env/
@@ -7,3 +8,8 @@
 # database files 
 /database/one-sg.db3/
 /dev.sqlite3/
+=======
+.env
+database/one-sg.db3/
+dev.sqlite3/
+>>>>>>> remove-db-dev
