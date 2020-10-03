@@ -16,6 +16,8 @@
 const SERVER_CONFIG = {
     PORT: process.env.PORT,
     HOSTNAME: process.env.HOSTNAME,
+    USE_HTTPS: process.env.USE_HTTPS,
+    HTTPS_OPTIONS: process.env.HTTPS_OPTION,
 }
 
 module.exports = {

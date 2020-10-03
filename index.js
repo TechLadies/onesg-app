@@ -26,9 +26,11 @@ const { SERVER_CONFIG } = require('./config/env');
 const homeRouter = require('./routers');
 const userRouter = require('./routers/users');
 const healthRouter = require('./routers/healthcheck');
+const { getSupportInfo } = require('prettier');
+const { fileURLToPath } = require('url');
 
 /**
- * Express server set up
+ * Express server setup
  */
 const app = express();
 const server = SERVER_CONFIG.USE_HTTPS
@@ -37,6 +39,9 @@ const server = SERVER_CONFIG.USE_HTTPS
 
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
 
+/**
+ * Middleware setup
+ */
 // CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); // should limit to onesg-web
@@ -47,7 +52,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
 
 // Body Parser
 app.use(bodyparser.json());
@@ -64,6 +68,9 @@ app.use(
 );
 */
 
+/**
+ * Routes setup
+ */
 /* link to routers (routes which should handle requests) */
 app.use('/', homeRouter);
 app.use('/api/users', userRouter);
