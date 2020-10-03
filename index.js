@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
@@ -20,14 +18,12 @@ const bodyparser = require('body-parser');
 const morgan = require('morgan');
 
 // Custom modules
-const { SERVER_CONFIG } = require('./config/env');
+const { SERVER_CONFIG, CORS_CONFIG } = require('./config/env');
 
 /* routers */
 const homeRouter = require('./routers');
 const userRouter = require('./routers/users');
 const healthRouter = require('./routers/healthcheck');
-const { getSupportInfo } = require('prettier');
-const { fileURLToPath } = require('url');
 
 /**
  * Express server setup
@@ -43,15 +39,12 @@ const server = SERVER_CONFIG.USE_HTTPS
  * Middleware setup
  */
 // CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // should limit to onesg-web
-  res.header('Access-Control-Allow-Headers', '*');
-  if (req.methods === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
-  }
-  next();
-});
+const corsOptions = {
+  origin: CORS_CONFIG.ALLOWED_ORIGINS,
+  methods: CORS_CONFIG.ALLOWED_METHODS,
+};
+
+app.use(cors(corsOptions));
 
 // Body Parser
 app.use(bodyparser.json());
@@ -76,12 +69,11 @@ app.use('/', homeRouter);
 app.use('/api/users', userRouter);
 app.use('/api/healthcheck', healthRouter);
 
-
 /**
  * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
   console.log(
-    `OneSG API SErver listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
+    `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
   );
 });
