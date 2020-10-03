@@ -19,11 +19,8 @@ const morgan = require('morgan');
 
 // Custom modules
 const { SERVER_CONFIG, CORS_CONFIG } = require('./config/env');
+const routes = require('./routers');
 
-/* routers */
-const homeRouter = require('./routers');
-const userRouter = require('./routers/users');
-const healthRouter = require('./routers/healthcheck');
 
 /**
  * Express server setup
@@ -53,21 +50,10 @@ app.use(bodyparser.urlencoded({ extended: false }));
 // Logger
 app.use(morgan('dev'));
 
-/* 
-app.use(
-  cors({
-    origin: 'http://localhost:3000', // should limit to onesg-web
-  })
-);
-*/
-
 /**
  * Routes setup
  */
-/* link to routers (routes which should handle requests) */
-app.use('/', homeRouter);
-app.use('/api/users', userRouter);
-app.use('/api/healthcheck', healthRouter);
+routes(app);
 
 /**
  * Start listening to connection requests made on specified PORT

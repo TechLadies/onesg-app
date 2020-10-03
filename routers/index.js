@@ -4,15 +4,21 @@
  * MIT Licensed
  */
 
-'use strict';
+/**
+ * Main server-side router
+ * @param {*} app 
+ */
 
-const express = require('express');
+ const beneficiaryRoutes = require('./beneficiaries');
+ // const caseRoutes = require('./cases');
 
-const router = express.Router();
+const routes = (app) => {
+  app.get('/v1/healthcheck', function(req, res) {
+    res.status(200).json({ message: `Everything's A-OK on v1!` });
+  });
 
-/* GET home page. */
-router.get('/', function (req, res) {
-  res.status(200).json({ message: 'This is the homepage' });
-});
+  app.use('/v1/beneficiaries', beneficiaryRoutes);
+  // app.use('/v1/cases', caseRoutes);
+}
 
-module.exports = router;
+module.exports = routes;

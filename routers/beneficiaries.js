@@ -4,27 +4,27 @@
  * MIT Licensed
  */
 
-'use strict';
+ /**
+ * Routing for beneficiaries endpoints (/v1/beneficiaries)
+ */
 
+/**
+ * Module dependencies.
+ */
 const express = require('express');
+// ÷const beneficiariesController???/?
+
 
 const router = express.Router();
 
+// GET /v1/beneficiaries
 router.get('/', function (req, res) {
   res.status(200).json({
     message: 'Handling GET requests to /products',
   });
 });
 
-router.post('/', function (req, res) {
-  const user = {
-    username: req.body.username,
-    userid: req.body.userid,
-  };
-  res.status(201).json({
-    message: 'Handling POST requests to /products',
-    createdUser: user,
-  });
-});
+// POST /v1/beneficiaries
+// router.post('/', beneficiariesController.create);
 
 module.exports = router;
