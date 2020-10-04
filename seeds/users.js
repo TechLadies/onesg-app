@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable func-names */
 const {tableUser} = require('../src/models/user')
 
 exports.seed = function (knex) {
