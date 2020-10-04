@@ -1,18 +1,24 @@
-const {tableName} = require('../src/models/user')
+const {tableUser} = require('../src/models/user')
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex(tableName).del()
+  return knex(tableUser)
+    .del()
     .then(function () {
       // Inserts seed entries
-      return knex(tableName).insert([
+      return knex(tableUser).insert([
         {
-          firstName: 'tech',
-          lastName: 'lady',
-          email: 'test1@test.com',
-          passwordHash: 'abc123',
-          occupation: 'Software Engineer',
+          BeneficiaryId: '0001',
+          RefereeId: '1002',
+          Name: 'ziza',
+          email: 'zizah@azizah@.com',
+          phone: '596424222',
+          Address: '100 victoria street',
+          occupation: 'software engineer',
+          MaritalStatus: 'Female',
+          Income: '$1333',
+          CaseId: '20002',
         },
-      ]);
-    });
-};
+      ])
+    })
+}

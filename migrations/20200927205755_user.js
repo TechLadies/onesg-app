@@ -1,20 +1,23 @@
-'use strict'
-
-const {tableName} = require('../src/models/user.js')
+/* eslint-disable func-names */
+const { tableUser } = require('../src/models/user.js')
 
 exports.up = function (knex) {
-    return knex.schema.createTable(tableName, (table) => {
-        table.increments('id').primary();
-        table.text('email').notNullable().unique();
-        table.text('passwordHash').notNullable().unique();
-        table.text('firstName');
-        table.text('lastName');
-        table.text('occupation');
-        table.timestamps(true, true);
-    })
+  return knex.schema.createTable(tableUser, (table) => {
+    table.increments('BeneficiaryId').primary()
+    table.integer('RefereeId').unique()
+    table.text('Name')
+    table.text('email').notNullable().unique()
+    table.text('phone').notNullable().unique()
+    table.text('Address')
+    table.text('occupation')
+    table.enum('MaritalStatus', ['Female', 'Male'])
+    table.decimal('Income')
+    table.integer('CaseId').notNullable().unique()
+    table.timestamps(true, true)
+  })
 }
 
-
+// eslint-disable-next-line func-names
 exports.down = function (knex) {
-    return knex.schema.dropTable(tableName);
+  return knex.schema.dropTable(tableUser)
 }

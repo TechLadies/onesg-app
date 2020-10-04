@@ -27,6 +27,7 @@ const { errorHandler } = require('./middleware')
 /**
  * Express server setup
  */
+
 const app = express()
 const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
