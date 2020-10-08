@@ -21,7 +21,6 @@ const morgan = require('morgan');
 const { SERVER_CONFIG, CORS_CONFIG } = require('./config/env');
 const routes = require('./routers');
 
-
 /**
  * Express server setup
  */
@@ -59,7 +58,7 @@ routes(app);
  * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
-  console.log(
+  /* console.log(
     `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
-  );
+  ); */
 });
