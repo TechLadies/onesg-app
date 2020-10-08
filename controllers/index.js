@@ -12,6 +12,6 @@ const beneficiariesController = require('./beneficiaries')
 // const casesController = require('./cases');
 
 module.exports = {
-    beneficiariesController,
-    // casesController,
-};
+  beneficiariesController,
+  // casesController,
+}

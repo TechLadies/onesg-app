@@ -1,8 +1,8 @@
 module.exports = {
   env: {
-    es6: true,
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: ['airbnb-base', 'prettier'],
   parserOptions: {
@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'error',
+    'import/no-dynamic-require': 'off',
   },
   plugins: ['prettier'],
-};
+}

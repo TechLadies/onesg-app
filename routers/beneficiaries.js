@@ -4,23 +4,22 @@
  * MIT Licensed
  */
 
- /**
+/**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
 
 /**
  * Module dependencies.
  */
-const express = require('express');
-const {beneficiariesController} = require('../controllers');
+const express = require('express')
+const { beneficiariesController } = require('../controllers')
 
-
-const router = express.Router();
+const router = express.Router()
 
 // GET /v1/beneficiaries
-router.get('/', beneficiariesController.getAll);
+router.get('/', beneficiariesController.getAll)
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiariesController.create);
 
-module.exports = router;
+module.exports = router
