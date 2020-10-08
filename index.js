@@ -47,7 +47,23 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: false }))
 
 // Logger
-app.use(morgan('dev'))
+app.use(
+  morgan('combined', {
+    skip(req, res) {
+      return res.statusCode < 400
+    },
+    stream: process.stderr,
+  })
+)
+
+app.use(
+  morgan('combined', {
+    skip(req, res) {
+      return res.statusCode >= 400
+    },
+    stream: process.stdout,
+  })
+)
 
 /**
  * Routes setup
@@ -58,7 +74,7 @@ routes(app)
  * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
-  /* console.log(
+  console.log(
     `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
-  ); */
+  )
 })
