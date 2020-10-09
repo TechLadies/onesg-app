@@ -42,6 +42,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+app.use(express.json())
+
 // Body Parser
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: false }))
@@ -74,7 +76,10 @@ routes(app)
  * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(
     `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
   )
 })
+
+module.exports = app
