@@ -18,7 +18,9 @@ const bodyparser = require('body-parser')
 const morgan = require('morgan')
 
 // Custom modules
-const { SERVER_CONFIG, CORS_CONFIG } = require('./config/env')
+const {
+  envConfig: { SERVER_CONFIG, CORS_CONFIG },
+} = require('./config')
 const routes = require('./routers')
 
 /**
