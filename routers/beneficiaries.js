@@ -5,21 +5,20 @@
  */
 
 /**
- * Routing for beneficiaries endpoints (/v1/beneficiaries)
- */
-
-/**
  * Module dependencies.
  */
 const express = require('express')
-const { beneficiariesController } = require('../controllers')
 
 const router = express.Router()
+const { beneficiaries } = require('../controllers')
 
+/**
+ * Routing for beneficiaries endpoints (/v1/beneficiaries)
+ */
 // GET /v1/beneficiaries
-router.get('/', beneficiariesController.getAll)
+router.get('/', beneficiaries.getAll)
 
 // POST /v1/beneficiaries
-// router.post('/', beneficiariesController.create);
+// router.post('/', beneficiaries.create);
 
 module.exports = router
