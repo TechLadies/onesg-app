@@ -1,7 +1,6 @@
-/* eslint-disable func-names */
 const { tableUser } = require('../src/models/user.js')
 
-exports.up = function (knex) {
+exports.up = function makeUsertable(knex) {
   return knex.schema.createTable(tableUser, (table) => {
     table.increments('BeneficiaryId').primary()
     table.integer('RefereeId').unique()
@@ -16,7 +15,6 @@ exports.up = function (knex) {
   })
 }
 
-// eslint-disable-next-line func-names
-exports.down = function (knex) {
+exports.down = function exportUsertable(knex) {
   return knex.schema.dropTable(tableUser)
 }

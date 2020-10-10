@@ -1,7 +1,6 @@
-/* eslint-disable func-names */
 const { tableReferee } = require('../src/models/referee.js')
 
-exports.up = function (knex) {
+exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
     table.increments('RefereeId').primary()
     table.text('Name')
@@ -12,6 +11,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+exports.down = function exportRefereetable(knex) {
   return knex.schema.dropTable(tableReferee)
 }

@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
 const { Model } = require('objection')
-
-const Knex = require('knex')
 
 const RequestTypeEnum = {
   CookedFood: 'cookedFood',

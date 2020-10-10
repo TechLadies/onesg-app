@@ -22,6 +22,9 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - npm v6.14.6
 <br/>
 <br/>
+
+## Project Structure
+
 ## Quick Start 
 ## Installation
 Code and setup instructions for frontend and backend can be accessed in their respective subdirectories.

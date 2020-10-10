@@ -1,10 +1,8 @@
-/* eslint-disable lines-around-directive */
-/* eslint-disable no-unused-vars */
 /* eslint-disable strict */
+
 'use strict'
 
 const { Model } = require('objection')
-const Knex = require('knex')
 
 const tableReferee = 'referees'
 

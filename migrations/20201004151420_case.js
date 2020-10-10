@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-/* eslint-disable no-sequences */
 const { tableCase } = require('../src/models/case.js')
 const { tableUser } = require('../src/models/user.js')
 const { tableReferee } = require('../src/models/referee.js')
@@ -11,7 +9,7 @@ const {
   ApprovalTypeEnum,
 } = require('../src/models/case.js')
 
-exports.up = function (knex) {
+exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
     table.increments('CaseId').primary()
     table.enum('RequestType', Object.values(RequestTypeEnum))
@@ -37,6 +35,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+exports.down = function exportCasetable(knex) {
   return knex.schema.dropTable(tableCase)
 }
