@@ -1,6 +1,14 @@
 /* eslint-disable func-names */
 /* eslint-disable prettier/prettier */
 const {tableCase} = require('../src/models/case')
+const {
+  RequestTypeEnum,
+  FulfilmentTypeEnum,
+  CaseStatusTypeEnum,
+  ReferenceStatusTypeEnum,
+  ApprovalTypeEnum,
+} = require('../src/models/case.js')
+
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
@@ -11,12 +19,12 @@ exports.seed = function (knex) {
       return knex(tableCase).insert([
         {
           CaseId: '20002',
-          RequestType: 'Cooked Food',
-          Fulfilment: 'Cash Transfer',
+          RequestType: RequestTypeEnum.CookedFood,
+          Fulfilment: FulfilmentTypeEnum.InKindDonation,
           Description: 'due to debt',
-          CaseStatus: 'New',
-          ReferenceStatus: 'Unverified',
-          Approval: 'Partial',
+          CaseStatus: CaseStatusTypeEnum.New,
+          ReferenceStatus:ReferenceStatusTypeEnum.Unverified,
+          Approval: ApprovalTypeEnum.NIL,
           AmountGranted: '450.03',
           BeneficiaryId: '0001',
           RefereeId: '1002',

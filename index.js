@@ -33,11 +33,14 @@ const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
   : http.createServer(app)
 
-app.use(express.json())
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+/**
+ * Middleware setup
+ */
+// CORS
+const corsOptions = {
+  origin: CORS_CONFIG.ALLOWED_ORIGINS,
+  methods: CORS_CONFIG.ALLOWED_METHODS,
+}
 
 app.use(cors(corsOptions))
 

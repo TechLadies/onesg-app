@@ -12,7 +12,6 @@ exports.up = function (knex) {
     table.text('occupation')
     table.enum('MaritalStatus', ['Female', 'Male'])
     table.decimal('Income')
-    table.integer('CaseId').notNullable().unique()
     table.timestamps(true, true)
   })
 }

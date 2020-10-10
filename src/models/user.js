@@ -18,10 +18,9 @@ class User extends Model {
         Email: { type: 'string', minLength: 1, maxLength: 255 },
         Phone: { type: 'varchar', maxLength: 12 },
         Address: { type: 'varchar', maxLength: 255 },
-        occupation: { type: 'string', maxLength: 255 },
+        Occupation: { type: 'string', maxLength: 255 },
         MaritalStatus: { type: 'enum' },
         Income: { type: 'decimal', minLength: 1 },
-        CaseId: { type: 'integer' },
       },
     }
   }

@@ -5,5 +5,5 @@
 /env/
 
 # database files 
-/database/one-sg.db3/
+/database
 /dev.sqlite3/

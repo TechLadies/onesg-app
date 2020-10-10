@@ -19,7 +19,6 @@ exports.seed = function (knex) {
           Occupation: 'software engineer',
           MaritalStatus: 'Female',
           Income: '$1333',
-          CaseId: '20002',
         },
       ])
     })

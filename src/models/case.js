@@ -3,6 +3,44 @@ const { Model } = require('objection')
 
 const Knex = require('knex')
 
+const RequestTypeEnum = {
+  CookedFood: 'cookedFood',
+  Diapers: 'diapers',
+  FinancialAssistance: 'financialAssistance',
+  MedicalBill: 'medicalBill',
+  MilkFormula: 'milkFormula',
+  SchoolFees: 'schoolFees',
+  TransportationFees: 'transportationFees',
+  UtilityBill: 'utilityBill',
+}
+
+const FulfilmentTypeEnum = {
+  InKindDonation: 'inKindDonation',
+  CashTransfer: 'cashTransfer',
+  ThirdpartyPayment: 'third-partyPayment',
+  PartnerReferral: 'partnerReferral',
+}
+
+const CaseStatusTypeEnum = {
+  New: 'new',
+  OnHold: 'onHold',
+  ReferredtoEFC: 'referredtoEFC',
+  Processing: 'processing',
+  Closed: 'closed',
+}
+
+const ReferenceStatusTypeEnum = {
+  Unverified: 'unverified',
+  Pending: 'pending',
+  Verified: 'verified',
+}
+const ApprovalTypeEnum = {
+  NIL: '-',
+  full: 'full',
+  partial: 'partial',
+  rejected: 'rejected',
+}
+
 const tableCase = 'cases'
 
 class Case extends Model {
@@ -33,4 +71,9 @@ module.exports = {
   Case,
   model: Case,
   tableCase,
+  RequestTypeEnum,
+  FulfilmentTypeEnum,
+  ReferenceStatusTypeEnum,
+  ApprovalTypeEnum,
+  CaseStatusTypeEnum,
 }
