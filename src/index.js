@@ -20,7 +20,7 @@ const morgan = require('morgan')
 // Custom modules
 const {
   envConfig: { SERVER_CONFIG, CORS_CONFIG },
-} = require('./config')
+} = require('../config')
 const routes = require('./routers')
 const { errorHandler } = require('./middleware')
 

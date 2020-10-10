@@ -8,7 +8,8 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 
 ## Table of Contents
 - [Requirements](#requirements)
-- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
 - [Project Structure](#project-structure)
 <br/>
 <br/>
@@ -25,7 +26,6 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 
 ## Project Structure
 
-## Quick Start 
 ## Installation
 Code and setup instructions for frontend and backend can be accessed in their respective subdirectories.
 1. Install dependencies
@@ -40,13 +40,28 @@ npm run dev
 ```
 4. Go to http://localhost:8080
 
-## Create DB 
-1. Make sure folder "database" is in the directory. If not, please create it.
-2. Open your NPM Scripts sidebar
-+ Run createdb script 
-+ Run db-migrate script. 
-+ Database file 'one-sg.db' should be created in the "database" folder. Please check.
-+ Run db-run-seed.
+<br/>
+<br/>
+
+## Database Setup
+To setup your database, create a folder named `database` in the root directory.
+
+1. Create the database using the following script:
+```
+npm run createdb
+```
+
+2. To run the migrations,
+```
+npm run db-migrate
+```
+
+3. Populate the tables with the seed data with,
+```
+npm run db-run-seed
+```
+
+Ensure that the database file `one-sg.db` exists in the `database` folder, with the tables populated with the seeded data
 
 <br/>
 <br/>
