@@ -16,7 +16,7 @@ class Referee extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['email', 'Name', 'phone'],
+      required: ['Email', 'Name', 'Phone'],
       properties: {
         RefereeId: { type: 'integer' },
         Name: { type: 'string', minLength: 1, maxLength: 255 },
