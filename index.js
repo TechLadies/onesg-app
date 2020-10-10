@@ -18,8 +18,11 @@ const bodyparser = require('body-parser')
 const morgan = require('morgan')
 
 // Custom modules
-const { SERVER_CONFIG, CORS_CONFIG } = require('./config/env')
+const {
+  envConfig: { SERVER_CONFIG, CORS_CONFIG },
+} = require('./config')
 const routes = require('./routers')
+const { errorHandler } = require('./middleware')
 
 /**
  * Express server setup
@@ -71,9 +74,15 @@ app.use(
 routes(app)
 
 /**
+ * Error handler setup
+ */
+errorHandler(app)
+
+/**
  * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(
     `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
   )

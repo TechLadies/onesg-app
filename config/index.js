@@ -4,10 +4,12 @@
  * MIT Licensed
  */
 
-const beneficiaries = require('./beneficiaries')
-// const cases = require('./cases');
+/**
+ * Config folder index
+ */
+
+const envConfig = require('./env')
 
 module.exports = {
-  beneficiaries,
-  // cases,
+  envConfig,
 }

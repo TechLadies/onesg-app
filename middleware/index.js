@@ -4,10 +4,8 @@
  * MIT Licensed
  */
 
-const beneficiaries = require('./beneficiaries')
-// const cases = require('./cases');
+const errorHandler = require('./errorHandler')
 
 module.exports = {
-  beneficiaries,
-  // cases,
+  errorHandler,
 }

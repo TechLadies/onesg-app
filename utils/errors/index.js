@@ -4,10 +4,10 @@
  * MIT Licensed
  */
 
-const beneficiaries = require('./beneficiaries')
-// const cases = require('./cases');
+const OpError = require('./OpError')
+const BadRequest = require('./BadRequest')
 
 module.exports = {
-  beneficiaries,
-  // cases,
+  OpError,
+  BadRequest,
 }

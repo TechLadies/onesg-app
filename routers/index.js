@@ -5,20 +5,22 @@
  */
 
 /**
- * Main server-side router
- * @param {*} app
+ * Module dependencies.
  */
+const beneficiaries = require('./beneficiaries')
+// const cases = require('./cases');
 
-const beneficiaryRoutes = require('./beneficiaries')
-// const caseRoutes = require('./cases');
-
+/**
+ * Main server-side router
+ * @param {function} app
+ */
 const routes = (app) => {
   app.get('/v1/healthcheck', function healthcheck(req, res) {
     res.status(200).json({ message: `Everything's A-OK on v1!` })
   })
 
-  app.use('/v1/beneficiaries', beneficiaryRoutes)
-  // app.use('/v1/cases', caseRoutes);
+  app.use('/v1/beneficiaries', beneficiaries)
+  // app.use('/v1/cases', cases);
 }
 
 module.exports = routes
