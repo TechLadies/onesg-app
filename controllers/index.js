@@ -4,14 +4,10 @@
  * MIT Licensed
  */
 
-/**
- * Controller index
- */
-
-const beneficiariesController = require('./beneficiaries')
-// const casesController = require('./cases');
+const beneficiaries = require('./beneficiaries')
+// const cases = require('./cases');
 
 module.exports = {
-  beneficiariesController,
-  // casesController,
+  beneficiaries,
+  // cases,
 }

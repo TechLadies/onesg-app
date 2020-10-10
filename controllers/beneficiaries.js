@@ -5,9 +5,10 @@
  */
 
 /**
- * Handlers for beneficiaries endpoints (/v1/beneficiaries)
+ * Retrieve all beneficiaries
+ * @param {Request} req
+ * @param {Response} res
  */
-
 const getAll = (req, res) => {
   res.status(200).json({ data: 'sample GET /v1/beneficiaries data :p' })
 }

@@ -4,10 +4,6 @@
  * MIT Licensed
  */
 
-/**
- * Middleware index
- */
-
 const errorHandler = require('./errorHandler')
 
 module.exports = {
