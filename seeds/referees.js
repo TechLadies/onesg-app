@@ -12,8 +12,8 @@ exports.seed = function (knex) {
         {
           RefereeId: '1002',
           Name: 'Atu',
-          email: 'ahl@aok.com',
-          phone: '34673662',
+          Email: 'ahl@aok.com',
+          Phone: '34673662',
           Organisation: 'Techladies',
 
         },
