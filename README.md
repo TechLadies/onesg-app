@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 # OneSG App
 This is an application that is made for [OneSG](http://onesingapore.org/), that aims to provide a centralised platform for users to access, create and update cases.
 
 The development of this application was done as part of [Techladies Bootcamp #6](https://github.com/TechLadies/bootcamp6-info). [Techladies](http://www.techladies.co/) is a community for women in Asia to connect, learn, and advance as programmers.
-=======
-# onesg-app
-[app description. wip]
->>>>>>> readme updated
+
 <br/>
 <br/>
 
