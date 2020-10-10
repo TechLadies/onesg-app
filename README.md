@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 # OneSG App
 This is an application that is made for [OneSG](http://onesingapore.org/), that aims to provide a centralised platform for users to access, create and update cases.
 
 The development of this application was done as part of [Techladies Bootcamp #6](https://github.com/TechLadies/bootcamp6-info). [Techladies](http://www.techladies.co/) is a community for women in Asia to connect, learn, and advance as programmers.
+=======
+# onesg-app
+[app description. wip]
+>>>>>>> readme updated
 <br/>
 <br/>
 
 ## Table of Contents
 - [Requirements](#requirements)
-- [Installation](#installation)
+- [Quick Start](#quick-start)
 - [Project Structure](#project-structure)
 <br/>
 <br/>
@@ -21,7 +26,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - npm v6.14.6
 <br/>
 <br/>
-
+## Quick Start 
 ## Installation
 Code and setup instructions for frontend and backend can be accessed in their respective subdirectories.
 1. Install dependencies
@@ -35,6 +40,15 @@ npm install
 npm run dev
 ```
 4. Go to http://localhost:8080
+
+## Create DB 
+1. Make sure folder "database" is in the directory. If not, please create it.
+2. Open your NPM Scripts sidebar
++ Run createdb script 
++ Run db-migrate script. 
++ Database file 'one-sg.db' should be created in the "database" folder. Please check.
++ Run db-run-seed.
+
 <br/>
 <br/>
 
@@ -70,11 +84,4 @@ onesg-app
 <br/>
 <br/>
 
-Create Database, table and run seed
-1. Make sure folder "database" is in the directory. If not, please create it.
-2. Open your NPM Scripts sidebar
-    2a.Run createdb script 
-    2b. Run db-migrate script. 
-    2c. Database file 'one-sg.db' should be created in the "database" folder. Please check.
-    2d. Run db-run-seed.
 
