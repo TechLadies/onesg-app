@@ -1,12 +1,10 @@
-/* eslint-disable func-names */
-/* eslint-disable prettier/prettier */
-const {tableReferee} = require('../src/models/referee')
+const { tableReferee } = require('../src/models/referee')
 
-exports.seed = function (knex) {
+exports.seed = function seedRefereeTable(knex) {
   // Deletes ALL existing entries
   return knex(tableReferee)
     .del()
-    .then(function () {
+    .then(function insertReferees() {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
@@ -15,7 +13,6 @@ exports.seed = function (knex) {
           Email: 'ahl@aok.com',
           Phone: '34673662',
           Organisation: 'Techladies',
-
         },
       ])
     })

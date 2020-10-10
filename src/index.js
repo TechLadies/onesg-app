@@ -33,6 +33,8 @@ const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
   : http.createServer(app)
 
+// TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
+
 /**
  * Middleware setup
  */

@@ -1,6 +1,4 @@
-/* eslint-disable func-names */
-/* eslint-disable prettier/prettier */
-const {tableCase} = require('../src/models/case')
+const { tableCase } = require('../src/models/case')
 const {
   RequestTypeEnum,
   FulfilmentTypeEnum,
@@ -9,12 +7,11 @@ const {
   ApprovalTypeEnum,
 } = require('../src/models/case.js')
 
-
-exports.seed = function (knex) {
+exports.seed = function seedCaseTable(knex) {
   // Deletes ALL existing entries
   return knex(tableCase)
     .del()
-    .then(function () {
+    .then(function insertCases() {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
@@ -23,7 +20,7 @@ exports.seed = function (knex) {
           Fulfilment: FulfilmentTypeEnum.InKindDonation,
           Description: 'due to debt',
           CaseStatus: CaseStatusTypeEnum.New,
-          ReferenceStatus:ReferenceStatusTypeEnum.Unverified,
+          ReferenceStatus: ReferenceStatusTypeEnum.Unverified,
           Approval: ApprovalTypeEnum.NIL,
           AmountGranted: '450.03',
           BeneficiaryId: '0001',

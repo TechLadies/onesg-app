@@ -1,12 +1,10 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable func-names */
-const {tableUser} = require('../src/models/user')
+const { tableUser } = require('../src/models/user')
 
-exports.seed = function (knex) {
+exports.seed = function seedUserTable(knex) {
   // Deletes ALL existing entries
   return knex(tableUser)
     .del()
-    .then(function () {
+    .then(function insertUsers() {
       // Inserts seed entries
       return knex(tableUser).insert([
         {
