@@ -19,6 +19,6 @@ const { beneficiaries } = require('../controllers')
 router.get('/', beneficiaries.getAll)
 
 // POST /v1/beneficiaries
-// router.post('/', beneficiaries.create);
+router.post('/', beneficiaries.create)
 
 module.exports = router

@@ -13,6 +13,16 @@ const getAll = (req, res) => {
   res.status(200).json({ data: 'sample GET /v1/beneficiaries data :p' })
 }
 
+/**
+ * Create new beneficiary
+ * @param {Request} req
+ * @param {Response} res
+ */
+const create = (req, res) => {
+  res.status(200).json({ data: 'sample POST /v1/beneficiaries data :p' })
+}
+
 module.exports = {
   getAll,
+  create,
 }
