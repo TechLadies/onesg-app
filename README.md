@@ -2,12 +2,14 @@
 This is an application that is made for [OneSG](http://onesingapore.org/), that aims to provide a centralised platform for users to access, create and update cases.
 
 The development of this application was done as part of [Techladies Bootcamp #6](https://github.com/TechLadies/bootcamp6-info). [Techladies](http://www.techladies.co/) is a community for women in Asia to connect, learn, and advance as programmers.
+
 <br/>
 <br/>
 
 ## Table of Contents
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Database Setup](#database-setup)
 - [Project Structure](#project-structure)
 <br/>
 <br/>
@@ -22,6 +24,8 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 <br/>
 <br/>
 
+## Project Structure
+
 ## Installation
 Code and setup instructions for frontend and backend can be accessed in their respective subdirectories.
 1. Install dependencies
@@ -35,6 +39,30 @@ npm install
 npm run dev
 ```
 4. Go to http://localhost:8080
+
+<br/>
+<br/>
+
+## Database Setup
+To setup your database, create a folder named `database` in the root directory.
+
+1. Create the database using the following script:
+```
+npm run createdb
+```
+
+2. To run the migrations,
+```
+npm run db-migrate
+```
+
+3. Populate the tables with the seed data with,
+```
+npm run db-run-seed
+```
+
+Ensure that the database file `one-sg.db` exists in the `database` folder, with the tables populated with the seeded data
+
 <br/>
 <br/>
 
@@ -69,3 +97,5 @@ onesg-app
 ```
 <br/>
 <br/>
+
+
