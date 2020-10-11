@@ -8,6 +8,7 @@
  * Module dependencies.
  */
 const beneficiaries = require('./beneficiaries')
+const reference = require('./reference')
 // const cases = require('./cases');
 
 /**
@@ -19,8 +20,10 @@ const routes = (app) => {
     res.status(200).json({ message: `Everything's A-OK on v1!` })
   })
 
-  app.use('/v1/beneficiaries', beneficiaries)
   // app.use('/v1/cases', cases);
+  app.use('/v1/beneficiaries', beneficiaries)
+
+  app.use('/v1/reference', reference)
 }
 
 module.exports = routes
