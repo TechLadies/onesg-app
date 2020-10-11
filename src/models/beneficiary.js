@@ -1,16 +1,21 @@
 const { Model } = require('objection')
 
-const tableUser = 'users'
+const PaymentTypeEnum = {
+  PayNow: 'payNow',
+  BankTransfer: 'bankTransfer',
+}
 
-class User extends Model {
+const tableBeneficiary = 'beneficiary'
+
+class Beneficiary extends Model {
   static get tableName() {
-    return tableUser
+    return tableBeneficiary
   }
 
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['email', 'Name', 'phone'],
+      required: ['Email', 'Name', 'Phone'],
       properties: {
         BeneficiaryId: { type: 'integer' },
         RefereeId: { type: ['integer', 'null'] },
@@ -19,15 +24,17 @@ class User extends Model {
         Phone: { type: 'varchar', maxLength: 12 },
         Address: { type: 'varchar', maxLength: 255 },
         Occupation: { type: 'string', maxLength: 255 },
-        MaritalStatus: { type: 'enum' },
-        Income: { type: 'decimal', minLength: 1 },
+        HouseholdIncome: { type: 'decimal', minLength: 1 },
+        HouseholdSize: { type: 'integer' },
+        PaymentType: { type: 'enum' },
       },
     }
   }
 }
 
 module.exports = {
-  User,
-  model: User,
-  tableUser,
+  Beneficiary,
+  model: Beneficiary,
+  tableBeneficiary,
+  PaymentTypeEnum,
 }

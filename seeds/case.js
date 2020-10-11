@@ -18,6 +18,8 @@ exports.seed = function seedCaseTable(knex) {
           CaseId: '20002',
           RequestType: RequestTypeEnum.CookedFood,
           Fulfilment: FulfilmentTypeEnum.InKindDonation,
+          Poc: 'Techladies',
+          AmountRequested: '450.03',
           Description: 'due to debt',
           CaseStatus: CaseStatusTypeEnum.New,
           ReferenceStatus: ReferenceStatusTypeEnum.Unverified,

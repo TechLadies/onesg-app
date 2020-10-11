@@ -52,6 +52,8 @@ class Case extends Model {
         CaseId: { type: 'integer' },
         RequestType: { type: 'enum' },
         Fulfilment: { type: 'enum' },
+        Poc: { type: 'varchar', maxLength: 255 },
+        AmountRequested: { type: 'decimal' },
         Description: { type: 'varchar', maxLength: 255 },
         CaseStatus: { type: 'enum' },
         ReferenceStatus: { type: 'enum' },
