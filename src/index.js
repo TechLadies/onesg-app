@@ -20,13 +20,14 @@ const morgan = require('morgan')
 // Custom modules
 const {
   envConfig: { SERVER_CONFIG, CORS_CONFIG },
-} = require('./config')
+} = require('../config')
 const routes = require('./routers')
 const { errorHandler } = require('./middleware')
 
 /**
  * Express server setup
  */
+
 const app = express()
 const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
