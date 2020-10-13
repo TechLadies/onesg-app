@@ -1,5 +1,5 @@
 const { tableCase } = require('../src/models/case.js')
-const { tableUser } = require('../src/models/user.js')
+const { tableBeneficiary } = require('../src/models/beneficiary.js')
 const { tableReferee } = require('../src/models/referee.js')
 const {
   RequestTypeEnum,
@@ -14,6 +14,8 @@ exports.up = function makeCasetable(knex) {
     table.increments('CaseId').primary()
     table.enum('RequestType', Object.values(RequestTypeEnum))
     table.enum('Fulfilment', Object.values(FulfilmentTypeEnum))
+    table.text('POC')
+    table.decimal('AmountRequested')
     table.text('Description')
     table.enum('CaseStatus', Object.values(CaseStatusTypeEnum))
     table.enum('Approval', Object.values(ApprovalTypeEnum))
@@ -24,7 +26,7 @@ exports.up = function makeCasetable(knex) {
       .unsigned()
       .index()
       .references('BeneficiaryId')
-      .inTable(tableUser)
+      .inTable(tableBeneficiary)
     table
       .bigInteger('RefereeId')
       .unsigned()
