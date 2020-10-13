@@ -12,13 +12,13 @@
  */
 class OpError extends Error {
   constructor(id, statusCode, message) {
-    super()
+    super();
     this.error = {
       id,
       statusCode,
       message,
-    }
+    };
   }
 }
 
-module.exports = OpError
+module.exports = OpError;

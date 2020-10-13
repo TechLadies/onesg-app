@@ -13,7 +13,7 @@
 const CORS_CONFIG = {
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   ALLOWED_METHODS: process.env.ALLOWED_METHODS,
-}
+};
 
 // Server Settings
 const SERVER_CONFIG = {
@@ -21,9 +21,9 @@ const SERVER_CONFIG = {
   HOSTNAME: process.env.HOSTNAME,
   USE_HTTPS: process.env.USE_HTTPS,
   HTTPS_OPTIONS: process.env.HTTPS_OPTION,
-}
+};
 
 module.exports = {
   CORS_CONFIG,
   SERVER_CONFIG,
-}
+};

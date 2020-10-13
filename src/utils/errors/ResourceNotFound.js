@@ -7,7 +7,7 @@
 /**
  * Module dependencies
  */
-const OpError = require('./OpError')
+const OpError = require('./OpError');
 
 /**
  * Custom error class for Not Found (400) errors related to resources
@@ -16,8 +16,8 @@ const OpError = require('./OpError')
  */
 class ResourceNotFound extends OpError {
   constructor(message) {
-    super('RESOURCE_NOT_FOUND', 404, message)
+    super('RESOURCE_NOT_FOUND', 404, message);
   }
 }
 
-module.exports = ResourceNotFound
+module.exports = ResourceNotFound;

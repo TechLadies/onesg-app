@@ -4,10 +4,10 @@
  * MIT Licensed
  */
 
-const OpError = require('./OpError')
-const BadRequest = require('./BadRequest')
+const OpError = require('./OpError');
+const BadRequest = require('./BadRequest');
 
 module.exports = {
   OpError,
   BadRequest,
-}
+};

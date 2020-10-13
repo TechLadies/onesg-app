@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-const errorHandler = require('./errorHandler')
+const errorHandler = require('./errorHandler');
 
 module.exports = {
   errorHandler,
-}
+};

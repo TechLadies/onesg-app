@@ -1,15 +1,15 @@
-const { Model } = require('objection')
+const { Model } = require('objection');
 
 const PaymentTypeEnum = {
   PayNow: 'payNow',
   BankTransfer: 'bankTransfer',
-}
+};
 
-const tableBeneficiary = 'beneficiary'
+const tableBeneficiary = 'beneficiary';
 
 class Beneficiary extends Model {
   static get tableName() {
-    return tableBeneficiary
+    return tableBeneficiary;
   }
 
   static get jsonSchema() {
@@ -28,7 +28,7 @@ class Beneficiary extends Model {
         HouseholdSize: { type: 'integer' },
         PaymentType: { type: 'enum' },
       },
-    }
+    };
   }
 }
 
@@ -37,4 +37,4 @@ module.exports = {
   model: Beneficiary,
   tableBeneficiary,
   PaymentTypeEnum,
-}
+};

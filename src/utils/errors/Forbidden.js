@@ -7,7 +7,7 @@
 /**
  * Module dependencies
  */
-const OpError = require('./OpError')
+const OpError = require('./OpError');
 
 /**
  * Custom error class for Forbidden (403) errors
@@ -15,8 +15,8 @@ const OpError = require('./OpError')
  */
 class Forbidden extends OpError {
   constructor(message) {
-    super('FORBIDDEN', 403, message)
+    super('FORBIDDEN', 403, message);
   }
 }
 
-module.exports = Forbidden
+module.exports = Forbidden;

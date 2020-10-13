@@ -1,11 +1,11 @@
-const { tableCase } = require('../src/models/case')
+const { tableCase } = require('../src/models/case');
 const {
   RequestTypeEnum,
   FulfilmentTypeEnum,
   CaseStatusTypeEnum,
   ReferenceStatusTypeEnum,
   ApprovalTypeEnum,
-} = require('../src/models/case.js')
+} = require('../src/models/case.js');
 
 exports.seed = function seedCaseTable(knex) {
   // Deletes ALL existing entries
@@ -28,6 +28,6 @@ exports.seed = function seedCaseTable(knex) {
           BeneficiaryId: '0001',
           RefereeId: '1002',
         },
-      ])
-    })
-}
+      ]);
+    });
+};
