@@ -13,12 +13,12 @@ const router = express.Router()
 const { reference } = require('../controllers')
 
 /**
- * Routing for beneficiaries endpoints (/v1/reference)
+ * Routing for references endpoints (/v1/reference)
  */
 // GET /v1/reference
 router.get('/', reference.getAll)
 
-// POST /v1/reference
-router.post('/', reference.create)
+// POST /v1/reference/create
+router.post('/create', reference.create)
 
 module.exports = router
