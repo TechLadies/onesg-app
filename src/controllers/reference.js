@@ -4,14 +4,13 @@
  * MIT Licensed
  */
 
-const knex = require('knex')
-// isn't this and bottom already in models > index and exported as db? idk why I can't access it
-const config = require('../../knexfile').development
-
-const db = knex(config)
+const environment = process.env.NODE_ENV || 'development'
+const configuration = require('../../knexfile')[environment]
+// eslint-disable-next-line import/order
+const db = require('knex')(configuration)
 
 /**
- * Retrieve all reference
+ * Retrieve all references
  * @param {Request} req
  * @param {Response} res
  */
@@ -25,9 +24,16 @@ const getAll = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const create = (req, res) => {
-  // const newReference = req.body
-  res.status(200).json({ data: 'sample POST /v1/reference data' })
+const create = async (req, res) => {
+  const newReference = req.body
+  try {
+    const id = await db('referees').insert(newReference)
+    res.status(201).json(id)
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Error creating new reference', error: err })
+  }
 }
 
 module.exports = {
