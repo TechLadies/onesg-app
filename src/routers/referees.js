@@ -7,35 +7,30 @@
 /**
  * Module dependencies.
  */
+const express = require('express')
 
-'use strict';
-
-const express = require('express');
-
-const router = express.Router();
-const {
-  router: { beneficiaries },
-} = require('../../controllers');
-
+const router = express.Router()
 const passport = require('passport')
 
+const { referees } = require('../controllers')
+
 /**
- * Routing for beneficiaries endpoints (/v1/beneficiaries)
+ * Routing for beneficiaries endpoints (/v1/referees)
  */
-// GET /v1/beneficiaries
+// GET /v1/referees
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.status(200).json({
       success: true,
-      msg: 'You are successfully authenticated to this beneficiaries route!',
+      msg: 'You are successfully authenticated to this referees route!',
     })
   },
-  beneficiaries.getAll
+  referees.getAll
 )
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);
 
-module.exports = router;
+module.exports = router

@@ -8,9 +8,9 @@
  * Module dependencies.
  */
 // Built-in modules
-const http = require('http');
-const https = require('https');
-
+const http = require('http')
+const https = require('https')
+const passport = require('passport')
 // Third-party modules
 const express = require('express');
 const cors = require('cors');
@@ -33,7 +33,9 @@ const server = SERVER_CONFIG.USE_HTTPS
   : http.createServer(app);
 
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
+require('../config/passport')(passport)
 
+app.use(passport.initialize())
 /**
  * Middleware setup
  */

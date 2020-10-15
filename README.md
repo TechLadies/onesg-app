@@ -66,6 +66,12 @@ knex seed:run --specific=case.js
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check. 
 
 <br/>
+## Create keys
+
+1. To activate user authentication, run the following script to generate keys:
+
+node generateKeypair.js
+```
 <br/>
 
 ## Project Structure
