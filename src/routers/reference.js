@@ -19,6 +19,6 @@ const { reference } = require('../controllers')
 router.get('/', reference.getAll)
 
 // POST /v1/reference/create
-router.post('/create', reference.create)
+router.post('/create', reference.validate, reference.create)
 
 module.exports = router
