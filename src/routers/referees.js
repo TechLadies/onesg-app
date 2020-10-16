@@ -10,15 +10,15 @@
 const express = require('express')
 
 const router = express.Router()
-const { references } = require('../controllers')
+const { referees } = require('../controllers')
 
 /**
  * Routing for references endpoints (/v1/references)
  */
 // GET /v1/references
-router.get('/', references.getAll)
+router.get('/', referees.getAll)
 
 // POST /v1/references
-router.post('/', references.validate, references.create)
+router.post('/', referees.validate, referees.create)
 
 module.exports = router

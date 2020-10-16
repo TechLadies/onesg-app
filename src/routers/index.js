@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 const beneficiaries = require('./beneficiaries')
-const reference = require('./reference')
+const referees = require('./referees')
 // const cases = require('./cases');
 
 /**
@@ -23,7 +23,7 @@ const routes = (app) => {
   // app.use('/v1/cases', cases);
   app.use('/v1/beneficiaries', beneficiaries)
 
-  app.use('/v1/reference', reference)
+  app.use('/v1/references', referees)
 }
 
 module.exports = routes

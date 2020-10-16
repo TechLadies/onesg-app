@@ -31,13 +31,13 @@ const create = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(422).json(errors)
   }
-  const newReference = req.body
+  const newReferee = req.body
   try {
     // Check if reference already exists in db
-    const ref = await db('referees').insert(newReference)
+    const ref = await db('referees').insert(newReferee)
     return res
       .status(201)
-      .json({ message: 'Reference successfully created' }, ref)
+      .json({ message: 'Reference successfully created', ref })
   } catch (err) {
     return res
       .status(500)
@@ -63,7 +63,7 @@ const validate = [
     .isNumeric() // checks if string only contains numbers
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
-    .isAlphanumeric() // checks if string only contains letters and numbers
+    .isString() // checks if string only contains letters and numbers
     .isLength({ max: 255 }),
 ]
 

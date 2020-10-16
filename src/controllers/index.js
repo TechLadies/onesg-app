@@ -5,11 +5,11 @@
  */
 
 const beneficiaries = require('./beneficiaries')
-const reference = require('./reference')
+const referees = require('./referees')
 // const cases = require('./cases');
 
 module.exports = {
   beneficiaries,
-  reference,
+  referees,
   // cases,
 }
