@@ -15,10 +15,6 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 <br/>
 
 ## Requirements
-- body parser v1.19.0
-- cors v2.8.5
-- express v4.17.1
-- morgan v1.10.0
 - node v12.18.3
 - npm v6.14.6
 <br/>
