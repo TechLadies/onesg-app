@@ -12,13 +12,13 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-const { cases } = require('../controllers')
+const { CASES } = require('../controllers')
 
 /**
  * Routing for beneficiaries endpoints (/v1/referees)
  */
 // GET /v1/referees
-router.get('/', passport.authenticate('jwt', { session: false }), cases.getAll)
+router.get('/', passport.authenticate('jwt', { session: false }), CASES.getAll)
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);

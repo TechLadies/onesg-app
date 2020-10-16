@@ -1,6 +1,6 @@
 const Utils = require('../utils/utils')
 
-const Users = [
+const USERS = [
   {
     id: 1,
     email: 'john',
@@ -15,14 +15,18 @@ const Users = [
   },
 ]
 
+const getAll = (req, res) => {
+  res.status(200).json({ data: 'sample GET /v1/admin data :p' })
+}
+
 // Validate an existing user and issue a JWT
 const login = (req, res) => {
   const { email, password } = req.body
-  const user = Users.find(() => {
-    return user.email === email && user.password === password
-  })
-  if (user) {
-    const tokenObject = Utils.issueJWT(user)
+  const users = USERS.find(
+    (user) => user.email === email && user.password === password
+  )
+  if (users) {
+    const tokenObject = Utils.issueJWT(users)
 
     res.status(200).json({
       success: true,
@@ -37,6 +41,7 @@ const login = (req, res) => {
 }
 
 module.exports = {
+  getAll,
   login,
-  Users,
+  USERS,
 }

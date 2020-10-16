@@ -13,11 +13,14 @@ const { Beneficiary } = require('../../models');
  * Retrieve all beneficiaries
  * @param {Request} req
  * @param {Response} res
-
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select();
   res.status(200).json({ beneficiaries });
+};
+
+module.exports = {
+  getAll,
 };
 
 module.exports = {

@@ -7,11 +7,11 @@
 /**
  * Module dependencies.
  */
-const beneficiaries = require('./beneficiaries')
+const BENEFICIARIES = require('./beneficiaries')
 // const cases = require('./cases');
-const authRoutes = require('./auth')
-const refereesRoutes = require('./referees')
-const casesRoutes = require('./cases')
+const AUTHROUTES = require('./auth')
+const REFEREESROUTE = require('./referees')
+const CASESROUTE = require('./cases')
 /**
  * Main server-side router
  * @param {function} app
@@ -21,10 +21,10 @@ const routes = (app) => {
     res.status(200).json({ message: `Everything's A-OK on v1!` })
   })
 
-  app.use('/v1/login', authRoutes)
-  app.use('/v1/beneficiaries', beneficiaries)
-  app.use('/v1/referees', refereesRoutes)
-  app.use('/v1/cases', casesRoutes)
+  app.use('/v1/login', AUTHROUTES)
+  app.use('/v1/beneficiaries', BENEFICIARIES)
+  app.use('/v1/referees', REFEREESROUTE)
+  app.use('/v1/cases', CASESROUTE)
 }
 
 module.exports = routes
