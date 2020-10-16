@@ -18,17 +18,7 @@ const { cases } = require('../controllers')
  * Routing for beneficiaries endpoints (/v1/referees)
  */
 // GET /v1/referees
-router.get(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.status(200).json({
-      success: true,
-      msg: 'You are successfully authenticated to this cases route!',
-    })
-  },
-  cases.getAll
-)
+router.get('/', passport.authenticate('jwt', { session: false }), cases.getAll)
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);

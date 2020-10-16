@@ -13,7 +13,9 @@
     "db-make-table": "knex migrate:make ",
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referees": "knex seed:run --specific=referees.js",
-    "seed-cases": "knex seed:run --specific=case.js"
+    "seed-cases": "knex seed:run --specific=case.js",
+    "db-run-seed": "knex seed:run",
+    "create-keys": "node ./script/generateKeypair.js"
   },
   "repository": {
     "type": "git",

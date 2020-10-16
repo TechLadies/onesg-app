@@ -33,6 +33,7 @@ const server = SERVER_CONFIG.USE_HTTPS
   : http.createServer(app);
 
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
+
 require('../config/passport')(passport)
 
 app.use(passport.initialize())
@@ -81,7 +82,8 @@ app.use(routers);
 errorHandler(app);
 
 /**
- * Start listening to connection requests made on specified PORT
+ * Start listening to
+ *  connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
   // eslint-disable-next-line no-console

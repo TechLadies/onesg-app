@@ -1,6 +1,6 @@
-const utils = require('../utils/utils')
+const Utils = require('../utils/utils')
 
-const users = [
+const Users = [
   {
     id: 1,
     email: 'john',
@@ -15,18 +15,14 @@ const users = [
   },
 ]
 
-const getAll = (req, res) => {
-  res.status(200).json({ data: 'sample GET /v1/admin data :p' })
-}
-
 // Validate an existing user and issue a JWT
-function login(req, res) {
+const login = (req, res) => {
   const { email, password } = req.body
-  const user = users.find((u) => {
-    return u.email === email && u.password === password
+  const user = Users.find(() => {
+    return user.email === email && user.password === password
   })
   if (user) {
-    const tokenObject = utils.issueJWT(user)
+    const tokenObject = Utils.issueJWT(user)
 
     res.status(200).json({
       success: true,
@@ -35,35 +31,12 @@ function login(req, res) {
     })
   } else {
     res
-      .status(401)
+      .status(404)
       .json({ success: false, msg: 'No user found. Please contact admin.' })
   }
 }
 
-/* Register a new user
-router.post('/register', function (req, res, next) {
-  const saltHash = utils.genPassword(req.body.password)
-
-  const salt = saltHash.salt
-  const hash = saltHash.hash
-
-  const newUser = new User({
-    username: req.body.username,
-    hash: hash,
-    salt: salt,
-  })
-
-  try {
-    newUser.save().then((user) => {
-      res.json({ success: true, user: user })
-    })
-  } catch (err) {
-    res.json({ success: false, msg: err })
-  }
-}) */
-
 module.exports = {
-  getAll,
   login,
-  users,
+  Users,
 }

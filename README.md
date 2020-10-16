@@ -10,6 +10,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Database Setup](#database-setup)
+- [Create Keys](#create-keys)
 - [Project Structure](#project-structure)
 <br/>
 <br/>
@@ -66,11 +67,12 @@ knex seed:run --specific=case.js
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check. 
 
 <br/>
+
 ## Create keys
 
 1. To activate user authentication, run the following script to generate keys:
 
-node generateKeypair.js
+
 ```
 <br/>
 

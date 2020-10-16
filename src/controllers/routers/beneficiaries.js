@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
@@ -15,6 +13,7 @@ const { Beneficiary } = require('../../models');
  * Retrieve all beneficiaries
  * @param {Request} req
  * @param {Response} res
+
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select();

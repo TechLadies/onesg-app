@@ -21,8 +21,8 @@ const routes = (app) => {
     res.status(200).json({ message: `Everything's A-OK on v1!` })
   })
 
+  app.use('/v1/login', authRoutes)
   app.use('/v1/beneficiaries', beneficiaries)
-  app.use('/v1/auth', authRoutes)
   app.use('/v1/referees', refereesRoutes)
   app.use('/v1/cases', casesRoutes)
 }

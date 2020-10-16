@@ -3,7 +3,6 @@
 # env files
 /config/env/development.js
 /env/
-package-lock.json
 
 # database files 
 /database

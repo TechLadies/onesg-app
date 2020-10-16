@@ -23,15 +23,17 @@ const passport = require('passport')
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
 // GET /v1/beneficiaries
-router.get(
+/* router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    res.status(200).json({
-      success: true,
-      msg: 'You are successfully authenticated to this beneficiaries route!',
-    })
-  },
+    res.send(beneficiaries.getAll)
+  }
+) */
+
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
   beneficiaries.getAll
 )
 
