@@ -10,5 +10,4 @@
 
 
 # key files
-id_rsa_pub.pem
-/src/id_rsa_priv.pem
+/src/utils/scripts
