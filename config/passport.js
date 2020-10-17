@@ -4,9 +4,9 @@ const { ExtractJwt } = require('passport-jwt')
 const fs = require('fs')
 const path = require('path')
 
-const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem')
+const pathToKey = path.join(__dirname, '../src/utils/scripts/id_rsa_pub.pem')
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8')
-const { USERS } = require('../src/controllers/auth')
+const { getAdminUser } = require('../src/helpers/auth')
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,10 +16,9 @@ const options = {
 
 module.exports = (passport) => {
   const passportCallbackFn = (jwt_payload, done) => {
-    // there is email in jwt_payload.sub. we can check what we submitted in the payload in utils which we used in login to issue to user .
-    const userfromArray = USERS.find((User) => User.email === jwt_payload.sub)
-    if (userfromArray) {
-      return done(null, userfromArray)
+    const user = getAdminUser(jwt_payload.sub)
+    if (user) {
+      return done(null, user)
     }
     return done('user not found', false)
   }
