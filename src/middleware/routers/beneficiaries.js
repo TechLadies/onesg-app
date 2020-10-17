@@ -34,7 +34,7 @@ const passport = require('passport')
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  BENEFICIARIES.getAll
+  beneficiaries.getAll
 )
 
 // POST /v1/beneficiaries

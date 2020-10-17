@@ -12,7 +12,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-const { REFEREES } = require('../controllers')
+const { referees } = require('../controllers')
 
 /**
  * Routing for beneficiaries endpoints (/v1/referees)
@@ -21,7 +21,7 @@ const { REFEREES } = require('../controllers')
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  REFEREES.getAll
+  referees.getAll
 )
 
 // POST /v1/beneficiaries
