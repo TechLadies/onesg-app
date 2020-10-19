@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'import/no-dynamic-require': 'off',
+    'global-require': 0,
     semi: [2, 'always'],
   },
   plugins: ['prettier'],
