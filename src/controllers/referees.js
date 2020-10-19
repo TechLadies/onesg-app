@@ -4,7 +4,9 @@
  * MIT Licensed
  */
 const { check, validationResult } = require('express-validator')
-const error = require('../utils/errors') /* change this */
+const {
+  errors: { BadRequest, UnprocessableEntity },
+} = require('../utils')
 
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('../../knexfile')[environment]
@@ -30,7 +32,9 @@ const create = async (req, res) => {
   // Return if there are any validation errors
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(400).json(new error.BadRequest(errors))
+    return res
+      .status(BadRequest().error.statusCode)
+      .json(new BadRequest(errors))
   }
   const newReferee = req.body
   try {
@@ -41,8 +45,8 @@ const create = async (req, res) => {
       .json({ message: 'Reference successfully created', ref })
   } catch (err) {
     return res
-      .status(new error.BadRequest().error.statusCode)
-      .json(new error.BadRequestr('Reference already exists')) // need to create an error handler for internal server error
+      .status(new UnprocessableEntity().error.statusCode)
+      .json(new UnprocessableEntity('Reference already exists')) // need to create an error handler for internal server error
   }
 }
 

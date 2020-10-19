@@ -8,10 +8,12 @@ const OpError = require('./OpError')
 const BadRequest = require('./BadRequest')
 const Forbidden = require('./Forbidden')
 const ResourceNotFound = require('./ResourceNotFound')
+const UnprocessableEntity = require('./UnprocessableEntity')
 
 module.exports = {
   OpError,
   BadRequest,
   Forbidden,
   ResourceNotFound,
+  UnprocessableEntity,
 }

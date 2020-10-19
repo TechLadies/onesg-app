@@ -77,7 +77,7 @@ app.use(routes)
 /**
  * Error handler setup
  */
-errorHandler(app)
+app.use(errorHandler)
 
 /**
  * Start listening to connection requests made on specified PORT
