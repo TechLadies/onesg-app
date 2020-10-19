@@ -21,7 +21,7 @@ const morgan = require('morgan')
 const {
   envConfig: { SERVER_CONFIG, CORS_CONFIG },
 } = require('../config')
-const routes = require('./routers')
+const routes = require('./middleware/routers')
 const { errorHandler } = require('./middleware')
 
 /**

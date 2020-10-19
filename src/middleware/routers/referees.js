@@ -10,7 +10,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { referees } = require('../controllers')
+const { referees } = require('../../controllers')
 
 /**
  * Routing for references endpoints (/v1/references)

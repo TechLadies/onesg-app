@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 const { check, validationResult } = require('express-validator')
+const error = require('../utils/errors') /* change this */
 
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('../../knexfile')[environment]
@@ -29,7 +30,7 @@ const create = async (req, res) => {
   // Return if there are any validation errors
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json(errors)
+    return res.status(400).json(new error.BadRequest(errors))
   }
   const newReferee = req.body
   try {
@@ -40,8 +41,8 @@ const create = async (req, res) => {
       .json({ message: 'Reference successfully created', ref })
   } catch (err) {
     return res
-      .status(500)
-      .json({ message: 'Reference already exists', error: err })
+      .status(new error.BadRequest().error.statusCode)
+      .json(new error.BadRequestr('Reference already exists')) // need to create an error handler for internal server error
   }
 }
 
@@ -63,7 +64,7 @@ const validate = [
     .isNumeric() // checks if string only contains numbers
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
-    .isString() // checks if string only contains letters and numbers
+    .isString()
     .isLength({ max: 255 }),
 ]
 

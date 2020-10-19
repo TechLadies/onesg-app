@@ -10,7 +10,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { beneficiaries } = require('../controllers')
+const { beneficiaries } = require('../../controllers')
 
 /**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
