@@ -7,6 +7,10 @@
 /**
  * Module dependencies.
  */
+const express = require('express')
+
+const router = express.Router()
+
 const beneficiaries = require('./beneficiaries')
 const referees = require('./referees')
 // const cases = require('./cases');
@@ -15,15 +19,14 @@ const referees = require('./referees')
  * Main server-side router
  * @param {function} app
  */
-const routes = (app) => {
-  app.get('/v1/healthcheck', function healthcheck(req, res) {
-    res.status(200).json({ message: `Everything's A-OK on v1!` })
-  })
 
-  // app.use('/v1/cases', cases);
-  app.use('/v1/beneficiaries', beneficiaries)
+router.use('/v1/healthcheck', (req, res) => {
+  res.status(200).json({ message: `Everything's A-OK on v1!` })
+})
 
-  app.use('/v1/references', referees)
-}
+// app.use('/v1/cases', cases);
+router.use('/v1/beneficiaries', beneficiaries)
 
-module.exports = routes
+router.use('/v1/references', referees)
+
+module.exports = router

@@ -72,7 +72,7 @@ app.use(
 /**
  * Routes setup
  */
-routes(app)
+app.use(routes)
 
 /**
  * Error handler setup
