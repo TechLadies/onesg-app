@@ -49,18 +49,18 @@ class Case extends Model {
     return {
       type: 'object',
       properties: {
+        BeneficiaryId: { type: 'integer' },
+        RefereeId: { type: 'integer' },
         CaseId: { type: 'integer' },
         RequestType: { type: 'enum' },
         Fulfilment: { type: 'enum' },
-        Poc: { type: 'varchar', maxLength: 255 },
+        POC: { type: 'varchar', maxLength: 255 },
         AmountRequested: { type: 'decimal' },
         Description: { type: 'varchar', maxLength: 255 },
         CaseStatus: { type: 'enum' },
         ReferenceStatus: { type: 'enum' },
         Approval: { type: 'enum' },
         AmountGranted: { type: 'decimal' },
-        BeneficiaryId: { type: 'integer' },
-        RefereeId: { type: 'integer' },
       },
     };
   }

@@ -25,7 +25,6 @@ class Referee extends Model {
     };
   }
 }
-
 module.exports = {
   Referee,
   model: Referee,

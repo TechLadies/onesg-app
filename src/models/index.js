@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable strict */
 
 'use strict';
@@ -7,6 +8,13 @@ const path = require('path');
 const Knex = require('knex');
 const { Model } = require('objection');
 const knexConfig = require('../../knexfile');
+=======
+const fs = require('fs')
+const path = require('path')
+const Knex = require('knex')
+const { Model } = require('objection')
+const knexConfig = require('../../knexfile')
+>>>>>>> changed db to postgres & tested with referee
 
 const pathJoin = require(path.join());
 

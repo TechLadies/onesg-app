@@ -18,7 +18,6 @@ class Beneficiary extends Model {
       required: ['Email', 'Name', 'Phone'],
       properties: {
         BeneficiaryId: { type: 'integer' },
-        RefereeId: { type: ['integer', 'null'] },
         Name: { type: 'string', minLength: 1, maxLength: 255 },
         Email: { type: 'string', minLength: 1, maxLength: 255 },
         Phone: { type: 'varchar', maxLength: 12 },
