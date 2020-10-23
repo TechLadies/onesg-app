@@ -18,7 +18,11 @@ class Referee extends Model {
       properties: {
         RefereeId: { type: 'integer' },
         Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: { type: 'string', minLength: 1, maxLength: 255 },
+        Email: {
+          type: 'string',
+          minLength: 1,
+          maxLength: 255,
+        },
         Phone: { type: 'varchar', maxLength: 12 },
         Organisation: { type: 'varchar', maxLength: 255 },
       },

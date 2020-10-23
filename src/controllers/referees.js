@@ -6,6 +6,7 @@
 const { check, validationResult } = require('express-validator')
 
 const db = require('../../config/dbconfig')
+
 /**
  * Retrieve all references
  * @param {Request} req
@@ -53,12 +54,15 @@ const validate = [
     .isString() // checks for string format
     .isLength({ min: 1, max: 255 }), // checks for length of name
   check('Email', 'Email format invalid')
+    .optional({ checkFalsy: true })
     .isEmail() // checks for email format
     .isLength({ min: 1, max: 255 }),
   check('Phone', 'Phone format invalid')
+    .optional({ checkFalsy: true })
     .isNumeric() // checks if string only contains numbers
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
+    .optional({ checkFalsy: true })
     .isString() // checks if string only contains letters and numbers
     .isLength({ max: 255 }),
 ]
