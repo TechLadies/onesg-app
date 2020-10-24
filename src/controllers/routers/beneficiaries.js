@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 /**
  * Retrieve all beneficiaries
  * @param {Request} req

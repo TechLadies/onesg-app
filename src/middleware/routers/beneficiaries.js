@@ -7,10 +7,15 @@
 /**
  * Module dependencies.
  */
+
+'use strict';
+
 const express = require('express');
 
 const router = express.Router();
-const { beneficiaries } = require('../controllers');
+const {
+  router: { beneficiaries },
+} = require('../../controllers');
 
 /**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)

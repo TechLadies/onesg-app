@@ -21,8 +21,7 @@ const morgan = require('morgan');
 const {
   envConfig: { SERVER_CONFIG, CORS_CONFIG },
 } = require('../config');
-const routes = require('./routers');
-const { errorHandler } = require('./middleware');
+const { routers, errorHandler } = require('./middleware');
 
 /**
  * Express server setup
@@ -72,12 +71,12 @@ app.use(
 /**
  * Routes setup
  */
-routes(app);
+app.use(routers);
 
 /**
  * Error handler setup
  */
-errorHandler(app);
+app.use(errorHandler);
 
 /**
  * Start listening to connection requests made on specified PORT

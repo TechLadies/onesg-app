@@ -6,8 +6,10 @@
 
 'use strict';
 
-const router = require('./routers');
+const beneficiaries = require('./beneficiaries');
+// const cases = require('./cases');
 
 module.exports = {
-  router,
+  beneficiaries,
+  // cases,
 };
