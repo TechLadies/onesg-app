@@ -5,7 +5,9 @@
  */
 
 const errorHandler = require('./errorHandler');
+const routers = require('./routers');
 
 module.exports = {
   errorHandler,
+  routers,
 };
