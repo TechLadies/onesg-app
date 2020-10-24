@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-const errors = require('./errors')
+const errors = require('./errors');
 
 module.exports = {
   errors,
-}
+};

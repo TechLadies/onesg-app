@@ -8,8 +8,8 @@
  * Config folder index
  */
 
-const envConfig = require('./env')
+const envConfig = require('./env');
 
 module.exports = {
   envConfig,
-}
+};

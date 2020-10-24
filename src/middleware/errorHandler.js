@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-const { OpError } = require('../utils').errors
+const { OpError } = require('../utils').errors;
 
 /**
  * Handles unsupported endpoints and operational errors
@@ -20,25 +20,25 @@ const errorHandler = (app) => {
       id: 'PAGE_NOT_FOUND',
       status: 404,
       message: 'Unsupported Endpoint',
-    }
-    res.status(404).json(error)
-  })
+    };
+    res.status(404).json(error);
+  });
 
   // Other operational errors
   // eslint-disable-next-line no-unused-vars
   app.use(function opErrorHandler(err, req, res, next) {
     if (err instanceof OpError) {
-      const { error } = err
-      return res.status(error.statusCode).json(error)
+      const { error } = err;
+      return res.status(error.statusCode).json(error);
     }
 
     const error = {
       id: 'UNIDENTIFIED_ERROR',
       status: 500,
       message: 'Unidentified server error',
-    }
-    return res.status(500).json(error)
-  })
-}
+    };
+    return res.status(500).json(error);
+  });
+};
 
-module.exports = errorHandler
+module.exports = errorHandler;

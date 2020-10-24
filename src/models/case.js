@@ -1,4 +1,4 @@
-const { Model } = require('objection')
+const { Model } = require('objection');
 
 const RequestTypeEnum = {
   CookedFood: 'cookedFood',
@@ -9,14 +9,14 @@ const RequestTypeEnum = {
   SchoolFees: 'schoolFees',
   TransportationFees: 'transportationFees',
   UtilityBill: 'utilityBill',
-}
+};
 
 const FulfilmentTypeEnum = {
   InKindDonation: 'inKindDonation',
   CashTransfer: 'cashTransfer',
   ThirdpartyPayment: 'third-partyPayment',
   PartnerReferral: 'partnerReferral',
-}
+};
 
 const CaseStatusTypeEnum = {
   New: 'new',
@@ -24,25 +24,25 @@ const CaseStatusTypeEnum = {
   ReferredtoEFC: 'referredtoEFC',
   Processing: 'processing',
   Closed: 'closed',
-}
+};
 
 const ReferenceStatusTypeEnum = {
   Unverified: 'unverified',
   Pending: 'pending',
   Verified: 'verified',
-}
+};
 const ApprovalTypeEnum = {
   NIL: '-',
   full: 'full',
   partial: 'partial',
   rejected: 'rejected',
-}
+};
 
-const tableCase = 'cases'
+const tableCase = 'cases';
 
 class Case extends Model {
   static get tableName() {
-    return tableCase
+    return tableCase;
   }
 
   static get jsonSchema() {
@@ -62,7 +62,7 @@ class Case extends Model {
         BeneficiaryId: { type: 'integer' },
         RefereeId: { type: 'integer' },
       },
-    }
+    };
   }
 }
 
@@ -75,4 +75,4 @@ module.exports = {
   ReferenceStatusTypeEnum,
   ApprovalTypeEnum,
   CaseStatusTypeEnum,
-}
+};

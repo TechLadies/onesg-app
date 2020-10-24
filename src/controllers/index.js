@@ -4,10 +4,12 @@
  * MIT Licensed
  */
 
-const beneficiaries = require('./beneficiaries')
+'use strict';
+
+const beneficiaries = require('./beneficiaries');
 // const cases = require('./cases');
 
 module.exports = {
   beneficiaries,
   // cases,
-}
+};

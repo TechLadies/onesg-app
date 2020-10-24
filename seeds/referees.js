@@ -1,4 +1,4 @@
-const { tableReferee } = require('../src/models/referee')
+const { tableReferee } = require('../src/models/referee');
 
 exports.seed = function seedRefereeTable(knex) {
   // Deletes ALL existing entries
@@ -14,6 +14,6 @@ exports.seed = function seedRefereeTable(knex) {
           Phone: '34673662',
           Organisation: 'Techladies',
         },
-      ])
-    })
-}
+      ]);
+    });
+};

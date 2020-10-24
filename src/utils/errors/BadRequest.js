@@ -7,7 +7,7 @@
 /**
  * Module dependencies
  */
-const OpError = require('./OpError')
+const OpError = require('./OpError');
 
 /**
  * Custom error class for Bad Request (400) errors
@@ -15,8 +15,8 @@ const OpError = require('./OpError')
  */
 class BadRequest extends OpError {
   constructor(message) {
-    super('BAD_REQUEST', 400, message)
+    super('BAD_REQUEST', 400, message);
   }
 }
 
-module.exports = BadRequest
+module.exports = BadRequest;

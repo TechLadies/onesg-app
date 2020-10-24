@@ -7,18 +7,18 @@
 /**
  * Module dependencies.
  */
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
-const { beneficiaries } = require('../controllers')
+const router = express.Router();
+const { beneficiaries } = require('../controllers');
 
 /**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
 // GET /v1/beneficiaries
-router.get('/', beneficiaries.getAll)
+router.get('/', beneficiaries.getAll);
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);
 
-module.exports = router
+module.exports = router;

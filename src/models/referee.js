@@ -1,14 +1,14 @@
 /* eslint-disable strict */
 
-'use strict'
+'use strict';
 
-const { Model } = require('objection')
+const { Model } = require('objection');
 
-const tableReferee = 'referees'
+const tableReferee = 'referees';
 
 class Referee extends Model {
   static get tableName() {
-    return tableReferee
+    return tableReferee;
   }
 
   static get jsonSchema() {
@@ -22,7 +22,7 @@ class Referee extends Model {
         Phone: { type: 'varchar', maxLength: 12 },
         Organisation: { type: 'varchar', maxLength: 255 },
       },
-    }
+    };
   }
 }
 
@@ -30,4 +30,4 @@ module.exports = {
   Referee,
   model: Referee,
   tableReferee,
-}
+};

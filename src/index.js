@@ -8,30 +8,30 @@
  * Module dependencies.
  */
 // Built-in modules
-const http = require('http')
-const https = require('https')
+const http = require('http');
+const https = require('https');
 
 // Third-party modules
-const express = require('express')
-const cors = require('cors')
-const bodyparser = require('body-parser')
-const morgan = require('morgan')
+const express = require('express');
+const cors = require('cors');
+const bodyparser = require('body-parser');
+const morgan = require('morgan');
 
 // Custom modules
 const {
   envConfig: { SERVER_CONFIG, CORS_CONFIG },
-} = require('../config')
-const routes = require('./routers')
-const { errorHandler } = require('./middleware')
+} = require('../config');
+const routes = require('./routers');
+const { errorHandler } = require('./middleware');
 
 /**
  * Express server setup
  */
 
-const app = express()
+const app = express();
 const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
-  : http.createServer(app)
+  : http.createServer(app);
 
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
 
@@ -42,42 +42,42 @@ const server = SERVER_CONFIG.USE_HTTPS
 const corsOptions = {
   origin: CORS_CONFIG.ALLOWED_ORIGINS,
   methods: CORS_CONFIG.ALLOWED_METHODS,
-}
+};
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 // Body Parser
-app.use(bodyparser.json())
-app.use(bodyparser.urlencoded({ extended: false }))
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: false }));
 
 // Logger
 app.use(
   morgan('combined', {
     skip(req, res) {
-      return res.statusCode < 400
+      return res.statusCode < 400;
     },
     stream: process.stderr,
   })
-)
+);
 
 app.use(
   morgan('combined', {
     skip(req, res) {
-      return res.statusCode >= 400
+      return res.statusCode >= 400;
     },
     stream: process.stdout,
   })
-)
+);
 
 /**
  * Routes setup
  */
-routes(app)
+routes(app);
 
 /**
  * Error handler setup
  */
-errorHandler(app)
+errorHandler(app);
 
 /**
  * Start listening to connection requests made on specified PORT
@@ -86,5 +86,5 @@ server.listen(SERVER_CONFIG.PORT, () => {
   // eslint-disable-next-line no-console
   console.log(
     `OneSG API Server listening at http://${SERVER_CONFIG.HOSTNAME}:${SERVER_CONFIG.PORT}`
-  )
-})
+  );
+});

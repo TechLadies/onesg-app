@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-const beneficiaries = require('./beneficiaries')
+const beneficiaries = require('./beneficiaries');
 // const cases = require('./cases');
 
 /**
@@ -16,11 +16,11 @@ const beneficiaries = require('./beneficiaries')
  */
 const routes = (app) => {
   app.get('/v1/healthcheck', function healthcheck(req, res) {
-    res.status(200).json({ message: `Everything's A-OK on v1!` })
-  })
+    res.status(200).json({ message: `Everything's A-OK on v1!` });
+  });
 
-  app.use('/v1/beneficiaries', beneficiaries)
+  app.use('/v1/beneficiaries', beneficiaries);
   // app.use('/v1/cases', cases);
-}
+};
 
-module.exports = routes
+module.exports = routes;

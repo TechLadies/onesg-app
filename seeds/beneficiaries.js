@@ -1,5 +1,5 @@
-const { tableBeneficiary } = require('../src/models/beneficiary')
-const { PaymentTypeEnum } = require('../src/models/beneficiary.js')
+const { tableBeneficiary } = require('../src/models/beneficiary');
+const { PaymentTypeEnum } = require('../src/models/beneficiary.js');
 
 exports.seed = function seedBeneficiaryTable(knex) {
   // Deletes ALL existing entries
@@ -20,6 +20,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           HouseholdSize: '4',
           PaymentType: PaymentTypeEnum.PayNow,
         },
-      ])
-    })
-}
+      ]);
+    });
+};
