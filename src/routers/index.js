@@ -8,8 +8,6 @@
  * Module dependencies.
  */
 const beneficiaries = require('./beneficiaries')
-const referees = require('./referees')
-const authRoute = require('./auth')
 // const cases = require('./cases');
 
 /**

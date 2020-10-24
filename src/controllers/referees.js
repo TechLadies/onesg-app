@@ -5,7 +5,7 @@
  */
 const { check, validationResult } = require('express-validator')
 
-const db = require('../../config/dbconfig')
+const db = require('../../config/db')
 
 /**
  * Retrieve all references
