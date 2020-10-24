@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 const beneficiaries = require('./beneficiaries');
 // const cases = require('./cases');
 
