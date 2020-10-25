@@ -3,8 +3,8 @@ const { PaymentTypeEnum } = require('../src/models/beneficiary.js');
 
 exports.up = function makeBeneficiarytable(knex) {
   return knex.schema.createTable(tableBeneficiary, (table) => {
-    // table.increments('benId').primary();
-    table.increments('beneficiaryId').primary();
+    table.increments('id').primary();
+    table.string('beneficiaryId').index().unique();
     table.text('name');
     table.text('email').notNullable().unique();
     table.text('phone').notNullable().unique();

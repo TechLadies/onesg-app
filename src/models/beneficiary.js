@@ -1,6 +1,6 @@
 const { Model } = require('objection');
 
-const PaymentTypeEnum = {
+const paymentTypeEnum = {
   PayNow: 'payNow',
   BankTransfer: 'bankTransfer',
 };
@@ -35,5 +35,5 @@ module.exports = {
   Beneficiary,
   model: Beneficiary,
   tableBeneficiary,
-  PaymentTypeEnum,
+  paymentTypeEnum,
 };

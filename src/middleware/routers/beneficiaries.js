@@ -12,6 +12,8 @@
 
 const express = require('express');
 
+const { isNull } = require('../../../config/isNull');
+
 const router = express.Router();
 const passport = require('passport');
 const {
@@ -30,6 +32,6 @@ router.get(
 );
 
 // POST /v1/beneficiaries
-// router.post('/', beneficiaries.create);
+router.post('/', isNull, beneficiaries.validate, beneficiaries.create);
 
 module.exports = router;
