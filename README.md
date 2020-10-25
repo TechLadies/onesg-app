@@ -44,24 +44,30 @@ npm run dev
 <br/>
 
 ## Database Setup
-To setup your database, create a folder named `database` in the root directory.
 
-1. Create the database using the following script:
+1. Install PostgreSQL: 
 ```
-npm run createdb
+npm install pg
 ```
 
-2. To run the migrations,
+2. Create the database 
+```
+createdb onesg
+```
+
+3. To run the migrations,
 ```
 npm run db-migrate
 ```
 
-3. Populate the tables with the seed data with,
+4. Populate the tables with the seed data with,
 ```
-npm run db-run-seed
+knex seed:run --specific=beneficiaries.jS
+knex seed:run --specific=referees.js
+knex seed:run --specific=case.js
 ```
 
-Ensure that the database file `one-sg.db` exists in the `database` folder, with the tables populated with the seeded data
+Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check. 
 
 <br/>
 <br/>
