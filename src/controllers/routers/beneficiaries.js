@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
+
 const { ValidationError, UniqueViolationError } = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 const { Beneficiary } = require('../../models');
+
 
 /**
  * Sanitize data from client. Call before an insert or an update.
