@@ -13,7 +13,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           Name: 'ziza',
           Email: 'zizah@azizah@.com',
           Phone: '596424222',
-          Address: '100 victoria street',
           Occupation: 'software engineer',
           HouseholdIncome: '1333',
           HouseholdSize: '4',
