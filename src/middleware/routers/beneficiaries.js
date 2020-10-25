@@ -14,6 +14,7 @@
 const express = require('express');
 
 const isLoggedIn = require('../isLoggedIn');
+const { isNull } = require('../../../config/isNull');
 
 const router = express.Router();
 
@@ -29,6 +30,6 @@ const {
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
 // POST /v1/beneficiaries
-// router.post('/', beneficiaries.create);
+router.post('/', isNull, beneficiaries.validate, beneficiaries.create);
 
 module.exports = router;
