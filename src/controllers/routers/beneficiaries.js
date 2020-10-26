@@ -39,6 +39,35 @@ const create = async (req, res) => {
       .json({ message: 'Beneficiary already exists', error: err });
   }
 };
+/**
+ * Update Beneficiaries
+ * @param {Request} req
+ * @param {Response} res
+ */
+
+const update = async (req, res) => {
+  // Return if there are any validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json(errors);
+  }
+
+  const updateBeneficiary = req.body;
+  // const benID = req.body.BeneficiaryId;
+
+  try {
+    // Check if beneficiary already exists in db
+    const updateben = await db('beneficiary')
+      .where({ BeneficiaryId: req.body.BeneficiaryId })
+      .update(updateBeneficiary);
+    return res
+      .status(201)
+      .json({ message: 'Beneficiary successfully updated', updateben });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'Update Fail', error: err });
+  }
+};
 
 /**
  * Validate new Beneficiaries
@@ -76,5 +105,6 @@ const validate = [
 module.exports = {
   getAll,
   create,
+  update,
   validate,
 };

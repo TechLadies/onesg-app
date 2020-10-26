@@ -26,6 +26,12 @@ const {
 router.get('/', beneficiaries.getAll);
 
 // POST /v1/beneficiaries
-router.post('/', isNull, beneficiaries.validate, beneficiaries.create);
+router.post(
+  '/',
+  isNull,
+  beneficiaries.validate,
+  beneficiaries.update,
+  beneficiaries.create
+);
 
 module.exports = router;
