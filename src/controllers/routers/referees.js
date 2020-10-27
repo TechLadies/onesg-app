@@ -40,8 +40,13 @@ const create = async (req, res) => {
   const newReferee = req.body;
   try {
     // Check if reference already exists in db
-    await db('referees').insert(newReferee);
-    return res.status(201).json({ message: 'Reference successfully created' });
+    await db('referees')
+      .insert(newReferee)
+      .returning('RefereeId')
+      .then((id) => {
+        return res.json({ message: 'Reference successfully created', id });
+      });
+    return res.status(201);
   } catch (err) {
     return res
       .status(new UnprocessableEntity().error.statusCode)
