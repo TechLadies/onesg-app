@@ -43,10 +43,8 @@ const create = async (req, res) => {
   const newReferee = req.body;
   try {
     // Check if reference already exists in db
-    const ref = await db('referees').insert(newReferee);
-    return res
-      .status(201)
-      .json({ message: 'Reference successfully created', ref });
+    await db('referees').insert(newReferee);
+    return res.status(201).json({ message: 'Reference successfully created' });
   } catch (err) {
     return res
       .status(new UnprocessableEntity().error.statusCode)
@@ -60,7 +58,6 @@ const create = async (req, res) => {
  * @param {Response} res
  */
 const validate = [
-  check('RefereeId', 'Reference ID invalid').isInt(), // checks for int format
   check('Name', 'Reference name invalid')
     .exists() // makes Name field mandatory
     .isString() // checks for string format
@@ -70,7 +67,7 @@ const validate = [
     .isEmail() // checks for email format
     .isLength({ min: 1, max: 255 }),
   check('Phone', 'Phone format invalid')
-    .optional({ checkFalsy: true })
+    .optional()
     .isNumeric() // checks if string only contains numbers
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
