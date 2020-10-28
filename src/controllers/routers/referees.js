@@ -39,7 +39,7 @@ const create = async (req, res) => {
   }
   const newReferee = req.body;
   try {
-    // Check if reference already exists in db
+    // Check if reference already exists in db, and returns RefereeId
     await db('referees')
       .insert(newReferee)
       .returning('RefereeId')
@@ -65,11 +65,10 @@ const validate = [
     .isString() // checks for string format
     .isLength({ min: 1, max: 255 }), // checks for length of name
   check('Email', 'Email format invalid')
-    .optional({ checkFalsy: true })
+    .optional({ checkFalsy: true }) // fields with falsy values (eg "", 0, false, null) will also be considered optional
     .isEmail() // checks for email format
     .isLength({ min: 1, max: 255 }),
   check('Phone', 'Phone format invalid')
-    .optional()
     .isNumeric() // checks if string only contains numbers
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
