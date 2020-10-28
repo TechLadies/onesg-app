@@ -54,11 +54,12 @@ const update = async (req, res) => {
 
   const updateBeneficiary = req.body;
   // const benID = req.body.BeneficiaryId;
+  console.log(req.params.BeneficiaryId);
 
   try {
     // Check if beneficiary already exists in db
     const updateben = await db('beneficiary')
-      .where({ BeneficiaryId: req.body.BeneficiaryId })
+      .where({ BeneficiaryId: req.params.BeneficiaryId })
       .update(updateBeneficiary);
     return res
       .status(201)
