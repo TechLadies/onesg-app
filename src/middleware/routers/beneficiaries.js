@@ -28,4 +28,11 @@ router.get('/', beneficiaries.getAll);
 // POST /v1/beneficiaries
 router.post('/', isNull, beneficiaries.validate, beneficiaries.create);
 
+router.put(
+  '/:BeneficiaryId',
+  isNull,
+  beneficiaries.validate,
+  beneficiaries.update
+);
+
 module.exports = router;
