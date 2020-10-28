@@ -37,4 +37,11 @@ router.patch('/:id', beneficiaries.update);
 
 router.delete('/:beneficiaryId', beneficiaries.del);
 
+router.put(
+  '/:BeneficiaryId',
+  isNull,
+  beneficiaries.validate,
+  beneficiaries.update
+);
+
 module.exports = router;

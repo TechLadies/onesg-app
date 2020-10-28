@@ -120,6 +120,36 @@ const create = async (req, res, next) => {
     return next(new BadRequest(err.nativeError.detail));
   }
 };
+/**
+ * Update Beneficiaries
+ * @param {Request} req
+ * @param {Response} res
+ */
+
+const update = async (req, res) => {
+  // Return if there are any validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json(errors);
+  }
+
+  const updateBeneficiary = req.body;
+  // const benID = req.body.BeneficiaryId;
+  console.log(req.params.BeneficiaryId);
+
+  try {
+    // Check if beneficiary already exists in db
+    const updateben = await db('beneficiary')
+      .where({ BeneficiaryId: req.params.BeneficiaryId })
+      .update(updateBeneficiary);
+    return res
+      .status(201)
+      .json({ message: 'Beneficiary successfully updated', updateben });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'Update Fail', error: err });
+  }
+};
 
 /**
  * Update existing beneficiary
@@ -187,6 +217,10 @@ module.exports = {
   getBeneficiary,
   create,
   update,
+<<<<<<< HEAD
   del,
   getBeneficiarybyCase,
+=======
+  validate,
+>>>>>>> On 54 updateben (#14)
 };
