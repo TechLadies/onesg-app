@@ -44,4 +44,6 @@ router.put(
   beneficiaries.update
 );
 
+router.delete('/:BeneficiaryId', beneficiaries.del);
+
 module.exports = router;

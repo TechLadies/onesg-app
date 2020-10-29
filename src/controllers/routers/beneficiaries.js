@@ -217,10 +217,6 @@ module.exports = {
   getBeneficiary,
   create,
   update,
-<<<<<<< HEAD
   del,
   getBeneficiarybyCase,
-=======
-  validate,
->>>>>>> On 54 updateben (#14)
 };
