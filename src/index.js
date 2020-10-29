@@ -8,10 +8,15 @@
  * Module dependencies.
  */
 // Built-in modules
+// Third-party module
+
 const http = require('http');
 const https = require('https');
+<<<<<<< HEAD
 const passport = require('passport');
 // Third-party modules
+=======
+>>>>>>> added delete
 const express = require('express');
 const cors = require('cors');
 const bodyparser = require('body-parser');

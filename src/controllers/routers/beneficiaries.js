@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { check, validationResult } = require('express-validator');
 
 /**
@@ -17,6 +16,28 @@ const getAll = async (req, res) => {
 };
 
 /**
+ * Delete Beneficiaries
+ * @param {Request} req
+ * @param {Response} res
+ */
+const del = async (req, res) => {
+  const Beneficiary = req.body;
+  try {
+    // Check if beneficiary already exists in db
+    const delben = await db('beneficiary')
+      .where({ BeneficiaryId: req.params.BeneficiaryId })
+      .del(Beneficiary);
+    return res
+      .status(201)
+      .json({ message: 'Beneficiary successfully deleted', delben });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: 'Beneficiary cannot be deleted', error: err });
+  }
+};
+
+/**
  * Create new Beneficiaries
  * @param {Request} req
  * @param {Response} res
@@ -27,12 +48,9 @@ const create = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(422).json(errors);
   }
-  const newBeneficiary = req.body;
-  console.log(newBeneficiary);
-
   try {
     // Check if beneficiary already exists in db
-    const ben = await db('beneficiary').insert(newBeneficiary);
+    const ben = await db('beneficiary').insert(Beneficiary);
     return res
       .status(201)
       .json({ message: 'Beneficiary successfully created', ben });
@@ -49,26 +67,21 @@ const create = async (req, res) => {
  */
 
 const update = async (req, res) => {
+  const Beneficiary = req.body;
   // Return if there are any validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json(errors);
   }
-
-  const updateBeneficiary = req.body;
-  // const benID = req.body.BeneficiaryId;
-  console.log(req.params.BeneficiaryId);
-
   try {
     // Check if beneficiary already exists in db
     const updateben = await db('beneficiary')
       .where({ BeneficiaryId: req.params.BeneficiaryId })
-      .update(updateBeneficiary);
+      .update(Beneficiary);
     return res
       .status(201)
       .json({ message: 'Beneficiary successfully updated', updateben });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ message: 'Update Fail', error: err });
   }
 };
@@ -111,4 +124,5 @@ module.exports = {
   create,
   update,
   validate,
+  del,
 };
