@@ -57,7 +57,7 @@
     "supertest": "^6.0.1"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
+    "@types/module-alias": "^2.0.0",
     "eslint": "^7.10.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
