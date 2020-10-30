@@ -72,7 +72,7 @@ Ensure that the database  `onesg` exists in the localhost, with the tables popul
 
 1. To activate user authentication, run the following script to generate keys:
 
-
+npm gen-authcode
 ```
 <br/>
 

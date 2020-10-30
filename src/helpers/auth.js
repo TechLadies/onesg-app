@@ -11,12 +11,12 @@ const USERS = [
     password: 'password123member',
     role: 'referrer',
   },
-]
+];
 
 const getAdminUser = (userEmail) => {
-  const user = USERS.find((users) => users.email === userEmail)
-  return user
-}
+  const user = USERS.find((users) => users.email === userEmail);
+  return user;
+};
 module.exports = {
   getAdminUser,
-}
+};

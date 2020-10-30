@@ -8,9 +8,9 @@
  * Module dependencies.
  */
 // Built-in modules
-const http = require('http')
-const https = require('https')
-const passport = require('passport')
+const http = require('http');
+const https = require('https');
+const passport = require('passport');
 // Third-party modules
 const express = require('express');
 const cors = require('cors');
@@ -34,9 +34,9 @@ const server = SERVER_CONFIG.USE_HTTPS
 
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
 
-require('../config/passport')(passport)
+require('../config/passport')(passport);
 
-app.use(passport.initialize())
+app.use(passport.initialize());
 /**
  * Middleware setup
  */
@@ -82,8 +82,7 @@ app.use(routers);
 errorHandler(app);
 
 /**
- * Start listening to
- *  connection requests made on specified PORT
+ * Start listening to connection requests made on specified PORT
  */
 server.listen(SERVER_CONFIG.PORT, () => {
   // eslint-disable-next-line no-console
