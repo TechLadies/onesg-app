@@ -24,7 +24,11 @@ router.get('/', referees.getAll);
 
 // POST /v1/references
 router.post('/', referees.validate, function catchError(req, res, next) {
-  Promise.resolve().then(referees.create).catch(next);
+  Promise.resolve()
+    .then(referees.create(req, res, next))
+    .catch((err) => {
+      next(err);
+    });
 });
 
 module.exports = router;

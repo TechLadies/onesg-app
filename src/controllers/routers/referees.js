@@ -29,28 +29,22 @@ const getAll = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   // Return if there are any validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res
-      .status(new BadRequest().error.statusCode)
-      .json(new BadRequest(errors));
+  const validationError = validationResult(req);
+  if (!validationError.isEmpty()) {
+    next(new BadRequest(validationError.errors[0].msg));
   }
   const newReferee = req.body;
   try {
     // Check if reference already exists in db, and returns RefereeId
-    await db('referees')
-      .insert(newReferee)
-      .returning('RefereeId')
-      .then((id) => {
-        return res.json({ message: 'Reference successfully created', id });
-      });
-    return res.status(201);
+    const id = await db('referees').insert(newReferee).returning('RefereeId');
+    return res.status(201).json(id);
   } catch (err) {
-    return res
-      .status(new UnprocessableEntity().error.statusCode)
-      .json(new UnprocessableEntity(err));
+    return next(new UnprocessableEntity(err));
+    // return res
+    //   .status(new UnprocessableEntity().error.statusCode)
+    //   .json(new UnprocessableEntity(err));
   }
 };
 
@@ -63,18 +57,24 @@ const validate = [
   check('Name', 'Reference name invalid')
     .exists() // makes Name field mandatory
     .isString() // checks for string format
-    .isLength({ min: 1, max: 255 }), // checks for length of name
+    .withMessage('Please enter only  letters or numbers for name')
+    .isLength({ min: 1, max: 255 })
+    .withMessage('Please enter a name with a min length of 1 character'), // checks for length of name
   check('Email', 'Email format invalid')
     .optional({ checkFalsy: true }) // fields with falsy values (eg "", 0, false, null) will also be considered optional
     .isEmail() // checks for email format
     .isLength({ min: 1, max: 255 }),
   check('Phone', 'Phone format invalid')
     .isNumeric() // checks if string only contains numbers
+    .withMessage('Please enter only numbers for phone')
     .isLength({ max: 12 }),
   check('Organisation', 'Organisation invalid')
     .optional({ checkFalsy: true })
     .isString() // checks if string only contains letters and numbers
-    .isLength({ max: 255 }),
+    .isLength({ max: 255 })
+    .withMessage(
+      'Please enter an organisation with a max length of 255 characters'
+    ),
 ];
 
 module.exports = {
