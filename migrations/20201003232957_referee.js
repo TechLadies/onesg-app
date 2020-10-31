@@ -35,6 +35,7 @@ exports.up = function makeRefereetable(knex) {
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of referee update');
+    table.timestamps(true, true);
   });
 };
 
