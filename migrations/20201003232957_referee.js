@@ -7,7 +7,7 @@ exports.up = function makeRefereetable(knex) {
     table.text('Email').unique();
     table.text('Phone').unique();
     table.text('Organisation');
-    table.timestamps(true, false);
+    table.timestamps(true, true);
   });
 };
 
