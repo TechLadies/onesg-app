@@ -10,6 +10,4 @@
 
 const envConfig = require('./env');
 
-module.exports = {
-  envConfig,
-};
+module.exports = envConfig;

@@ -50,10 +50,8 @@ const create = async (req, res) => {
   }
   try {
     // Check if beneficiary already exists in db
-    const ben = await db('beneficiary').insert(Beneficiary);
-    return res
-      .status(201)
-      .json({ message: 'Beneficiary successfully created', ben });
+    await db('beneficiary').insert(Beneficiary).returning('BeneficiaryId');
+    return res.status(201);
   } catch (err) {
     return res
       .status(500)
