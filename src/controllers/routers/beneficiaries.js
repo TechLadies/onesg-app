@@ -101,12 +101,18 @@ const getBeneficiary = async (req, res, next) => {
 const create = async (req, res, next) => {
   const newBeneficiary = sanitize(req.body);
   try {
+<<<<<<< HEAD
     const ben = await Beneficiary.query()
       .select()
       .insert(newBeneficiary)
       .returning('beneficiaryId');
 
     return res.status(201).json({ ben });
+=======
+    // Check if beneficiary already exists in db
+    await db('beneficiary').insert(Beneficiary).returning('BeneficiaryId');
+    return res.status(201);
+>>>>>>> revise env
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
