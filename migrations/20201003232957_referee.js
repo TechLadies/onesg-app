@@ -4,10 +4,10 @@ exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
     table.increments('RefereeId').primary();
     table.text('Name');
-    table.text('Email').notNullable().unique();
-    table.text('Phone').notNullable().unique();
+    table.text('Email').unique();
+    table.text('Phone').unique();
     table.text('Organisation');
-    table.timestamps(true, false);
+    table.timestamps(true, true);
   });
 };
 

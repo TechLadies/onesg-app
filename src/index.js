@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -8,10 +9,10 @@
  * Module dependencies.
  */
 // Built-in modules
-// Third-party module
-
 const http = require('http');
 const https = require('https');
+
+// Third-party modules
 const express = require('express');
 const cors = require('cors');
 const bodyparser = require('body-parser');
