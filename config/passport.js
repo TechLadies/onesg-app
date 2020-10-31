@@ -4,7 +4,7 @@ const { ExtractJwt } = require('passport-jwt');
 const fs = require('fs');
 const path = require('path');
 
-const pathToKey = path.join(__dirname, '../src/utils/scripts/id_rsa_pub.pem');
+const pathToKey = path.join(__dirname, '../scripts/keys/id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 const { getAdminUser } = require('../src/helpers/auth');
 
