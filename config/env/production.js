@@ -10,6 +10,9 @@
  * These variables can be directly defined in HEROKU
  */
 
+// eslint-disable-next-line prefer-destructuring
+const NODE_ENV = process.env.NODE_ENV;
+
 const CORS_CONFIG = {
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   ALLOWED_METHODS: process.env.ALLOWED_METHODS,
@@ -24,6 +27,7 @@ const SERVER_CONFIG = {
 };
 
 module.exports = {
+  NODE_ENV,
   CORS_CONFIG,
   SERVER_CONFIG,
 };
