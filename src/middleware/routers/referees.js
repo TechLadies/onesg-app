@@ -23,12 +23,6 @@ const {
 router.get('/', referees.getAll);
 
 // POST /v1/references
-router.post('/', referees.validate, function catchError(req, res, next) {
-  Promise.resolve()
-    .then(referees.create(req, res, next))
-    .catch((err) => {
-      next(err);
-    });
-});
+router.post('/', referees.validate, referees.create);
 
 module.exports = router;
