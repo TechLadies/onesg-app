@@ -1,5 +1,3 @@
-/* eslint-disable strict */
-
 'use strict';
 
 const fs = require('fs');
@@ -7,14 +5,15 @@ const path = require('path');
 const Knex = require('knex');
 const { Model } = require('objection');
 const knexConfig = require('../../knexfile');
-
-const pathJoin = require(path.join());
+const {
+  envConfig: { NODE_ENV },
+} = require('../../config');
 
 const basename = path.basename(__filename);
 const db = {};
 
 // Initialise Knex
-const knex = Knex(knexConfig[process.env.NODE_ENV || 'development']);
+const knex = Knex(knexConfig[NODE_ENV]);
 db.knex = knex;
 
 Model.knex(knex);
@@ -45,7 +44,8 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach((file) => {
-    const { model } = pathJoin(__dirname, file);
+    const modelFile = path.join(__dirname, file);
+    const { model } = require(modelFile); // eslint-disable-line global-require
     db[model.name] = model;
   });
 
