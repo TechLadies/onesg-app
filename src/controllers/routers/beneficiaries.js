@@ -1,4 +1,9 @@
+/* eslint-disable no-console */
 const { check, validationResult } = require('express-validator');
+const {
+  errors: { BadRequest, UnprocessableEntity },
+} = require('../../utils');
+const { Beneficiary } = require('../../models');
 
 /**
  * Module dependencies.
@@ -16,20 +21,64 @@ const getAll = async (req, res) => {
 };
 
 /**
+ * Create new Beneficiaries
+ * @param {Request} req
+ * @param {Response} res
+ */
+const create = async (req, res, next) => {
+  const validationError = validationResult(req);
+  if (!validationError.isEmpty()) {
+    return next(new BadRequest(validationError.errors[0].msg));
+  }
+  const ben = req.body;
+  try {
+    await Beneficiary.query().insert(ben).returning('BeneficiaryId');
+    return res
+      .status(201)
+      .json({ message: `${req.body.Name} successfully added` });
+  } catch (err) {
+    return next(new UnprocessableEntity(err.data));
+  }
+};
+
+/**
+ * Update Beneficiaries
+ * @param {Request} req
+ * @param {Response} res
+ */
+const update = async (req, res, next) => {
+  const validationError = validationResult(req);
+  if (!validationError.isEmpty()) {
+    return next(new BadRequest(validationError.errors[0].msg));
+  }
+  const ben = req.body;
+  try {
+    await Beneficiary.query()
+      .update(ben)
+      .where('BeneficiaryId', req.body.BeneficiaryId);
+    return res
+      .status(201)
+      .json({ message: `${req.body.Name} successfully updated` });
+  } catch (err) {
+    console.log(err);
+    return next(new UnprocessableEntity(err.data));
+  }
+};
+
+/**
  * Delete Beneficiaries
  * @param {Request} req
  * @param {Response} res
  */
+
 const del = async (req, res) => {
-  const Beneficiary = req.body;
   try {
-    // Check if beneficiary already exists in db
-    const delben = await db('beneficiary')
-      .where({ BeneficiaryId: req.params.BeneficiaryId })
-      .del(Beneficiary);
+    await Beneficiary.query()
+      .delete()
+      .where({ BeneficiaryId: req.body.BeneficiaryId });
     return res
       .status(201)
-      .json({ message: 'Beneficiary successfully deleted', delben });
+      .json({ message: `${req.body.Name} successfully deleted` });
   } catch (err) {
     return res
       .status(500)
@@ -38,70 +87,20 @@ const del = async (req, res) => {
 };
 
 /**
- * Create new Beneficiaries
- * @param {Request} req
- * @param {Response} res
- */
-const create = async (req, res) => {
-  // Return if there are any validation error
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json(errors);
-  }
-  try {
-    // Check if beneficiary already exists in db
-    await db('beneficiary').insert(Beneficiary).returning('BeneficiaryId');
-    return res.status(201);
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ message: 'Beneficiary already exists', error: err });
-  }
-};
-/**
- * Update Beneficiaries
- * @param {Request} req
- * @param {Response} res
- */
-
-const update = async (req, res) => {
-  const Beneficiary = req.body;
-  // Return if there are any validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json(errors);
-  }
-  try {
-    // Check if beneficiary already exists in db
-    const updateben = await db('beneficiary')
-      .where({ BeneficiaryId: req.params.BeneficiaryId })
-      .update(Beneficiary);
-    return res
-      .status(201)
-      .json({ message: 'Beneficiary successfully updated', updateben });
-  } catch (err) {
-    return res.status(500).json({ message: 'Update Fail', error: err });
-  }
-};
-
-/**
- * Validate new Beneficiaries
+ * Validate Beneficiaries
  * @param {Request} req
  * @param {Response} res
  */
 const validate = [
-  check('Name', 'Beneficiary name invalid')
-    .exists() // makes Name field mandatory
-    .isString() // checks for string format
-    .isLength({ min: 1, max: 255 }), // checks for length of name
-  check('Email', 'Email format invalid')
+  check('Name')
+    .matches(/^[A-Za-z\s]+$/)
+    .withMessage('Reference name must be alphabetic'),
+  check('Email')
     .optional({ checkFalsy: true })
-    .isEmail() // checks for email format
-    .isLength({ min: 1, max: 255 }),
-  check('Phone', 'Phone format invalid')
-    .optional({ checkFalsy: true })
-    .isNumeric() // checks if string only contains numbers
-    .isLength({ max: 12 }),
+    .isEmail()
+    .withMessage('Email format invalid')
+    .normalizeEmail({ all_lowercase: true }), // sanitisation
+  check('Phone').isNumeric().withMessage('Phone number must be numeric'),
   check('Occupation')
     .optional({ checkFalsy: true })
     .isString() // checks if string only contains letters and numbers
@@ -121,6 +120,6 @@ module.exports = {
   getAll,
   create,
   update,
-  validate,
   del,
+  validate,
 };

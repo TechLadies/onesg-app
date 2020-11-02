@@ -9,9 +9,25 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
+<<<<<<< HEAD
     table.increments('id').primary();
     table
       .string('caseNumber', 12)
+=======
+    table.increments('CaseId').primary();
+    table.enum('RequestType', Object.values(RequestTypeEnum));
+    table.enum('Fulfilment', Object.values(FulfilmentTypeEnum));
+    table.text('POC');
+    table.decimal('AmountRequested');
+    table.text('Description');
+    table.enum('CaseStatus', Object.values(CaseStatusTypeEnum));
+    table.enum('Approval', Object.values(ApprovalTypeEnum));
+    table.enum('ReferenceStatus', Object.values(ReferenceStatusTypeEnum));
+    table.decimal('AmountGranted');
+    table
+      .string('BeneficiaryId')
+      .unsigned()
+>>>>>>> objection query
       .index()
       .unique()
       .comment('Case number for this case. Format: EFYYYY-MM999');
