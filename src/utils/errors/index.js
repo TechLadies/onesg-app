@@ -6,8 +6,10 @@
 
 const OpError = require('./OpError');
 const BadRequest = require('./BadRequest');
+const UnprocessableEntity = require('./UnprocessableEntity');
 
 module.exports = {
   OpError,
   BadRequest,
+  UnprocessableEntity,
 };

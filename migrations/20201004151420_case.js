@@ -22,7 +22,7 @@ exports.up = function makeCasetable(knex) {
     table.enum('ReferenceStatus', Object.values(ReferenceStatusTypeEnum));
     table.decimal('AmountGranted');
     table
-      .bigInteger('BeneficiaryId')
+      .string('BeneficiaryId')
       .unsigned()
       .index()
       .references('BeneficiaryId')

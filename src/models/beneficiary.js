@@ -5,7 +5,7 @@ const PaymentTypeEnum = {
   BankTransfer: 'bankTransfer',
 };
 
-const tableBeneficiary = 'beneficiary';
+const tableBeneficiary = 'Beneficiary';
 
 class Beneficiary extends Model {
   static get tableName() {
@@ -17,14 +17,14 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['Email', 'Name', 'Phone'],
       properties: {
-        BeneficiaryId: { type: 'integer' },
-        Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: { type: 'string', minLength: 1, maxLength: 255 },
-        Phone: { type: 'varchar', maxLength: 12 },
-        Occupation: { type: 'string', maxLength: 255 },
-        HouseholdIncome: { type: 'decimal', minLength: 1 },
-        HouseholdSize: { type: 'integer' },
-        PaymentType: { type: 'enum' },
+        beneficiaryId: { type: 'varchar' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { maxLength: 255 },
+        phone: { type: 'varchar', maxLength: 12 },
+        occupation: { type: 'string', maxLength: 255 },
+        householdIncome: { type: 'decimal', minLength: 1 },
+        householdSize: { type: 'varchar' },
+        paymentType: { type: 'enum' },
       },
     };
   }
