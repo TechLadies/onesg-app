@@ -80,7 +80,7 @@ const getBeneficiarybyId = async (req, res, next) => {
 =======
 >>>>>>> add graphfetch
 /**
- * Create new Beneficiaries
+ * Update Beneficiaries
  * @param {Request} req
  * @param {Response} res
  */
@@ -180,5 +180,6 @@ module.exports = {
   create,
   update,
   del,
+  validate,
 };
 >>>>>>> add graphfetch
