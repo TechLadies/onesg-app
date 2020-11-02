@@ -5,7 +5,7 @@ const paymentTypeEnum = {
   BankTransfer: 'bankTransfer',
 };
 
-const tableBeneficiary = 'beneficiary';
+const tableBeneficiary = 'Beneficiary';
 
 class Beneficiary extends Model {
   static get tableName() {

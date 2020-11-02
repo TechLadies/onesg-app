@@ -22,16 +22,16 @@ exports.up = function makeCasetable(knex) {
     table.enum('referenceStatus', Object.values(ReferenceStatusTypeEnum));
     table.decimal('amountGranted');
     table
-      .integer('beneficiaryId')
+      .varchar('beneficiaryId')
       .unsigned()
       .index()
       .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .bigInteger('refereeId')
+      .varchar('refereeId')
       .unsigned()
       .index()
-      .references('refId')
+      .references('refereeId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });

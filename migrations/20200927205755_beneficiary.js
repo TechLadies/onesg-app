@@ -10,6 +10,7 @@ exports.up = function makeBeneficiarytable(knex) {
     table.text('phone').notNullable().unique();
     table.text('address');
     table.text('occupation');
+    table.text('notes');
     table.decimal('householdIncome');
     table.integer('householdSize');
     table.enum('paymentType', Object.values(PaymentTypeEnum));
