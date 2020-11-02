@@ -16,7 +16,12 @@ const paymentTypeEnum = {
   PayNow: 'payNow',
   BankTransfer: 'bankTransfer',
 };
+<<<<<<< HEAD
 const tableBeneficiary = 'beneficiary';
+=======
+
+const tableBeneficiary = 'Beneficiary';
+>>>>>>> objection query
 
 // helper functions
 function getBeneficiaryId(previousId) {
@@ -66,6 +71,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
+<<<<<<< HEAD
         beneficiaryNumber: {
           type: 'string',
           minLength: 11,
@@ -82,11 +88,20 @@ class Beneficiary extends Model {
         },
 <<<<<<< HEAD
 =======
+=======
+        beneficiaryId: { type: 'varchar' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+<<<<<<< HEAD
+        email: { type: 'string', minLength: 1, maxLength: 255 },
+        phone: { type: 'varchar', maxLength: 12 },
+        address: { type: 'varchar', maxLength: 255 },
+>>>>>>> objection query
         occupation: { type: 'string', maxLength: 255 },
         notes: { type: 'text', maxLength: 255 },
         householdIncome: { type: 'decimal', minLength: 1 },
 >>>>>>> update: add notes & revised search
         householdSize: { type: 'integer' },
+<<<<<<< HEAD
         paymentType: {
           type: 'array',
           $comment:
@@ -121,6 +136,16 @@ class Beneficiary extends Model {
           },
           to: 'referees.refereeId',
         },
+=======
+=======
+        email: { maxLength: 255 },
+        phone: { type: 'varchar', maxLength: 12 },
+        occupation: { type: 'string', maxLength: 255 },
+        householdIncome: { type: 'decimal', minLength: 1 },
+        householdSize: { type: 'varchar' },
+>>>>>>> objection query
+        paymentType: { type: 'enum' },
+>>>>>>> objection query
       },
     };
   }
