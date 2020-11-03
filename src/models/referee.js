@@ -52,15 +52,9 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-<<<<<<< HEAD
         refereeNumber: { type: 'string', $comment: 'Format: RYYYY-MM999' },
         name: { type: 'string', minLength: 1, maxLength: 100 },
         email: { type: ['string', 'null'], maxLength: 50 },
-=======
-        refereeId: { type: 'string' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { maxLength: 255 },
->>>>>>> after rebase
         phone: {
           type: 'string',
           minLength: 8,
