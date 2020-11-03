@@ -27,7 +27,7 @@ router.get('/v1/healthcheck', function healthcheck(req, res) {
 });
 
 router.use('/v1/beneficiaries', beneficiaries);
-router.use('/v1/references', referees);
+router.use('/v1/referees', referees);
 // router.use('/v1/cases', cases);
 
 module.exports = router;

@@ -23,6 +23,6 @@ const {
 router.get('/', referees.getAll);
 
 // POST /v1/references
-router.post('/', referees.validate, referees.create);
+router.post('/', referees.create);
 
 module.exports = router;

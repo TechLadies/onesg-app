@@ -14,10 +14,10 @@ const OpError = require('./OpError');
  * Unsupported endpoints should not use this class
  * @param {string} message - custom message from calling function
  */
-class UnprocessableEntity extends OpError {
+class InvalidInput extends OpError {
   constructor(message) {
-    super('UNPROCESSABLE_ENTITY', 422, message);
+    super('INVALID_INPUT', 422, message);
   }
 }
 
-module.exports = UnprocessableEntity;
+module.exports = InvalidInput;

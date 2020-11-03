@@ -6,12 +6,12 @@
 
 'use strict';
 
-const { check, validationResult } = require('express-validator');
+const { ValidationError, UniqueViolationError } = require('objection');
 
 const { Referee } = require('../../models');
 
 const {
-  errors: { BadRequest, UnprocessableEntity },
+  errors: { BadRequest, InvalidInput },
 } = require('../../utils');
 
 /**
@@ -30,41 +30,25 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  // Return if there are any validation errors
-  const validationError = validationResult(req);
-  if (!validationError.isEmpty()) {
-    return next(new BadRequest(validationError.errors[0].msg));
-  }
   const newReferee = req.body;
   try {
-    // Check if reference already exists in db, and returns RefereeId
     const ref = await Referee.query().insert(newReferee).returning('RefereeId');
     return res.status(201).json(ref.RefereeId);
   } catch (err) {
-    return next(new UnprocessableEntity(err.data));
+    // if error type is validation error
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
+    }
+    // if error type is duplicate entry
+    if (err instanceof UniqueViolationError) {
+      return next(new BadRequest(err.nativeError.detail));
+    }
+    return next(new InvalidInput(err));
   }
 };
-
-/**
- * Validate new reference
- * @param {Request} req
- * @param {Response} res
- */
-const validate = [
-  check('Name')
-    .matches(/^[A-Za-z\s]+$/)
-    .withMessage('Reference name must be alphabetic'),
-  check('Email')
-    .optional({ checkFalsy: true })
-    .isEmail()
-    .withMessage('Email format invalid')
-    .normalizeEmail({ all_lowercase: true }), // sanitisation
-  check('Phone').isNumeric().withMessage('Phone number must be numeric'),
-  check('Organisation').optional({ checkFalsy: true }),
-];
 
 module.exports = {
   getAll,
   create,
-  validate,
+  // validate,
 };
