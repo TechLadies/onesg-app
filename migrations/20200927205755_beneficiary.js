@@ -8,6 +8,7 @@ const { tableStaff } = require('../src/models/staff.js');
 exports.up = function makeBeneficiarytable(knex) {
   return knex.schema.createTable(tableBeneficiary, (table) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     table.increments('id').primary();
     table
       .string('beneficiaryNumber', 11)
@@ -49,6 +50,10 @@ exports.up = function makeBeneficiarytable(knex) {
       .comment('Date of beneficiary update');
 =======
     table.varchar('BeneficiaryId').primary();
+=======
+    table.increments('BenId').primary();
+    table.string('BeneficiaryId').index();
+>>>>>>> add format for ben id
     table.string('Name').index();
     table.string('Email').unique();
     table.string('Phone').unique();

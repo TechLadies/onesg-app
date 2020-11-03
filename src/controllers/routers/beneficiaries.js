@@ -6,11 +6,6 @@ const {
 const { Beneficiary } = require('../../models');
 
 /**
- * Module dependencies.
- */
-const { Beneficiary } = require('../../models');
-
-/**
  * Retrieve all beneficiaries
  * @param {Request} req
  * @param {Response} res
@@ -32,11 +27,12 @@ const create = async (req, res, next) => {
   }
   const ben = req.body;
   try {
-    await Beneficiary.query().insert(ben).returning('BeneficiaryId');
+    await Beneficiary.query().insert(ben).returning('BenId');
     return res
       .status(201)
       .json({ message: `${req.body.Name} successfully added` });
   } catch (err) {
+    console.log(err);
     return next(new UnprocessableEntity(err.data));
   }
 };
