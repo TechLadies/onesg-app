@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 'use strict';
 
+=======
+/* eslint-disable no-console */
+>>>>>>> add format for ben id
 const { Model } = require('objection');
 =======
 /* eslint-disable global-require */
@@ -20,6 +24,7 @@ const paymentTypeEnum = {
 const tableBeneficiary = 'beneficiary';
 =======
 
+<<<<<<< HEAD
 const tableBeneficiary = 'Beneficiary';
 >>>>>>> objection query
 
@@ -49,6 +54,9 @@ function getBeneficiaryId(previousId) {
 
   return `B${currentYear}${currentMonth}-${paddedIndex}`;
 }
+=======
+const tableBeneficiary = 'beneficiary';
+>>>>>>> add format for ben id
 
 class Beneficiary extends Model {
   static get tableName() {
@@ -56,6 +64,7 @@ class Beneficiary extends Model {
   }
 
   async $beforeInsert() {
+<<<<<<< HEAD
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
       .orderBy('id', 'desc')
@@ -64,6 +73,25 @@ class Beneficiary extends Model {
     this.beneficiaryId = getBeneficiaryId(
       lastInsertedBeneficiary[0].beneficiaryId
     );
+=======
+    const knex = Beneficiary.knex();
+    const increDB = await knex.raw(
+      `SELECT CASE WHEN is_called THEN last_value + 1 
+      ELSE last_value END FROM "beneficiary_BenId_seq"`
+      // `SELECT nextval(pg_get_serial_sequence('Beneficiary', 'BenId'))`
+    );
+    const increobj = JSON.stringify(increDB.rows[0].last_value);
+    // eslint-disable-next-line radix
+    const increment = +increobj;
+
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = d.getMonth();
+    const id = `B${yyyy}${mm}-${increment}`;
+    this.BeneficiaryId = id;
+    // eslint-disable-next-line dot-notation
+    console.log(typeof increment);
+>>>>>>> add format for ben id
   }
 
   static get jsonSchema() {
@@ -71,6 +99,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
+<<<<<<< HEAD
 <<<<<<< HEAD
         beneficiaryNumber: {
           type: 'string',
@@ -89,6 +118,8 @@ class Beneficiary extends Model {
 <<<<<<< HEAD
 =======
 =======
+=======
+>>>>>>> add format for ben id
         beneficiaryId: { type: 'varchar' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
 <<<<<<< HEAD
@@ -145,7 +176,20 @@ class Beneficiary extends Model {
         householdSize: { type: 'varchar' },
 >>>>>>> objection query
         paymentType: { type: 'enum' },
+<<<<<<< HEAD
 >>>>>>> objection query
+=======
+=======
+        BeneficiaryId: { type: 'varchar' },
+        Name: { type: 'string', minLength: 1, maxLength: 255 },
+        Email: { type: 'string', minLength: 1, maxLength: 255 },
+        Phone: { type: 'varchar', maxLength: 12 },
+        Occupation: { type: 'string', maxLength: 255 },
+        HouseholdIncome: { type: 'decimal', minLength: 1 },
+        HouseholdSize: { type: 'integer' },
+        PaymentType: { type: 'enum' },
+>>>>>>> add format for ben id
+>>>>>>> add format for ben id
       },
     };
   }

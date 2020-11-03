@@ -35,6 +35,7 @@ exports.up = function makeCasetable(knex) {
       .notNullable()
       .unsigned()
       .comment('Beneficiary id that is related to this case');
+      .inTable(tableBeneficiary);
     table
       .integer('refereeId')
       .references('id')
