@@ -43,7 +43,7 @@ const create = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
-    return next(new InvalidInput(err));
+    return next(new InvalidInput(err)); // to change to different error
   }
 };
 
