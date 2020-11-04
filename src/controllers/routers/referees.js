@@ -32,7 +32,7 @@ const getAll = async (req, res) => {
 const create = async (req, res, next) => {
   const newReferee = req.body;
   try {
-    const ref = await Referee.query().insert(newReferee).returning('RefereeId');
+    const ref = await Referee.query().insert(newReferee).returning('refereeId');
     return res.status(201).json(ref);
   } catch (err) {
     if (err instanceof ValidationError) {
