@@ -11,6 +11,7 @@
 'use strict';
 
 const express = require('express');
+const search = require('./search');
 
 const router = express.Router();
 const beneficiaries = require('./beneficiaries');
@@ -26,6 +27,7 @@ router.get('/v1/healthcheck', function healthcheck(req, res) {
 });
 
 router.use('/v1/beneficiaries', beneficiaries);
+router.use('/v1/search', search);
 // router.use('/v1/cases', cases);
 
 module.exports = router;

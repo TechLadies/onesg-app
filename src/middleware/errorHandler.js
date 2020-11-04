@@ -11,6 +11,12 @@
 'use strict';
 
 const express = require('express');
+const {
+  ValidationError,
+  UniqueViolationError,
+  InvalidInput,
+} = require('objection');
+const { BadRequest } = require('../utils/errors');
 
 const app = express();
 
@@ -39,6 +45,14 @@ app.use(function opErrorHandler(err, req, res, next) {
   if (err instanceof OpError) {
     const { error } = err;
     return res.status(error.statusCode).json(error);
+  }
+
+  if (err instanceof ValidationError) {
+    return res.json(new InvalidInput(err.message));
+  }
+
+  if (err instanceof UniqueViolationError) {
+    return res.json(new BadRequest(err.nativeError.detail));
   }
 
   const error = {

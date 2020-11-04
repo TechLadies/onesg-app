@@ -9,7 +9,9 @@
 const beneficiaries = require('./beneficiaries');
 // const cases = require('./cases');
 
+const search = require('./search');
+
 module.exports = {
   beneficiaries,
-  // cases,
+  search,
 };
