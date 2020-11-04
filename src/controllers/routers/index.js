@@ -7,27 +7,14 @@
 'use strict';
 
 const beneficiaries = require('./beneficiaries');
-<<<<<<< HEAD
 const referees = require('./referees');
 // const cases = require('./cases');
-=======
-const cases = require('./cases');
->>>>>>> mapping
 
 const search = require('./search');
-const referees = require('./referees');
 
 module.exports = {
   beneficiaries,
-<<<<<<< HEAD
   referees,
   // cases,
-=======
   search,
-<<<<<<< HEAD
->>>>>>> add search
-=======
-  cases,
-  referees,
->>>>>>> mapping
 };

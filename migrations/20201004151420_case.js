@@ -10,7 +10,6 @@ const {
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
     table.increments('id').primary();
-<<<<<<< HEAD
     table
       .string('caseNumber', 12)
       .index()
@@ -64,31 +63,6 @@ exports.up = function makeCasetable(knex) {
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of case update');
-=======
-    table.string('caseId').index().unique();
-    table.enum('requestType', Object.values(requestTypeEnum));
-    table.enum('fulfilment', Object.values(fulfilmentTypeEnum));
-    table.text('POC');
-    table.decimal('amountRequested');
-    table.text('description');
-    table.enum('caseStatus', Object.values(caseStatusTypeEnum));
-    table.enum('approval', Object.values(approvalTypeEnum));
-    table.enum('referenceStatus', Object.values(referenceStatusTypeEnum));
-    table.decimal('amountGranted');
-    table
-      .varchar('beneficiaryId')
-      .unsigned()
-      .index()
-      .references('beneficiaryId')
-      .inTable(tableBeneficiary);
-    table
-      .varchar('refereeId')
-      .unsigned()
-      .index()
-      .references('refereeId')
-      .inTable(tableReferee);
-    table.timestamps(true, true);
->>>>>>> cleaned migration files and change created_at to id in idgenerator
   });
 };
 

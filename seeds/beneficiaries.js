@@ -16,7 +16,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           occupation: 'software engineer',
           householdIncome: '1333',
           householdSize: '4',
-<<<<<<< HEAD
           paymentType: ['PAYNOW'],
           notes: 'Repeated request',
           createdBy: 1,
@@ -47,24 +46,10 @@ exports.seed = function seedBeneficiaryTable(knex) {
           paymentType: ['PAYNOW', 'BANK_TRANSFER'],
           createdBy: 1,
           updatedBy: 2,
-=======
-          paymentType: PaymentTypeEnum.PayNow,
-=======
-          occupation: 'software engineer',
-=======
-          name: 'Gurmit',
-          email: 'gurmit@singh.com',
-          phone: '96424222',
-          occupation: 'calefare actor',
->>>>>>> add seed data
           householdIncome: '1333',
           householdSize: '4',
           paymentType: paymentTypeEnum.payNow,
-<<<<<<< HEAD
->>>>>>> cleaned error & change fields to camelcase
-=======
           created_at: '2020-11-12 15:04:31.18657+08',
->>>>>>> cleaned migration files and change created_at to id in idgenerator
         },
         {
           beneficiaryId: 'B202011-0002',
@@ -109,7 +94,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           householdSize: 6,
           paymentType: paymentTypeEnum.bankTransfer,
           created_at: '2020-11-12 15:04:35.18657+08',
->>>>>>> cleaned migration files and change created_at to id in idgenerator
         },
       ]);
     });

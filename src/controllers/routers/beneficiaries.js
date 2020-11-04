@@ -146,6 +146,7 @@ const update = async (req, res, next) => {
     return next();
   }
 };
+
 /**
  * Delete Beneficiaries
  * @param {Request} req
