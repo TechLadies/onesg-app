@@ -17,11 +17,11 @@ class Referee extends Model {
       type: 'object',
       required: ['Name', 'Phone'],
       properties: {
-        RefereeId: { type: 'integer' },
-        Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: { maxLength: 255 },
-        Phone: { type: 'varchar', minLength: 8, maxLength: 8 },
-        Organisation: { type: 'varchar', maxLength: 255 },
+        refereeId: { type: 'integer' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { maxLength: 255 },
+        phone: { type: 'varchar', minLength: 8, maxLength: 8 },
+        organisation: { type: 'varchar', maxLength: 255 },
       },
     };
   }
@@ -29,17 +29,17 @@ class Referee extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     // validate email
-    if (json.Email !== null) {
-      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.Email) === false) {
+    if (json.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
         throw new ValidationError({
-          message: `Email format "${json.Email}" is invalid`,
+          message: `Email format "${json.email}" is invalid`,
         });
       }
     }
     // validate phone
-    if (/^(6|8|9)\d{7}$/.test(json.Phone) === false) {
+    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
       throw new ValidationError({
-        message: `Phone format "${json.Phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
       });
     }
   }

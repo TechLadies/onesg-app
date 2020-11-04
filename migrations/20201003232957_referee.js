@@ -2,11 +2,11 @@ const { tableReferee } = require('../src/models/referee.js');
 
 exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
-    table.increments('RefereeId').primary();
-    table.text('Name');
-    table.text('Email').unique();
-    table.text('Phone').unique();
-    table.text('Organisation');
+    table.increments('refereeId').primary();
+    table.text('name');
+    table.text('email').unique();
+    table.text('phone').unique();
+    table.text('organisation');
     table.timestamps(true, true);
   });
 };

@@ -6,16 +6,16 @@
 
 'use strict';
 
-// const { ValidationError, UniqueViolationError } = require('objection');
+const { ValidationError, UniqueViolationError } = require('objection');
 
 const { Referee } = require('../../models');
 
-// const {
-//   errors: { BadRequest, InvalidInput },
-// } = require('../../utils');
+const {
+  errors: { BadRequest, InvalidInput },
+} = require('../../utils');
 
 /**
- * Retrieve all references
+ * Retrieve all referees
  * @param {Request} req
  * @param {Response} res
  */
@@ -25,7 +25,7 @@ const getAll = async (req, res) => {
 };
 
 /**
- * Create new reference
+ * Create new referee
  * @param {Request} req
  * @param {Response} res
  */
@@ -35,6 +35,12 @@ const create = async (req, res, next) => {
     const ref = await Referee.query().insert(newReferee).returning('RefereeId');
     return res.status(201).json(ref.RefereeId);
   } catch (err) {
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
+    }
     return next(err);
   }
 };
