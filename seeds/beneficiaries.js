@@ -16,7 +16,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           occupation: 'software engineer',
           householdIncome: '1333',
           householdSize: '4',
-<<<<<<< HEAD
           paymentType: ['PAYNOW'],
           notes: 'Repeated request',
           createdBy: 1,
@@ -47,10 +46,6 @@ exports.seed = function seedBeneficiaryTable(knex) {
           paymentType: ['PAYNOW', 'BANK_TRANSFER'],
           createdBy: 1,
           updatedBy: 2,
-=======
-          paymentType: paymentTypeEnum.payNow,
-          created_at: '2020-11-12 15:04:31.18657+08',
->>>>>>> cleaned migration files and change created_at to id in idgenerator
         },
         {
           beneficiaryId: 'B202011-0002',
