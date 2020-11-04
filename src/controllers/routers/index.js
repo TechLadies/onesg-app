@@ -14,7 +14,10 @@ const search = require('./search');
 
 module.exports = {
   beneficiaries,
+<<<<<<< HEAD
   referees,
   // cases,
+=======
+>>>>>>> add search
   search,
 };
