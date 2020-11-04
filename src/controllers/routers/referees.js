@@ -33,7 +33,7 @@ const create = async (req, res, next) => {
   const newReferee = req.body;
   try {
     const ref = await Referee.query().insert(newReferee).returning('RefereeId');
-    return res.status(201).json(ref.RefereeId);
+    return res.status(201).json(ref);
   } catch (err) {
     if (err instanceof ValidationError) {
       return res.json(new InvalidInput(err.message));
