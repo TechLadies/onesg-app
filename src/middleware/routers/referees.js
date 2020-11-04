@@ -17,7 +17,7 @@ const {
 } = require('../../controllers');
 
 /**
- * Routing for references endpoints (/v1/references)
+ * Routing for references endpoints (/v1/referees)
  */
 // GET /v1/referees
 router.get('/', referees.getAll);
