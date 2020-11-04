@@ -10,9 +10,11 @@
 
 const { Referee } = require('../../models');
 
-// const {
-//   errors: { BadRequest, InvalidInput },
-// } = require('../../utils');
+const {
+  errors: {
+    BadRequest, // InvalidInput
+  },
+} = require('../../utils');
 
 /**
  * Retrieve all referees
@@ -32,10 +34,14 @@ const getAll = async (req, res) => {
 const getReferee = async (req, res, next) => {
   const refId = req.params.id;
   try {
-    const referee = await Referee.query().select().where('RefereeId', refId);
+    const referee = await Referee.query().select().where('refereeId', refId);
+    // if id is an int and returns an empty array object
+    if (referee.length === 0) {
+      return res.status(404).json('Not Found'); // to update with invalidInput
+    }
     return res.status(200).json(referee);
   } catch (err) {
-    return next(err);
+    return next(new BadRequest(err));
   }
 };
 
@@ -47,8 +53,10 @@ const getReferee = async (req, res, next) => {
 const create = async (req, res, next) => {
   const newReferee = req.body;
   try {
-    const ref = await Referee.query().insert(newReferee).returning('RefereeId');
-    return res.status(201).json(ref.RefereeId);
+    const referee = await Referee.query()
+      .insert(newReferee)
+      .returning('refereeId');
+    return res.status(201).json(referee);
   } catch (err) {
     return next(err);
   }
@@ -63,16 +71,13 @@ const update = async (req, res, next) => {
   const refId = req.params.id;
   const updateInfo = req.body;
   try {
-    const ref = await Referee.query()
-      .patch(updateInfo)
-      .where('RefereeId', refId);
-    return res
-      .status(201)
-      .json(
-        `The following has been updated for RefereeId ${ref}: ${JSON.stringify(
-          updateInfo
-        )}`
-      );
+    await Referee.query().patch(updateInfo).where('refereeId', refId);
+    const referee = await Referee.query().select().where('refereeId', refId);
+    // if id is an int and returns an empty array object
+    if (referee.length === 0) {
+      return res.status(404).json('Not Found'); // to update with invalidInput
+    }
+    return res.status(201).json(referee);
   } catch (err) {
     return next(err);
   }
