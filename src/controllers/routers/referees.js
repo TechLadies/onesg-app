@@ -6,13 +6,13 @@
 
 'use strict';
 
-const { ValidationError, UniqueViolationError } = require('objection');
+// const { ValidationError, UniqueViolationError } = require('objection');
 
 const { Referee } = require('../../models');
 
-const {
-  errors: { BadRequest, InvalidInput },
-} = require('../../utils');
+// const {
+//   errors: { BadRequest, InvalidInput },
+// } = require('../../utils');
 
 /**
  * Retrieve all references
@@ -35,20 +35,11 @@ const create = async (req, res, next) => {
     const ref = await Referee.query().insert(newReferee).returning('RefereeId');
     return res.status(201).json(ref.RefereeId);
   } catch (err) {
-    // if error type is validation error
-    if (err instanceof ValidationError) {
-      return next(new InvalidInput(err.message));
-    }
-    // if error type is duplicate entry
-    if (err instanceof UniqueViolationError) {
-      return next(new BadRequest(err.nativeError.detail));
-    }
-    return next(new InvalidInput(err)); // to change to different error
+    return next(err);
   }
 };
 
 module.exports = {
   getAll,
   create,
-  // validate,
 };

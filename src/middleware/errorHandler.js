@@ -10,7 +10,11 @@
 
 'use strict';
 
-const { OpError } = require('../utils').errors;
+const { ValidationError, UniqueViolationError } = require('objection');
+
+const {
+  errors: { BadRequest, InvalidInput, OpError },
+} = require('../utils');
 
 /**
  * Handles unsupported endpoints and operational errors
@@ -34,6 +38,14 @@ const errorHandler = (app) => {
     if (err instanceof OpError) {
       const { error } = err;
       return res.status(error.statusCode).json(error);
+    }
+
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
     }
 
     const error = {
