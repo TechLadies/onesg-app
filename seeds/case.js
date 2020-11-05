@@ -1,4 +1,14 @@
 const { tableCase } = require('../src/models/case');
+<<<<<<< HEAD
+=======
+const {
+  requestTypeEnum,
+  fulfilmentTypeEnum,
+  caseStatusTypeEnum,
+  referenceStatusTypeEnum,
+  approvalTypeEnum,
+} = require('../src/models/case.js');
+>>>>>>> cleaned error & change fields to camelcase
 
 exports.seed = function seedCaseTable(knex) {
   // Deletes ALL existing entries

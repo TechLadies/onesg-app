@@ -1,4 +1,8 @@
 const { tableBeneficiary } = require('../src/models/beneficiary');
+<<<<<<< HEAD
+=======
+const { paymentTypeEnum } = require('../src/models/beneficiary.js');
+>>>>>>> cleaned error & change fields to camelcase
 
 exports.seed = function seedBeneficiaryTable(knex) {
   // Deletes ALL existing entries
@@ -11,11 +15,17 @@ exports.seed = function seedBeneficiaryTable(knex) {
           beneficiaryNumber: 'B2020-11001',
           name: 'Ziza',
           email: 'zizah@azizah@.com',
+<<<<<<< HEAD
           phone: '96424222',
+=======
+          phone: '596424222',
+<<<<<<< HEAD
+>>>>>>> cleaned error & change fields to camelcase
           address: '100 victoria street',
           occupation: 'software engineer',
           householdIncome: '1333',
           householdSize: '4',
+<<<<<<< HEAD
           paymentType: ['PAYNOW'],
           notes: 'Repeated request',
           createdBy: 1,
@@ -94,6 +104,15 @@ exports.seed = function seedBeneficiaryTable(knex) {
           householdSize: 6,
           paymentType: paymentTypeEnum.bankTransfer,
           created_at: '2020-11-12 15:04:35.18657+08',
+=======
+          paymentType: PaymentTypeEnum.PayNow,
+=======
+          occupation: 'software engineer',
+          householdIncome: '1333',
+          householdSize: '4',
+          paymentType: paymentTypeEnum.payNow,
+>>>>>>> cleaned error & change fields to camelcase
+>>>>>>> cleaned error & change fields to camelcase
         },
       ]);
     });

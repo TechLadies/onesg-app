@@ -46,7 +46,8 @@ exports.up = function makeBeneficiarytable(knex) {
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of beneficiary update');
-  });
+
+  })
 };
 
 exports.down = function exportBeneficiarytable(knex) {

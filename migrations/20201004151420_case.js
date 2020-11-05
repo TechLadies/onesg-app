@@ -12,6 +12,18 @@ exports.up = function makeCasetable(knex) {
     table.increments('id').primary();
     table
       .string('caseNumber', 12)
+    table.enum('requestType', Object.values(RequestTypeEnum));
+    table.enum('fulfilment', Object.values(FulfilmentTypeEnum));
+    table.text('POC');
+    table.decimal('amountRequested');
+    table.text('description');
+    table.enum('caseStatus', Object.values(CaseStatusTypeEnum));
+    table.enum('approval', Object.values(ApprovalTypeEnum));
+    table.enum('referenceStatus', Object.values(ReferenceStatusTypeEnum));
+    table.decimal('amountGranted');
+    table
+      .integer('beneficiaryId')
+      .unsigned()
       .index()
       .unique()
       .comment('Case number for this case. Format: EFYYYY-MM999');
@@ -35,7 +47,6 @@ exports.up = function makeCasetable(knex) {
       .notNullable()
       .unsigned()
       .comment('Beneficiary id that is related to this case');
-      .inTable(tableBeneficiary);
     table
       .integer('refereeId')
       .references('id')

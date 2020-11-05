@@ -6,6 +6,7 @@
 
 =======
 /* eslint-disable no-console */
+<<<<<<< HEAD
 >>>>>>> add format for ben id
 const { Model } = require('objection');
 =======
@@ -15,6 +16,9 @@ const { Model } = require('objection');
 const { Model, ValidationError } = require('objection');
 const { Case } = require('./case');
 const { Referee } = require('./referee');
+=======
+const { Model, ValidationError } = require('objection');
+>>>>>>> cleaned error & change fields to camelcase
 
 const paymentTypeEnum = {
   PayNow: 'payNow',
@@ -76,22 +80,25 @@ class Beneficiary extends Model {
 =======
     const knex = Beneficiary.knex();
     const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1 
-      ELSE last_value END FROM "beneficiary_BenId_seq"`
-      // `SELECT nextval(pg_get_serial_sequence('Beneficiary', 'BenId'))`
+      `SELECT CASE WHEN is_called THEN last_value + 1
+       ELSE last_value
+       END FROM "beneficiary_benId_seq";
+       `
     );
-    const increobj = JSON.stringify(increDB.rows[0].last_value);
-    // eslint-disable-next-line radix
-    const increment = +increobj;
-
+    const increobj = increDB.rows[0].last_value;
     const d = new Date();
     const yyyy = d.getFullYear();
     const mm = d.getMonth();
+<<<<<<< HEAD
     const id = `B${yyyy}${mm}-${increment}`;
     this.BeneficiaryId = id;
     // eslint-disable-next-line dot-notation
     console.log(typeof increment);
 >>>>>>> add format for ben id
+=======
+    const id = `B${yyyy}${mm}-${increobj}`;
+    this.beneficiaryId = id;
+>>>>>>> cleaned error & change fields to camelcase
   }
 
   static get jsonSchema() {
@@ -99,6 +106,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         beneficiaryNumber: {
@@ -120,6 +128,8 @@ class Beneficiary extends Model {
 =======
 =======
 >>>>>>> add format for ben id
+=======
+>>>>>>> cleaned error & change fields to camelcase
         beneficiaryId: { type: 'varchar' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
 <<<<<<< HEAD
@@ -189,11 +199,25 @@ class Beneficiary extends Model {
         HouseholdSize: { type: 'integer' },
         PaymentType: { type: 'enum' },
 >>>>>>> add format for ben id
+<<<<<<< HEAD
 >>>>>>> add format for ben id
+=======
+=======
+        beneficiaryId: { type: 'varchar' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { type: 'string', minLength: 1, maxLength: 255 },
+        phone: { type: 'varchar', maxLength: 12 },
+        occupation: { type: 'string', maxLength: 255 },
+        householdIncome: { type: 'decimal', minLength: 1 },
+        householdSize: { type: 'integer' },
+        paymentType: { type: 'enum' },
+>>>>>>> cleaned error & change fields to camelcase
+>>>>>>> cleaned error & change fields to camelcase
       },
     };
   }
 
+<<<<<<< HEAD
   $afterValidate(beneficiary) {
     super.$afterValidate(beneficiary);
 
@@ -204,16 +228,32 @@ class Beneficiary extends Model {
       ) {
         throw new ValidationError({
           message: `Email format "${beneficiary.email}" is invalid`,
+=======
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    // validate email
+    if (json.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
+        throw new ValidationError({
+          message: `Email format "${json.email}" is invalid`,
+>>>>>>> cleaned error & change fields to camelcase
         });
       }
     }
     // validate phone
+<<<<<<< HEAD
     if (beneficiary.phone !== undefined && beneficiary.phone !== null) {
       if (/^(6|8|9)\d{7}$/.test(beneficiary.phone) === false) {
         throw new ValidationError({
           message: `Phone format "${beneficiary.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
         });
       }
+=======
+    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
+      throw new ValidationError({
+        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+      });
+>>>>>>> cleaned error & change fields to camelcase
     }
   }
 }
@@ -221,4 +261,8 @@ class Beneficiary extends Model {
 module.exports = {
   model: Beneficiary,
   tableBeneficiary,
+<<<<<<< HEAD
+=======
+  paymentTypeEnum,
+>>>>>>> cleaned error & change fields to camelcase
 };

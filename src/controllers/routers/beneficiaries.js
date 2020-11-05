@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+<<<<<<< HEAD
 
 const { ValidationError, UniqueViolationError } = require('objection');
 const {
@@ -28,6 +29,13 @@ function sanitize(json) {
   return beneficiary;
 }
 
+=======
+const { ValidationError, UniqueViolationError } = require('objection');
+const {
+  errors: { BadRequest, InvalidInput },
+} = require('../../utils');
+const { Beneficiary } = require('../../models');
+>>>>>>> cleaned error & change fields to camelcase
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -99,6 +107,7 @@ const getBeneficiary = async (req, res, next) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
+<<<<<<< HEAD
   const newBeneficiary = sanitize(req.body);
   try {
     const ben = await Beneficiary.query()
@@ -118,6 +127,23 @@ const create = async (req, res, next) => {
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
     return next(new BadRequest(err.nativeError.detail));
+=======
+  try {
+    const newBen = req.body;
+    const ben = await Beneficiary.query()
+      .insert(newBen)
+      .returning('beneficiaryId');
+
+    return res.status(201).json(ben);
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
+    }
+    return next(err);
+>>>>>>> cleaned error & change fields to camelcase
   }
 };
 /**
@@ -126,6 +152,7 @@ const create = async (req, res, next) => {
  * @param {Response} res
  */
 
+<<<<<<< HEAD
 const update = async (req, res) => {
   // Return if there are any validation errors
   const errors = validationResult(req);
@@ -148,6 +175,24 @@ const update = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: 'Update Fail', error: err });
+=======
+const update = async (req, res, next) => {
+  const updateBen = req.body;
+  console.log(req.body.email);
+  try {
+    await Beneficiary.query()
+      .update(updateBen)
+      .where('beneficiaryId', req.params.beneficiaryId);
+    return res.status(201).json(`${req.params.beneficiaryId} has been updated`);
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
+    }
+    return next(err);
+>>>>>>> cleaned error & change fields to camelcase
   }
 };
 
@@ -218,5 +263,8 @@ module.exports = {
   create,
   update,
   del,
+<<<<<<< HEAD
   getBeneficiarybyCase,
+=======
+>>>>>>> cleaned error & change fields to camelcase
 };
