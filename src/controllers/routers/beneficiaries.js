@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
-const { check, validationResult } = require('express-validator');
+const { ValidationError, UniqueViolationError } = require('objection');
 const {
-  errors: { BadRequest, UnprocessableEntity },
+  errors: { BadRequest, InvalidInput },
 } = require('../../utils');
 const { Beneficiary } = require('../../models');
-
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -21,19 +20,21 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  const validationError = validationResult(req);
-  if (!validationError.isEmpty()) {
-    return next(new BadRequest(validationError.errors[0].msg));
-  }
-  const ben = req.body;
   try {
-    await Beneficiary.query().insert(ben).returning('BenId');
-    return res
-      .status(201)
-      .json({ message: `${req.body.Name} successfully added` });
+    const newBen = req.body;
+    const ben = await Beneficiary.query()
+      .insert(newBen)
+      .returning('beneficiaryId');
+
+    return res.status(201).json(ben);
   } catch (err) {
-    console.log(err);
-    return next(new UnprocessableEntity(err.data));
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
+    }
+    return next(err);
   }
 };
 
@@ -42,22 +43,23 @@ const create = async (req, res, next) => {
  * @param {Request} req
  * @param {Response} res
  */
+
 const update = async (req, res, next) => {
-  const validationError = validationResult(req);
-  if (!validationError.isEmpty()) {
-    return next(new BadRequest(validationError.errors[0].msg));
-  }
-  const ben = req.body;
+  const updateBen = req.body;
+  console.log(req.body.email);
   try {
     await Beneficiary.query()
-      .update(ben)
-      .where('BeneficiaryId', req.body.BeneficiaryId);
-    return res
-      .status(201)
-      .json({ message: `${req.body.Name} successfully updated` });
+      .update(updateBen)
+      .where('beneficiaryId', req.params.beneficiaryId);
+    return res.status(201).json(`${req.params.beneficiaryId} has been updated`);
   } catch (err) {
-    console.log(err);
-    return next(new UnprocessableEntity(err.data));
+    if (err instanceof ValidationError) {
+      return res.json(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return res.json(new BadRequest(err.nativeError.detail));
+    }
+    return next(err);
   }
 };
 
@@ -71,7 +73,7 @@ const del = async (req, res) => {
   try {
     await Beneficiary.query()
       .delete()
-      .where({ BeneficiaryId: req.body.BeneficiaryId });
+      .where({ BeneficiaryId: req.body.beneficiaryId });
     return res
       .status(201)
       .json({ message: `${req.body.Name} successfully deleted` });
@@ -82,40 +84,9 @@ const del = async (req, res) => {
   }
 };
 
-/**
- * Validate Beneficiaries
- * @param {Request} req
- * @param {Response} res
- */
-const validate = [
-  check('Name')
-    .matches(/^[A-Za-z\s]+$/)
-    .withMessage('Reference name must be alphabetic'),
-  check('Email')
-    .optional({ checkFalsy: true })
-    .isEmail()
-    .withMessage('Email format invalid')
-    .normalizeEmail({ all_lowercase: true }), // sanitisation
-  check('Phone').isNumeric().withMessage('Phone number must be numeric'),
-  check('Occupation')
-    .optional({ checkFalsy: true })
-    .isString() // checks if string only contains letters and numbers
-    .isLength({ max: 255 }),
-  check('HouseholdIncome', 'Please insert a number')
-    .optional({ checkFalsy: true })
-    .isCurrency() // checks if string is currency
-    .isLength({ max: 12 }),
-  check('HouseholdSize', 'Please insert a number')
-    .optional({ checkFalsy: true })
-    .isInt() // checks if string only contains numbers
-    .isLength({ max: 12 }),
-  check('PaymentType').isIn(['payNow', 'bankTransfer']),
-];
-
 module.exports = {
   getAll,
   create,
   update,
   del,
-  validate,
 };

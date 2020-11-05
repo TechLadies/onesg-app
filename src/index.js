@@ -11,16 +11,10 @@
 // Built-in modules
 const http = require('http');
 const https = require('https');
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 const passport = require('passport');
-// Third-party modules
-=======
->>>>>>> added delete
-=======
 
 // Third-party modules
->>>>>>> revise env
 const express = require('express');
 const cors = require('cors');
 const bodyparser = require('body-parser');
