@@ -26,20 +26,20 @@ class Referee extends Model {
     };
   }
 
-  $afterValidate(json) {
-    super.$afterValidate(json);
+  $afterValidate(referee) {
+    super.$afterValidate(referee);
     // validate email
-    if (json.email !== null) {
-      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
+    if (referee.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
         throw new ValidationError({
-          message: `Email format "${json.email}" is invalid`,
+          message: `Email format "${referee.email}" is invalid`,
         });
       }
     }
     // validate phone
-    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
+    if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
       throw new ValidationError({
-        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+        message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
       });
     }
   }
