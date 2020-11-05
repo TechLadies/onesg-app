@@ -10,11 +10,11 @@
 
 const { Referee } = require('../../models');
 
-const {
-  errors: {
-    BadRequest, // InvalidInput
-  },
-} = require('../../utils');
+// const {
+//   errors: {
+//     BadRequest, InvalidInput
+//   },
+// } = require('../../utils');
 
 /**
  * Retrieve all referees
@@ -41,7 +41,7 @@ const getReferee = async (req, res, next) => {
     }
     return res.status(200).json(referee);
   } catch (err) {
-    return next(new BadRequest(err));
+    return next(err);
   }
 };
 
