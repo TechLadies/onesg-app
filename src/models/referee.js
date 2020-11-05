@@ -76,19 +76,19 @@ class Referee extends Model {
           from: 'referees.refereeId',
           to: 'cases.refereeId',
         },
-        beneficiary: {
-          relation: Model.ManyToManyRelation,
-          modelClass: `${__dirname}/Beneficiary`,
-          join: {
-            from: 'referees.refereeId',
-            through: {
-              from: 'cases.refereeId',
-              to: 'cases.beneficiaryId',
-            },
-            to: 'beneficiary.beneficiaryId',
+      },
+      beneficiary: {
+        relation: Model.ManyToManyRelation,
+        modelClass: `${__dirname}/Beneficiary`,
+        join: {
+          from: 'referees.refereeId',
+          through: {
+            from: 'cases.refereeId',
+            to: 'cases.beneficiaryId',
           },
           to: 'beneficiary.beneficiaryId',
         },
+        to: 'beneficiary.beneficiaryId',
       },
     };
   }
@@ -112,8 +112,7 @@ class Referee extends Model {
         });
       }
     }
-  
-}
+  }
 }
 module.exports = {
   model: Referee,

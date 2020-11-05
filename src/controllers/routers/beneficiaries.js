@@ -49,7 +49,6 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 
-<<<<<<< HEAD
 const getBeneficiarybyId = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -77,10 +76,8 @@ const getBeneficiarybyId = async (req, res, next) => {
   }
 };
 
-=======
->>>>>>> add graphfetch
 /**
- * Update Beneficiaries
+ * Create new Beneficiaries
  * @param {Request} req
  * @param {Response} res
  */
@@ -170,16 +167,8 @@ const del = async (req, res) => {
 
 module.exports = {
   getAll,
-<<<<<<< HEAD
   getBeneficiarybyId,
   create,
   update,
   del,
 };
-=======
-  create,
-  update,
-  del,
-  validate,
-};
->>>>>>> add graphfetch

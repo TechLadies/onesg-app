@@ -36,9 +36,4 @@ router.patch('/:id', beneficiaries.update);
 
 router.delete('/:id', beneficiaries.del);
 
-// PATCH /v1/beneficiaries/:id
-router.patch('/:id', beneficiaries.update);
-
-router.delete('/:beneficiaryId', beneficiaries.del);
-
 module.exports = router;

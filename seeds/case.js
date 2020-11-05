@@ -8,7 +8,6 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-
           caseNumber: 'EF2020-11001',
           caseStatus: 'NEW',
           appliedOn: '2020-11-01', // YYYY-MM-DD
