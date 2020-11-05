@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 
 const paymentTypeEnum = {
   PayNow: 'payNow',
@@ -16,21 +16,17 @@ class Beneficiary extends Model {
   async $beforeInsert() {
     const knex = Beneficiary.knex();
     const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1 
-      ELSE last_value END FROM "beneficiary_BenId_seq"`
-      // `SELECT nextval(pg_get_serial_sequence('Beneficiary', 'BenId'))`
+      `SELECT CASE WHEN is_called THEN last_value + 1
+       ELSE last_value
+       END FROM "beneficiary_benId_seq";
+       `
     );
-    const increobj = JSON.stringify(increDB.rows[0].last_value);
-    // eslint-disable-next-line radix
-    const increment = +increobj;
-
+    const increobj = increDB.rows[0].last_value;
     const d = new Date();
     const yyyy = d.getFullYear();
     const mm = d.getMonth();
-    const id = `B${yyyy}${mm}-${increment}`;
-    this.BeneficiaryId = id;
-    // eslint-disable-next-line dot-notation
-    console.log(typeof increment);
+    const id = `B${yyyy}${mm}-${increobj}`;
+    this.beneficiaryId = id;
   }
 
   static get jsonSchema() {
@@ -49,6 +45,24 @@ class Beneficiary extends Model {
         paymentType: { type: 'enum' },
       },
     };
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    // validate email
+    if (json.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
+        throw new ValidationError({
+          message: `Email format "${json.email}" is invalid`,
+        });
+      }
+    }
+    // validate phone
+    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
+      throw new ValidationError({
+        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+      });
+    }
   }
 }
 

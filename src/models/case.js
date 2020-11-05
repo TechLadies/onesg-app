@@ -1,37 +1,37 @@
 const { Model } = require('objection');
 
-const RequestTypeEnum = {
-  CookedFood: 'cookedFood',
-  Diapers: 'diapers',
-  FinancialAssistance: 'financialAssistance',
-  MedicalBill: 'medicalBill',
-  MilkFormula: 'milkFormula',
-  SchoolFees: 'schoolFees',
-  TransportationFees: 'transportationFees',
-  UtilityBill: 'utilityBill',
+const requestTypeEnum = {
+  cookedFood: 'cookedFood',
+  diapers: 'diapers',
+  financialAssistance: 'financialAssistance',
+  medicalBill: 'medicalBill',
+  milkFormula: 'milkFormula',
+  schoolFees: 'schoolFees',
+  transportationFees: 'transportationFees',
+  utilityBill: 'utilityBill',
 };
 
-const FulfilmentTypeEnum = {
-  InKindDonation: 'inKindDonation',
-  CashTransfer: 'cashTransfer',
-  ThirdpartyPayment: 'third-partyPayment',
-  PartnerReferral: 'partnerReferral',
+const fulfilmentTypeEnum = {
+  inKindDonation: 'inKindDonation',
+  cashTransfer: 'cashTransfer',
+  thirdpartyPayment: 'third-partyPayment',
+  partnerReferral: 'partnerReferral',
 };
 
-const CaseStatusTypeEnum = {
-  New: 'new',
-  OnHold: 'onHold',
-  ReferredtoEFC: 'referredtoEFC',
-  Processing: 'processing',
-  Closed: 'closed',
+const caseStatusTypeEnum = {
+  new: 'new',
+  onHold: 'onHold',
+  referredtoEFC: 'referredtoEFC',
+  processing: 'processing',
+  closed: 'closed',
 };
 
-const ReferenceStatusTypeEnum = {
-  Unverified: 'unverified',
-  Pending: 'pending',
-  Verified: 'verified',
+const referenceStatusTypeEnum = {
+  unverified: 'unverified',
+  pending: 'pending',
+  verified: 'verified',
 };
-const ApprovalTypeEnum = {
+const approvalTypeEnum = {
   NIL: '-',
   full: 'full',
   partial: 'partial',
@@ -70,9 +70,9 @@ module.exports = {
   Case,
   model: Case,
   tableCase,
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
-  CaseStatusTypeEnum,
+  requestTypeEnum,
+  fulfilmentTypeEnum,
+  referenceStatusTypeEnum,
+  approvalTypeEnum,
+  caseStatusTypeEnum,
 };

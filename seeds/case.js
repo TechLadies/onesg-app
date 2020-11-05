@@ -1,10 +1,10 @@
 const { tableCase } = require('../src/models/case');
 const {
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  CaseStatusTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
+  requestTypeEnum,
+  fulfilmentTypeEnum,
+  caseStatusTypeEnum,
+  referenceStatusTypeEnum,
+  approvalTypeEnum,
 } = require('../src/models/case.js');
 
 exports.seed = function seedCaseTable(knex) {
@@ -15,18 +15,18 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-          beneficiaryId: '0001',
-          refereeId: '0001',
-          caseId: '20002',
-          requestType: RequestTypeEnum.CookedFood,
-          fulfilment: FulfilmentTypeEnum.InKindDonation,
-          POC: 'Techladies',
-          amountRequested: '450.03',
-          description: 'due to debt',
-          caseStatus: CaseStatusTypeEnum.New,
-          referenceStatus: ReferenceStatusTypeEnum.Unverified,
-          approval: ApprovalTypeEnum.NIL,
-          amountGranted: '450.03',
+          refereeId: 'R202011-0001',
+          name: 'Atu',
+          email: 'ahl@aok.com',
+          phone: '34673662',
+          organisation: 'Techladies',
+        },
+        {
+          refereeId: 'R202011-0002',
+          name: 'Siddique',
+          email: 'cropoc@hotmail.com.',
+          phone: '90093711',
+          organisation: 'Siddique Impex',
         },
       ]);
     });

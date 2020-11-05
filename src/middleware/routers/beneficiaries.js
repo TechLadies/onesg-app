@@ -32,15 +32,10 @@ router.get(
 );
 
 // POST /v1/beneficiaries
-router.post('/', isNull, beneficiaries.validate, beneficiaries.create);
+router.post('/', isNull, beneficiaries.create);
 
-router.put(
-  '/:BeneficiaryId',
-  isNull,
-  beneficiaries.validate,
-  beneficiaries.update
-);
+router.put('/:beneficiaryId', isNull, beneficiaries.update);
 
-router.delete('/:BeneficiaryId', beneficiaries.del);
+router.delete('/:beneficiaryId', beneficiaries.del);
 
 module.exports = router;
