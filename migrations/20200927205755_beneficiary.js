@@ -1,17 +1,17 @@
 const { tableBeneficiary } = require('../src/models/beneficiary.js');
-const { PaymentTypeEnum } = require('../src/models/beneficiary.js');
+const { paymentTypeEnum } = require('../src/models/beneficiary.js');
 
 exports.up = function makeBeneficiarytable(knex) {
   return knex.schema.createTable(tableBeneficiary, (table) => {
-    table.increments('BenId').primary();
-    table.string('BeneficiaryId').index();
-    table.string('Name').index();
-    table.string('Email').unique();
-    table.string('Phone').unique();
-    table.string('Occupation');
-    table.decimal('HouseholdIncome');
-    table.integer('HouseholdSize');
-    table.enum('PaymentType', Object.values(PaymentTypeEnum));
+    table.increments('benId').primary();
+    table.string('beneficiaryId').index();
+    table.string('name').index();
+    table.string('email').unique();
+    table.string('phone').unique();
+    table.string('occupation');
+    table.decimal('householdIncome');
+    table.integer('householdSize');
+    table.enum('paymentType', Object.values(paymentTypeEnum));
     table.timestamps(true, true);
   });
 };

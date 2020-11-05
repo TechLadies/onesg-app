@@ -6,10 +6,12 @@
 
 const OpError = require('./OpError');
 const BadRequest = require('./BadRequest');
+const InvalidInput = require('./InvalidInput');
 const UnprocessableEntity = require('./UnprocessableEntity');
 
 module.exports = {
   OpError,
   BadRequest,
   UnprocessableEntity,
+  InvalidInput,
 };

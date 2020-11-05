@@ -2,36 +2,36 @@ const { tableCase } = require('../src/models/case.js');
 const { tableBeneficiary } = require('../src/models/beneficiary.js');
 const { tableReferee } = require('../src/models/referee.js');
 const {
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  CaseStatusTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
+  requestTypeEnum,
+  fulfilmentTypeEnum,
+  caseStatusTypeEnum,
+  referenceStatusTypeEnum,
+  approvalTypeEnum,
 } = require('../src/models/case.js');
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('CaseId').primary();
-    table.enum('RequestType', Object.values(RequestTypeEnum));
-    table.enum('Fulfilment', Object.values(FulfilmentTypeEnum));
+    table.increments('caseId').primary();
+    table.enum('requestType', Object.values(requestTypeEnum));
+    table.enum('fulfilment', Object.values(fulfilmentTypeEnum));
     table.text('POC');
-    table.decimal('AmountRequested');
-    table.text('Description');
-    table.enum('CaseStatus', Object.values(CaseStatusTypeEnum));
-    table.enum('Approval', Object.values(ApprovalTypeEnum));
-    table.enum('ReferenceStatus', Object.values(ReferenceStatusTypeEnum));
-    table.decimal('AmountGranted');
+    table.decimal('amountRequested');
+    table.text('description');
+    table.enum('caseStatus', Object.values(caseStatusTypeEnum));
+    table.enum('approval', Object.values(approvalTypeEnum));
+    table.enum('referenceStatus', Object.values(referenceStatusTypeEnum));
+    table.decimal('amountGranted');
     table
-      .integer('BenId')
+      .integer('beneficiaryId')
       .unsigned()
       .index()
-      .references('BenId')
+      .references('benId')
       .inTable(tableBeneficiary);
     table
-      .bigInteger('RefereeId')
+      .bigInteger('refereeId')
       .unsigned()
       .index()
-      .references('RefereeId')
+      .references('refereeId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });

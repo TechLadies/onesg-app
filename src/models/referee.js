@@ -14,17 +14,17 @@ class Referee extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['Name'],
+      required: ['name'],
       properties: {
-        RefereeId: { type: 'integer' },
-        Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: {
+        refereeId: { type: 'integer' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: {
           type: 'string',
           minLength: 1,
           maxLength: 255,
         },
-        Phone: { type: 'varchar', maxLength: 12 },
-        Organisation: { type: 'varchar', maxLength: 255 },
+        phone: { type: 'varchar', maxLength: 12 },
+        organisation: { type: 'varchar', maxLength: 255 },
       },
     };
   }

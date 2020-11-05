@@ -14,7 +14,9 @@ const express = require('express');
 
 const app = express();
 
-const { OpError } = require('../utils').errors;
+const {
+  errors: { OpError },
+} = require('../utils');
 
 /**
  * Handles unsupported endpoints and operational errors

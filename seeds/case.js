@@ -1,10 +1,10 @@
 const { tableCase } = require('../src/models/case');
 const {
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  CaseStatusTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
+  requestTypeEnum,
+  fulfilmentTypeEnum,
+  caseStatusTypeEnum,
+  referenceStatusTypeEnum,
+  approvalTypeEnum,
 } = require('../src/models/case.js');
 
 exports.seed = function seedCaseTable(knex) {
@@ -15,18 +15,18 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-          BeneficiaryId: '0001',
-          RefereeId: '1002',
-          CaseId: '20002',
-          RequestType: RequestTypeEnum.CookedFood,
-          Fulfilment: FulfilmentTypeEnum.InKindDonation,
+          beneficiaryId: '0001',
+          refereeId: '1002',
+          caseId: '20002',
+          requestType: requestTypeEnum.cookedFood,
+          fulfilment: fulfilmentTypeEnum.inKindDonation,
           POC: 'Techladies',
-          AmountRequested: '450.03',
-          Description: 'due to debt',
-          CaseStatus: CaseStatusTypeEnum.New,
-          ReferenceStatus: ReferenceStatusTypeEnum.Unverified,
-          Approval: ApprovalTypeEnum.NIL,
-          AmountGranted: '450.03',
+          amountRequested: '450.03',
+          description: 'due to debt',
+          caseStatus: caseStatusTypeEnum.new,
+          referenceStatus: referenceStatusTypeEnum.unverified,
+          approval: approvalTypeEnum.NIL,
+          amountGranted: '450.03',
         },
       ]);
     });
