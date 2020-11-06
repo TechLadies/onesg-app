@@ -22,7 +22,13 @@ const {
 // GET /v1/referees
 router.get('/', referees.getAll);
 
+// GET /v1/referees/:id
+router.get('/:id', referees.getReferee);
+
 // POST /v1/referees
 router.post('/', referees.create);
+
+// PATCH /v1/referees
+router.patch('/:id', referees.update);
 
 module.exports = router;

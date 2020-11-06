@@ -28,7 +28,7 @@ class Referee extends Model {
     super.$afterValidate(referee);
 
     // validate email
-    if (referee.email !== null) {
+    if (referee.email !== undefined && referee.email !== null) {
       if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
         throw new ValidationError({
           message: `Email format "${referee.email}" is invalid`,

@@ -42,7 +42,26 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const referees = await Referee.query().select();
-  return res.status(200).json(referees);
+  return res.status(200).json({ results: referees });
+};
+
+/**
+ * Retrieve one referee
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getReferee = async (req, res, next) => {
+  const refId = req.params.id;
+  const checkRef = await Referee.query().select('refereeId');
+  if (refId in checkRef) {
+    try {
+      const ref = await Referee.query().select().where('refereeId', refId);
+      return res.status(200).json({ referee: ref });
+    } catch (err) {
+      return next(err);
+    }
+  }
+  return next(new BadRequest(`refereeId ${refId} does not exist`));
 };
 
 /**
@@ -54,7 +73,7 @@ const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
     const ref = await Referee.query().insert(newReferee).returning('refereeId');
-    return res.status(201).json(ref);
+    return res.status(201).json({ refereeId: ref.refereeId });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
@@ -70,7 +89,36 @@ const create = async (req, res, next) => {
   }
 };
 
+/**
+ * Update existing referee
+ * @param {Request} req
+ * @param {Response} res
+ */
+const update = async (req, res, next) => {
+  const refId = req.params.id;
+  const updateInfo = req.body;
+  const checkRef = await Referee.query().select('refereeId');
+  if (refId in checkRef) {
+    try {
+      await Referee.query().patch(updateInfo).where('refereeId', refId);
+      const ref = await Referee.query().select().where('refereeId', refId);
+      return res.status(200).json({ referee: ref });
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        return next(new InvalidInput(err.message));
+      }
+      if (err instanceof UniqueViolationError) {
+        return next(new BadRequest(err.nativeError.detail));
+      }
+      return next(new BadRequest(err.nativeError.detail));
+    }
+  }
+  return next(new BadRequest(`refereeId ${refId} does not exist`));
+};
+
 module.exports = {
   getAll,
+  getReferee,
   create,
+  update,
 };
