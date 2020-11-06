@@ -3,10 +3,8 @@
 'use strict';
 
 const { Model, ValidationError } = require('objection');
-// const { check } = require('express-validator');
 
 const tableReferee = 'referees';
-
 class Referee extends Model {
   static get tableName() {
     return tableReferee;
@@ -28,6 +26,7 @@ class Referee extends Model {
 
   $afterValidate(referee) {
     super.$afterValidate(referee);
+
     // validate email
     if (referee.email !== null) {
       if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
