@@ -27,7 +27,7 @@ const errorHandler = (app) => {
       status: 404,
       message: 'Unsupported Endpoint',
     };
-    res.status(404).json(error);
+    res.status(404).json({ error });
   });
 
   // Other operational errors
@@ -35,7 +35,7 @@ const errorHandler = (app) => {
   app.use(function opErrorHandler(err, req, res, next) {
     if (err instanceof OpError) {
       const { error } = err;
-      return res.status(error.statusCode).json(error);
+      return res.status(error.statusCode).json({ error });
     }
 
     const error = {
@@ -43,7 +43,7 @@ const errorHandler = (app) => {
       status: 500,
       message: 'Unidentified server error',
     };
-    return res.status(500).json(error);
+    return res.status(500).json({ error });
   });
 };
 
