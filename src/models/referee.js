@@ -10,12 +10,28 @@ class Referee extends Model {
     return tableReferee;
   }
 
+  async $beforeInsert() {
+    const knex = Referee.knex();
+    const increDB = await knex.raw(
+      `SELECT CASE WHEN is_called THEN last_value + 1
+      ELSE last_value
+      END FROM "referees_refId_seq";
+      `
+    );
+    const increobj = increDB.rows[0].last_value;
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = d.getMonth();
+    const id = `R${yyyy}${mm}-${increobj}`;
+    this.refereeId = id;
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-        refereeId: { type: 'integer' },
+        refereeId: { type: 'varchar' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
         email: { maxLength: 255 },
         phone: { type: 'varchar', minLength: 8, maxLength: 8 },
