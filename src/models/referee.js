@@ -19,10 +19,11 @@ class Referee extends Model {
       `
     );
     const increobj = increDB.rows[0].last_value;
+    const i = `0000${increobj}`.substring(increobj.length); // to add leading zeros
     const d = new Date();
     const yyyy = d.getFullYear();
     const mm = d.getMonth();
-    const id = `R${yyyy}${mm}-${increobj}`;
+    const id = `R${yyyy}${mm}-${i}`;
     this.refereeId = id;
   }
 
