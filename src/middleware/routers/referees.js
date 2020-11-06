@@ -28,7 +28,7 @@ router.get('/:id', referees.getReferee);
 // POST /v1/referees
 router.post('/', referees.create);
 
-// PATCH /v1/referees
+// PATCH /v1/referees/:id
 router.patch('/:id', referees.update);
 
 module.exports = router;
