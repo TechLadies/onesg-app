@@ -36,10 +36,12 @@ class Referee extends Model {
       }
     }
     // validate phone
-    if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
-      throw new ValidationError({
-        message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
-      });
+    if (referee.phone !== undefined && referee.phone !== null) {
+      if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
+        throw new ValidationError({
+          message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+        });
+      }
     }
   }
 }
