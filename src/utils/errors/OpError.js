@@ -11,10 +11,10 @@
  * @param {string} message - custom message from calling function
  */
 class OpError extends Error {
-  constructor(id, statusCode, message) {
+  constructor(errorType, statusCode, message) {
     super();
     this.error = {
-      id,
+      errorType,
       statusCode,
       message,
     };

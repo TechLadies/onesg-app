@@ -2,10 +2,9 @@
 
 'use strict';
 
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 
 const tableReferee = 'referees';
-
 class Referee extends Model {
   static get tableName() {
     return tableReferee;
@@ -14,21 +13,37 @@ class Referee extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['Name'],
+      required: ['name', 'phone'],
       properties: {
-        RefereeId: { type: 'integer' },
-        Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: {
-          type: 'string',
-          minLength: 1,
-          maxLength: 255,
-        },
-        Phone: { type: 'varchar', maxLength: 12 },
-        Organisation: { type: 'varchar', maxLength: 255 },
+        refereeId: { type: 'varchar' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { maxLength: 255 },
+        phone: { type: 'varchar', minLength: 8, maxLength: 8 },
+        organisation: { type: 'varchar', maxLength: 255 },
       },
     };
   }
+
+  $afterValidate(referee) {
+    super.$afterValidate(referee);
+
+    // validate email
+    if (referee.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
+        throw new ValidationError({
+          message: `Email format "${referee.email}" is invalid`,
+        });
+      }
+    }
+    // validate phone
+    if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
+      throw new ValidationError({
+        message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+      });
+    }
+  }
 }
+
 module.exports = {
   Referee,
   model: Referee,

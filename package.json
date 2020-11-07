@@ -34,7 +34,7 @@
     "knex": "^0.21.6",
     "morgan": "^1.10.0",
     "objection": "^2.2.3",
-    "pg": "^8.4.1"
+    "pg": "^8.4.2"
   },
   "devDependencies": {
     "eslint": "^7.10.0",

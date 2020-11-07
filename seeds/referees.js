@@ -8,11 +8,11 @@ exports.seed = function seedRefereeTable(knex) {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
-          RefereeId: '1002',
-          Name: 'Atu',
-          Email: 'ahl@aok.com',
-          Phone: '34673662',
-          Organisation: 'Techladies',
+          refereeId: '0001',
+          name: 'Atu',
+          email: 'ahl@aok.com',
+          phone: '34673662',
+          organisation: 'Techladies',
         },
       ]);
     });

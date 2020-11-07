@@ -11,27 +11,27 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('CaseId').primary();
-    table.enum('RequestType', Object.values(RequestTypeEnum));
-    table.enum('Fulfilment', Object.values(FulfilmentTypeEnum));
+    table.increments('caseId').primary();
+    table.enum('requestType', Object.values(RequestTypeEnum));
+    table.enum('fulfilment', Object.values(FulfilmentTypeEnum));
     table.text('POC');
-    table.decimal('AmountRequested');
-    table.text('Description');
-    table.enum('CaseStatus', Object.values(CaseStatusTypeEnum));
-    table.enum('Approval', Object.values(ApprovalTypeEnum));
-    table.enum('ReferenceStatus', Object.values(ReferenceStatusTypeEnum));
-    table.decimal('AmountGranted');
+    table.decimal('amountRequested');
+    table.text('description');
+    table.enum('caseStatus', Object.values(CaseStatusTypeEnum));
+    table.enum('approval', Object.values(ApprovalTypeEnum));
+    table.enum('referenceStatus', Object.values(ReferenceStatusTypeEnum));
+    table.decimal('amountGranted');
     table
-      .bigInteger('BeneficiaryId')
+      .integer('beneficiaryId')
       .unsigned()
       .index()
-      .references('BeneficiaryId')
+      .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .bigInteger('RefereeId')
+      .integer('refereeId')
       .unsigned()
       .index()
-      .references('RefereeId')
+      .references('refereeId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });

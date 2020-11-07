@@ -10,11 +10,9 @@
 
 'use strict';
 
-const express = require('express');
-
-const app = express();
-
-const { OpError } = require('../utils').errors;
+const {
+  errors: { OpError },
+} = require('../utils');
 
 /**
  * Handles unsupported endpoints and operational errors
@@ -22,29 +20,31 @@ const { OpError } = require('../utils').errors;
  */
 
 // Unsupported endpoints
-app.use(function pageNotFoundHandler(req, res) {
-  const error = {
-    id: 'PAGE_NOT_FOUND',
-    status: 404,
-    message: 'Unsupported Endpoint',
-  };
-  res.status(404).json(error);
-});
+const errorHandler = (app) => {
+  app.use(function pageNotFoundHandler(req, res) {
+    const error = {
+      id: 'PAGE_NOT_FOUND',
+      status: 404,
+      message: 'Unsupported Endpoint',
+    };
+    res.status(404).json({ error });
+  });
 
-// Other operational errors
-// eslint-disable-next-line no-unused-vars
-app.use(function opErrorHandler(err, req, res, next) {
-  if (err instanceof OpError) {
-    const { error } = err;
-    return res.status(error.statusCode).json(error);
-  }
+  // Other operational errors
+  // eslint-disable-next-line no-unused-vars
+  app.use(function opErrorHandler(err, req, res, next) {
+    if (err instanceof OpError) {
+      const { error } = err;
+      return res.status(error.statusCode).json({ error });
+    }
 
-  const error = {
-    id: 'UNIDENTIFIED_ERROR',
-    status: 500,
-    message: 'Unidentified server error',
-  };
-  return res.status(500).json(error);
-});
+    const error = {
+      id: 'UNIDENTIFIED_ERROR',
+      status: 500,
+      message: 'Unidentified server error',
+    };
+    return res.status(500).json({ error });
+  });
+};
 
-module.exports = app;
+module.exports = errorHandler;
