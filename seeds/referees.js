@@ -8,7 +8,7 @@ exports.seed = function seedRefereeTable(knex) {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
-          refereeId: 'R2020-0001',
+          refereeId: 'R202011-0001',
           name: 'Atu',
           email: 'ahl@aok.com',
           phone: '34673662',
