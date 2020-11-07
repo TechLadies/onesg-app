@@ -25,13 +25,13 @@ exports.up = function makeCasetable(knex) {
       .integer('beneficiaryId')
       .unsigned()
       .index()
-      .references('benId')
+      .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
       .integer('refereeId')
       .unsigned()
       .index()
-      .references('refId')
+      .references('refereeId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });
