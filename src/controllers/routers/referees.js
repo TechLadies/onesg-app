@@ -78,8 +78,10 @@ const getReferee = async (req, res, next) => {
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
-    const ref = await Referee.query().insert(newReferee).returning('refereeId');
-    return res.status(201).json({ refereeId: ref.refereeId });
+    const referee = await Referee.query()
+      .insert(newReferee)
+      .returning('refereeId');
+    return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));

@@ -10,6 +10,23 @@ class Referee extends Model {
     return tableReferee;
   }
 
+  async $beforeInsert() {
+    const knex = Referee.knex();
+    const increDB = await knex.raw(
+      `SELECT CASE WHEN is_called THEN last_value + 1
+      ELSE last_value
+      END FROM "referees_refId_seq";
+      `
+    );
+    const increobj = increDB.rows[0].last_value;
+    const i = `0000${increobj}`.substring(increobj.length);
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = d.getMonth();
+    const id = `R${yyyy}${mm}-${i}`;
+    this.refereeId = id;
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',

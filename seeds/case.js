@@ -16,7 +16,7 @@ exports.seed = function seedCaseTable(knex) {
       return knex(tableCase).insert([
         {
           BeneficiaryId: '0001',
-          RefereeId: '1002',
+          refereeId: '0001',
           CaseId: '20002',
           RequestType: RequestTypeEnum.CookedFood,
           Fulfilment: FulfilmentTypeEnum.InKindDonation,
