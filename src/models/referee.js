@@ -22,7 +22,7 @@ class Referee extends Model {
     const i = `0000${increobj}`.substring(increobj.length);
     const d = new Date();
     const yyyy = d.getFullYear();
-    const mm = d.getMonth();
+    const mm = d.getMonth() + 1;
     const id = `R${yyyy}${mm}-${i}`;
     this.refereeId = id;
   }
