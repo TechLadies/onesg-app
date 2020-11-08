@@ -1,3 +1,4 @@
+
 const { tableBeneficiary } = require('../src/models/beneficiary');
 
 exports.seed = function seedBeneficiaryTable(knex) {
@@ -53,10 +54,11 @@ exports.seed = function seedBeneficiaryTable(knex) {
         },
         {
           beneficiaryId: 'B202011-0002',
-          name: 'veronica',
+          name: 'gurindam',
           email: 'jojojuju@gmail.com',
           phone: '90093955',
           occupation: 'homemaker',
+          notes: 'nil',
           householdIncome: '202',
           householdSize: 4,
           paymentType: paymentTypeEnum.payNow,
@@ -68,6 +70,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           email: 'famiz676@gmail.com',
           phone: '92224421',
           occupation: 'student',
+          notes: 'nil',
           householdIncome: '1200.00',
           householdSize: 3,
           paymentType: paymentTypeEnum.bankTransfer,
@@ -79,6 +82,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           email: 'familyyy@gmail.com',
           phone: '91940421',
           occupation: 'unemployed',
+          notes: 'nil',
           householdIncome: '1000.00',
           householdSize: 3,
           paymentType: paymentTypeEnum.payNow,
@@ -86,10 +90,11 @@ exports.seed = function seedBeneficiaryTable(knex) {
         },
         {
           beneficiaryId: 'B202011-0005',
-          name: 'gurinda',
+          name: 'veronica',
           email: 'salagh@gmail.com',
           phone: '97577645',
           occupation: 'tech',
+          notes: 'nil',
           householdIncome: '3455.00',
           householdSize: 6,
           paymentType: paymentTypeEnum.bankTransfer,
