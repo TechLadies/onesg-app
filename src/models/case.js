@@ -2,49 +2,9 @@ const { Model } = require('objection');
 const { Beneficiary } = require('./beneficiary');
 const { Referee } = require('./referee');
 
-<<<<<<< HEAD
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
 const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
-=======
-const requestTypeEnum = {
-  cookedFood: 'cookedFood',
-  diapers: 'diapers',
-  financialAssistance: 'financialAssistance',
-  medicalBill: 'medicalBill',
-  milkFormula: 'milkFormula',
-  schoolFees: 'schoolFees',
-  transportationFees: 'transportationFees',
-  utilityBill: 'utilityBill',
-};
-
-const fulfilmentTypeEnum = {
-  inKindDonation: 'inKindDonation',
-  cashTransfer: 'cashTransfer',
-  thirdpartyPayment: 'third-partyPayment',
-  partnerReferral: 'partnerReferral',
-};
-
-const caseStatusTypeEnum = {
-  new: 'new',
-  onHold: 'onHold',
-  referredtoEFC: 'referredtoEFC',
-  processing: 'processing',
-  closed: 'closed',
-};
-
-const referenceStatusTypeEnum = {
-  unverified: 'unverified',
-  pending: 'pending',
-  verified: 'verified',
-};
-const approvalTypeEnum = {
-  NIL: '-',
-  full: 'full',
-  partial: 'partial',
-  rejected: 'rejected',
-};
->>>>>>> cleaned error & change fields to camelcase
 
 const tableCase = 'case';
 
@@ -111,14 +71,6 @@ class Case extends Model {
 module.exports = {
   model: Case,
   tableCase,
-<<<<<<< HEAD
   caseStatusEnum,
   referenceStatusEnum,
-=======
-  requestTypeEnum,
-  fulfilmentTypeEnum,
-  referenceStatusTypeEnum,
-  approvalTypeEnum,
-  caseStatusTypeEnum,
->>>>>>> cleaned error & change fields to camelcase
 };

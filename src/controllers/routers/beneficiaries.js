@@ -1,13 +1,8 @@
-/* eslint-disable no-console */
-<<<<<<< HEAD
-
 const { ValidationError, UniqueViolationError } = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 const { Beneficiary } = require('../../models');
-
-
 /**
  * Sanitize data from client. Call before an insert or an update.
  */
@@ -29,13 +24,6 @@ function sanitize(json) {
   return beneficiary;
 }
 
-=======
-const { ValidationError, UniqueViolationError } = require('objection');
-const {
-  errors: { BadRequest, InvalidInput },
-} = require('../../utils');
-const { Beneficiary } = require('../../models');
->>>>>>> cleaned error & change fields to camelcase
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -50,23 +38,9 @@ const getAll = async (req, res) => {
     'notes',
     'householdIncome',
     'householdSize',
-    'paymentType',
-    'created_at',
-    'updated_at'
+    'paymentType'
   );
   res.status(200).json({ beneficiaries });
-};
-
-/**
- * Retrieve specific beneficiary with cases
- * @param {Request} req
- * @param {Response} res
- */
-const getBeneficiarybyCase = async (req, res) => {
-  const byCase = await Beneficiary.query().withGraphFetched(
-    '[cases, referees]'
-  );
-  res.status(200).json({ byCase });
 };
 
 /**
@@ -75,7 +49,7 @@ const getBeneficiarybyCase = async (req, res) => {
  * @param {Response} res
  */
 
-const getBeneficiary = async (req, res, next) => {
+const getBeneficiarybyId = async (req, res, next) => {
   const { id } = req.params;
   try {
     const beneficiary = await Beneficiary.query()
@@ -87,11 +61,10 @@ const getBeneficiary = async (req, res, next) => {
         'notes',
         'householdIncome',
         'householdSize',
-        'paymentType',
-        'created_at',
-        'updated_at'
+        'paymentType'
       )
-      .where('beneficiaryId', id);
+      .where('beneficiaryId', id)
+      .withGraphFetched('[cases, referees]');
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }
@@ -107,7 +80,6 @@ const getBeneficiary = async (req, res, next) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-<<<<<<< HEAD
   const newBeneficiary = sanitize(req.body);
   try {
     const ben = await Beneficiary.query()
@@ -127,72 +99,6 @@ const create = async (req, res, next) => {
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
     return next(new BadRequest(err.nativeError.detail));
-=======
-  try {
-    const newBen = req.body;
-    const ben = await Beneficiary.query()
-      .insert(newBen)
-      .returning('beneficiaryId');
-
-    return res.status(201).json(ben);
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      return res.json(new InvalidInput(err.message));
-    }
-    if (err instanceof UniqueViolationError) {
-      return res.json(new BadRequest(err.nativeError.detail));
-    }
-    return next(err);
->>>>>>> cleaned error & change fields to camelcase
-  }
-};
-/**
- * Update Beneficiaries
- * @param {Request} req
- * @param {Response} res
- */
-
-<<<<<<< HEAD
-const update = async (req, res) => {
-  // Return if there are any validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json(errors);
-  }
-
-  const updateBeneficiary = req.body;
-  // const benID = req.body.BeneficiaryId;
-  console.log(req.params.BeneficiaryId);
-
-  try {
-    // Check if beneficiary already exists in db
-    const updateben = await db('beneficiary')
-      .where({ BeneficiaryId: req.params.BeneficiaryId })
-      .update(updateBeneficiary);
-    return res
-      .status(201)
-      .json({ message: 'Beneficiary successfully updated', updateben });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: 'Update Fail', error: err });
-=======
-const update = async (req, res, next) => {
-  const updateBen = req.body;
-  console.log(req.body.email);
-  try {
-    await Beneficiary.query()
-      .update(updateBen)
-      .where('beneficiaryId', req.params.beneficiaryId);
-    return res.status(201).json(`${req.params.beneficiaryId} has been updated`);
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      return res.json(new InvalidInput(err.message));
-    }
-    if (err instanceof UniqueViolationError) {
-      return res.json(new BadRequest(err.nativeError.detail));
-    }
-    return next(err);
->>>>>>> cleaned error & change fields to camelcase
   }
 };
 
@@ -259,12 +165,8 @@ const del = async (req, res) => {
 
 module.exports = {
   getAll,
-  getBeneficiary,
+  getBeneficiarybyId,
   create,
   update,
   del,
-<<<<<<< HEAD
-  getBeneficiarybyCase,
-=======
->>>>>>> cleaned error & change fields to camelcase
 };

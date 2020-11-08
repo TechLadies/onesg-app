@@ -1,14 +1,4 @@
 const { tableCase } = require('../src/models/case');
-<<<<<<< HEAD
-=======
-const {
-  requestTypeEnum,
-  fulfilmentTypeEnum,
-  caseStatusTypeEnum,
-  referenceStatusTypeEnum,
-  approvalTypeEnum,
-} = require('../src/models/case.js');
->>>>>>> cleaned error & change fields to camelcase
 
 exports.seed = function seedCaseTable(knex) {
   // Deletes ALL existing entries
@@ -42,34 +32,6 @@ exports.seed = function seedCaseTable(knex) {
           beneficiaryId: 2,
           createdBy: 2,
           updatedBy: 2,
-        },
-        {
-          beneficiaryId: 'B202011-0003',
-          refereeId: 'R202011-0001',
-          caseId: 'EF2020-110003',
-          requestType: requestTypeEnum.diapers,
-          fulfilment: fulfilmentTypeEnum.inKindDonation,
-          POC: 'Siddique Impex',
-          amountRequested: '200',
-          description: 'investment failed',
-          caseStatus: caseStatusTypeEnum.new,
-          referenceStatus: referenceStatusTypeEnum.unverified,
-          approval: approvalTypeEnum.NIL,
-          amountGranted: '200',
-        },
-        {
-          beneficiaryId: 'B202011-0001',
-          refereeId: 'R202011-0001',
-          caseId: 'EF2020-110004',
-          requestType: requestTypeEnum.diapers,
-          fulfilment: fulfilmentTypeEnum.cashTransfer,
-          POC: 'Techladies',
-          amountRequested: '345',
-          description: 'job loss',
-          caseStatus: caseStatusTypeEnum.new,
-          referenceStatus: referenceStatusTypeEnum.verified,
-          approval: approvalTypeEnum.NIL,
-          amountGranted: '200',
         },
       ]);
     })

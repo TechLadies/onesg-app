@@ -1,36 +1,16 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
 'use strict';
 
-=======
-/* eslint-disable no-console */
-<<<<<<< HEAD
->>>>>>> add format for ben id
 const { Model } = require('objection');
-=======
-/* eslint-disable global-require */
->>>>>>> mapping
 
 const { Model, ValidationError } = require('objection');
-const { Case } = require('./case');
-const { Referee } = require('./referee');
-=======
-const { Model, ValidationError } = require('objection');
->>>>>>> cleaned error & change fields to camelcase
 
 const paymentTypeEnum = {
   PayNow: 'payNow',
   BankTransfer: 'bankTransfer',
 };
-<<<<<<< HEAD
 const tableBeneficiary = 'beneficiary';
-=======
-
-<<<<<<< HEAD
-const tableBeneficiary = 'Beneficiary';
->>>>>>> objection query
 
 // helper functions
 function getBeneficiaryId(previousId) {
@@ -58,9 +38,6 @@ function getBeneficiaryId(previousId) {
 
   return `B${currentYear}${currentMonth}-${paddedIndex}`;
 }
-=======
-const tableBeneficiary = 'beneficiary';
->>>>>>> add format for ben id
 
 class Beneficiary extends Model {
   static get tableName() {
@@ -68,37 +45,23 @@ class Beneficiary extends Model {
   }
 
   async $beforeInsert() {
-<<<<<<< HEAD
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
       .orderBy('id', 'desc')
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
-      lastInsertedBeneficiary[0].beneficiaryId
-    );
-=======
-    const knex = Beneficiary.knex();
-    const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1
-       ELSE last_value
-       END FROM "beneficiary_benId_seq";
-       `
+      lastInsertedBeneficiary[0].beneficiaryId,
+
+      console.log(`look here`, lastInsertedBeneficiary)
     );
     const increobj = increDB.rows[0].last_value;
+    const i = `000${increobj}`.substring(increobj.length);
     const d = new Date();
     const yyyy = d.getFullYear();
-    const mm = d.getMonth();
-<<<<<<< HEAD
-    const id = `B${yyyy}${mm}-${increment}`;
-    this.BeneficiaryId = id;
-    // eslint-disable-next-line dot-notation
-    console.log(typeof increment);
->>>>>>> add format for ben id
-=======
-    const id = `B${yyyy}${mm}-${increobj}`;
+    const mm = d.getMonth() + 1;
+    const id = `B${yyyy}${mm}-${i}`;
     this.beneficiaryId = id;
->>>>>>> cleaned error & change fields to camelcase
   }
 
   static get jsonSchema() {
@@ -106,9 +69,6 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         beneficiaryNumber: {
           type: 'string',
           minLength: 11,
@@ -123,26 +83,7 @@ class Beneficiary extends Model {
         householdIncome: {
           type: 'number',
         },
-<<<<<<< HEAD
-=======
-=======
-=======
->>>>>>> add format for ben id
-=======
->>>>>>> cleaned error & change fields to camelcase
-        beneficiaryId: { type: 'varchar' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-<<<<<<< HEAD
-        email: { type: 'string', minLength: 1, maxLength: 255 },
-        phone: { type: 'varchar', maxLength: 12 },
-        address: { type: 'varchar', maxLength: 255 },
->>>>>>> objection query
-        occupation: { type: 'string', maxLength: 255 },
-        notes: { type: 'text', maxLength: 255 },
-        householdIncome: { type: 'decimal', minLength: 1 },
->>>>>>> update: add notes & revised search
         householdSize: { type: 'integer' },
-<<<<<<< HEAD
         paymentType: {
           type: 'array',
           $comment:
@@ -155,7 +96,7 @@ class Beneficiary extends Model {
     };
   }
 
-  static get relationMappings() {
+static get relationMappings() {
     return {
       cases: {
         relation: Model.HasManyRelation,
@@ -177,48 +118,11 @@ class Beneficiary extends Model {
           },
           to: 'referees.refereeId',
         },
-=======
-=======
-        email: { maxLength: 255 },
-        phone: { type: 'varchar', maxLength: 12 },
-        occupation: { type: 'string', maxLength: 255 },
-        householdIncome: { type: 'decimal', minLength: 1 },
-        householdSize: { type: 'varchar' },
->>>>>>> objection query
-        paymentType: { type: 'enum' },
-<<<<<<< HEAD
->>>>>>> objection query
-=======
-=======
-        BeneficiaryId: { type: 'varchar' },
-        Name: { type: 'string', minLength: 1, maxLength: 255 },
-        Email: { type: 'string', minLength: 1, maxLength: 255 },
-        Phone: { type: 'varchar', maxLength: 12 },
-        Occupation: { type: 'string', maxLength: 255 },
-        HouseholdIncome: { type: 'decimal', minLength: 1 },
-        HouseholdSize: { type: 'integer' },
-        PaymentType: { type: 'enum' },
->>>>>>> add format for ben id
-<<<<<<< HEAD
->>>>>>> add format for ben id
-=======
-=======
-        beneficiaryId: { type: 'varchar' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { type: 'string', minLength: 1, maxLength: 255 },
-        phone: { type: 'varchar', maxLength: 12 },
-        occupation: { type: 'string', maxLength: 255 },
-        householdIncome: { type: 'decimal', minLength: 1 },
-        householdSize: { type: 'integer' },
-        paymentType: { type: 'enum' },
->>>>>>> cleaned error & change fields to camelcase
->>>>>>> cleaned error & change fields to camelcase
-      },
-    };
-  }
-
-<<<<<<< HEAD
-  $afterValidate(beneficiary) {
+      }
+    }
+}   
+    
+    $afterValidate(beneficiary) {
     super.$afterValidate(beneficiary);
 
     // validate email
@@ -228,41 +132,22 @@ class Beneficiary extends Model {
       ) {
         throw new ValidationError({
           message: `Email format "${beneficiary.email}" is invalid`,
-=======
-  $afterValidate(json) {
-    super.$afterValidate(json);
-    // validate email
-    if (json.email !== null) {
-      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
-        throw new ValidationError({
-          message: `Email format "${json.email}" is invalid`,
->>>>>>> cleaned error & change fields to camelcase
         });
       }
     }
     // validate phone
-<<<<<<< HEAD
     if (beneficiary.phone !== undefined && beneficiary.phone !== null) {
       if (/^(6|8|9)\d{7}$/.test(beneficiary.phone) === false) {
         throw new ValidationError({
           message: `Phone format "${beneficiary.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
         });
       }
-=======
-    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
-      throw new ValidationError({
-        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
-      });
->>>>>>> cleaned error & change fields to camelcase
     }
   }
 }
 
 module.exports = {
+  Beneficiary,
   model: Beneficiary,
   tableBeneficiary,
-<<<<<<< HEAD
-=======
-  paymentTypeEnum,
->>>>>>> cleaned error & change fields to camelcase
 };

@@ -29,7 +29,6 @@ const {
 // GET /v1/beneficiaries
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
-<<<<<<< HEAD
 // POST /v1/beneficiaries:id
 router.post('/', isNull, beneficiaries.create);
 
@@ -37,12 +36,9 @@ router.post('/', isNull, beneficiaries.create);
 router.patch('/:id', beneficiaries.update);
 
 router.delete('/:beneficiaryId', beneficiaries.del);
-=======
-// POST /v1/beneficiaries
-router.post('/', isNull, beneficiaries.create);
->>>>>>> cleaned error & change fields to camelcase
 
-router.put('/:beneficiaryId', isNull, beneficiaries.update);
+// PATCH /v1/beneficiaries/:id
+router.patch('/:id', beneficiaries.update);
 
 router.delete('/:beneficiaryId', beneficiaries.del);
 
