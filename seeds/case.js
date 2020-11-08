@@ -15,18 +15,18 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-          BeneficiaryId: '0001',
+          beneficiaryId: '0001',
           refereeId: '0001',
-          CaseId: '20002',
-          RequestType: RequestTypeEnum.CookedFood,
-          Fulfilment: FulfilmentTypeEnum.InKindDonation,
+          caseId: '20002',
+          requestType: RequestTypeEnum.CookedFood,
+          fulfilment: FulfilmentTypeEnum.InKindDonation,
           POC: 'Techladies',
-          AmountRequested: '450.03',
-          Description: 'due to debt',
-          CaseStatus: CaseStatusTypeEnum.New,
-          ReferenceStatus: ReferenceStatusTypeEnum.Unverified,
-          Approval: ApprovalTypeEnum.NIL,
-          AmountGranted: '450.03',
+          amountRequested: '450.03',
+          description: 'due to debt',
+          caseStatus: CaseStatusTypeEnum.New,
+          referenceStatus: ReferenceStatusTypeEnum.Unverified,
+          approval: ApprovalTypeEnum.NIL,
+          amountGranted: '450.03',
         },
       ]);
     });
