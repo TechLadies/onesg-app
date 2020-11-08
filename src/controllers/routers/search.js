@@ -30,13 +30,13 @@ const getSearch = async (req, res) => {
 
 const search = async (req, res) => {
   // Step: Extract all query params
-  const { q, type, page, per_page } = req.query;
+  const { q, type, page, per_page, include_entities } = req.query;
   // Step: Choose database based on `type` query param
   let model;
   let searchFields;
   if (type === 'beneficiary') {
     model = Beneficiary;
-    searchFields = ['"name"', '"beneficiaryId"', '"email"'];
+    searchFields = ['"name"', '"email"'];
   } else if (type === 'case') {
     model = Case;
     searchFields = ['"caseId"'];
@@ -46,6 +46,10 @@ const search = async (req, res) => {
   } else {
     return res.json(new BadRequest(`Type is missing.`));
   }
+  console.log(include_entities);
+  const entities = include_entities ? include_entities.split('&') : [];
+  console.log(entities);
+  // TODO : create custom join login based on entities.
   // Step: Construct SQL query, basically whatever you need to put into `raw`
   // The query will change based on page, per_page values; look into LIMIT, OFFSET in sql
   // & string interpolation
@@ -54,14 +58,10 @@ const search = async (req, res) => {
   const limit = parseInt(per_page, 10) || 10;
   const currentPage = parseInt(page, 10) || 1;
   const offset = limit * currentPage - limit;
-  /* const entities = () => {
-      if (include_entities === true) {
-        // const include_entities = Model;
-      } else {
-        req.query.include_entities = 'none';
-      }
-    }; */
   // Step: Execute the transaction
+  /* select * from beneficiary 
+inner join "cases" on beneficiary."benId" = cases."beneficiaryId" 
+where similarity ('ziz', "name"|| "email") > 0.08 */
   const results = await model
     .query()
     .select(raw(`*`))
@@ -69,6 +69,11 @@ const search = async (req, res) => {
     // ref(`model.name`, `model.organisation`
     .limit(limit)
     .offset(offset);
+
+  if (entities.indexOf('cases') > -1) {
+    results.join(`cases`, `beneficiary.benId`, `cases.beneficiaryId`);
+    // Cases.id is not included.
+  }
   // Step: Envelope the results with paging information
   const response = {
     page: currentPage,
