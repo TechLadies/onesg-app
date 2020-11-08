@@ -105,7 +105,7 @@ const create = async (req, res, next) => {
 };
 
 /**
- * Update existing referee
+ * Update existing beneficiary
  * @param {Request} req
  * @param {Response} res
  */

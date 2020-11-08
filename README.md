@@ -69,6 +69,16 @@ knex seed:run --specific=case.js
 
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check. 
 
+5. Install psql and pg_trgm
+```
+psql
+```
+CREATE EXTENSION pg_trgm
+```
+
+
+
+
 <br/>
 <br/>
 
