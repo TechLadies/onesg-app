@@ -23,6 +23,9 @@ function sanitize(json) {
     referee.name = json.name.trim();
   }
   if (json.phone) {
+    if (Number.isInteger(json.phone) === true) {
+      referee.phone = String(json.phone);
+    }
     referee.phone = json.phone.trim();
   }
   if (json.email) {

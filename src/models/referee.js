@@ -32,11 +32,15 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-        refereeId: { type: 'varchar' },
+        refereeId: { type: 'string' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
         email: { maxLength: 255 },
-        phone: { type: 'varchar', minLength: 8, maxLength: 8 },
-        organisation: { type: 'varchar', maxLength: 255 },
+        phone: {
+          type: 'string',
+          minLength: 8,
+          maxLength: 8,
+        },
+        organisation: { type: 'string', maxLength: 255 },
       },
     };
   }
@@ -47,6 +51,7 @@ class Referee extends Model {
     // validate email
     if (referee.email !== undefined && referee.email !== null) {
       if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
+        console.log('reach validate email');
         throw new ValidationError({
           message: `Email format "${referee.email}" is invalid`,
         });
@@ -54,6 +59,7 @@ class Referee extends Model {
     }
     // validate phone
     if (referee.phone !== undefined && referee.phone !== null) {
+      console.log('reach validate phone');
       if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
         throw new ValidationError({
           message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
