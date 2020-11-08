@@ -51,9 +51,7 @@ class Beneficiary extends Model {
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
-      lastInsertedBeneficiary[0].beneficiaryId,
-
-      console.log(`look here`, lastInsertedBeneficiary)
+      lastInsertedBeneficiary[0].beneficiaryId
     );
   }
 

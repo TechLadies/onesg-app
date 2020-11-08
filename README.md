@@ -82,6 +82,16 @@ CREATE EXTENSION pg_trgm;
 
 
 
+5. Install psql and pg_trgm
+```
+psql
+```
+CREATE EXTENSION pg_trgm
+```
+
+
+
+
 <br/>
 
 ## Setup Keys for Passport

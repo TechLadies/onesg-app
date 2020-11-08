@@ -3,8 +3,6 @@ const { tableStaff } = require('../src/models/staff.js');
 
 exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
-<<<<<<< HEAD
-
     table.increments('id').primary();
     table
       .string('refereeNumber', 11)
