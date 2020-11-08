@@ -47,21 +47,26 @@ class Beneficiary extends Model {
     };
   }
 
-  $afterValidate(json) {
-    super.$afterValidate(json);
+  $afterValidate(beneficiary) {
+    super.$afterValidate(beneficiary);
+
     // validate email
-    if (json.email !== null) {
-      if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(json.email) === false) {
+    if (beneficiary.email !== undefined && beneficiary.email !== null) {
+      if (
+        /^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(beneficiary.email) === false
+      ) {
         throw new ValidationError({
-          message: `Email format "${json.email}" is invalid`,
+          message: `Email format "${beneficiary.email}" is invalid`,
         });
       }
     }
     // validate phone
-    if (/^(6|8|9)\d{7}$/.test(json.phone) === false) {
-      throw new ValidationError({
-        message: `Phone format "${json.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
-      });
+    if (beneficiary.phone !== undefined && beneficiary.phone !== null) {
+      if (/^(6|8|9)\d{7}$/.test(beneficiary.phone) === false) {
+        throw new ValidationError({
+          message: `Phone format "${beneficiary.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+        });
+      }
     }
   }
 }
