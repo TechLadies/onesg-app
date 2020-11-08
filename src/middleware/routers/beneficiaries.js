@@ -28,7 +28,8 @@ router.get('/', beneficiaries.getAll);
 // POST /v1/beneficiaries
 router.post('/', isNull, beneficiaries.create);
 
-router.put('/:beneficiaryId', isNull, beneficiaries.update);
+// PATCH /v1/beneficiaries/:id
+router.patch('/:id', beneficiaries.update);
 
 router.delete('/:beneficiaryId', beneficiaries.del);
 

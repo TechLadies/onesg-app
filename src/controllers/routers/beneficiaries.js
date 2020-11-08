@@ -1,9 +1,28 @@
 /* eslint-disable no-console */
-const { ValidationError, UniqueViolationError } = require('objection');
 const {
-  errors: { BadRequest, InvalidInput },
+  DataError,
+  ValidationError,
+  UniqueViolationError,
+} = require('objection');
+const {
+  errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 const { Beneficiary } = require('../../models');
+
+const sanitize = (json) => {
+  const beneficiary = json;
+  if (json.name) {
+    beneficiary.name = json.name.trim();
+  }
+  if (json.phone) {
+    beneficiary.phone = json.phone.trim();
+  }
+  if (json.email) {
+    beneficiary.email = json.email.toLowerCase().trim();
+  }
+  return beneficiary;
+};
+
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -12,6 +31,29 @@ const { Beneficiary } = require('../../models');
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select();
   res.status(200).json({ beneficiaries });
+};
+
+/**
+ * Retrieve specific referee by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getBeneficiary = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const beneficiary = await Beneficiary.query()
+      .select()
+      .where('BeneficiaryId', id);
+    if (beneficiary.length === 0) {
+      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+    }
+    return res.status(200).json({ beneficiary });
+  } catch (err) {
+    if (err instanceof DataError) {
+      return next(new BadRequest('Beneficiary Id format is invalid'));
+    }
+    return next();
+  }
 };
 
 /**
@@ -39,30 +81,36 @@ const create = async (req, res, next) => {
 };
 
 /**
- * Update Beneficiaries
+ * Update existing referee
  * @param {Request} req
  * @param {Response} res
  */
-
 const update = async (req, res, next) => {
-  const updateBen = req.body;
-  console.log(req.body.email);
+  const { id } = req.params;
+  const updateInfo = sanitize(req.body);
   try {
-    await Beneficiary.query()
-      .update(updateBen)
-      .where('beneficiaryId', req.params.beneficiaryId);
-    return res.status(201).json(`${req.params.beneficiaryId} has been updated`);
+    const beneficiary = await Beneficiary.query()
+      .select()
+      .patch(updateInfo)
+      .where('BeneficiaryId', id)
+      .returning('*');
+    if (beneficiary.length === 0) {
+      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+    }
+    return res.status(200).json({ beneficiary });
   } catch (err) {
     if (err instanceof ValidationError) {
-      return res.json(new InvalidInput(err.message));
+      return next(new InvalidInput(err.message));
     }
     if (err instanceof UniqueViolationError) {
-      return res.json(new BadRequest(err.nativeError.detail));
+      return next(new BadRequest(err.nativeError.detail));
     }
-    return next(err);
+    if (err instanceof DataError) {
+      return next(new BadRequest('Beneficiary Id format is invalid'));
+    }
+    return next();
   }
 };
-
 /**
  * Delete Beneficiaries
  * @param {Request} req
@@ -86,6 +134,7 @@ const del = async (req, res) => {
 
 module.exports = {
   getAll,
+  getBeneficiary,
   create,
   update,
   del,
