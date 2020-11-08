@@ -7,6 +7,8 @@ const {
   router: { search },
 } = require('../../controllers');
 
-router.get('/', search.getSearch);
+// router.post('/', search.postSearch);
+
+router.get('/', search.search);
 
 module.exports = router;

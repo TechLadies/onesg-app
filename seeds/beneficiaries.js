@@ -10,10 +10,17 @@ exports.seed = function seedBeneficiaryTable(knex) {
       return knex(tableBeneficiary).insert([
         {
           beneficiaryId: 'B202011-0001',
+<<<<<<< HEAD
           name: 'Gurmit',
           email: 'gurmit@singh.com',
           phone: '96424222',
           occupation: 'calefare actor',
+=======
+          name: 'ziza',
+          email: 'zizah@azizah@.com',
+          phone: '596424222',
+          occupation: 'software engineer',
+>>>>>>> save changes to search
           householdIncome: '1333',
           householdSize: '4',
           paymentType: paymentTypeEnum.payNow,
