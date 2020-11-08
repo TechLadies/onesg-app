@@ -6,11 +6,7 @@
 
 'use strict';
 
-const {
-  DataError,
-  ValidationError,
-  UniqueViolationError,
-} = require('objection');
+const { ValidationError, UniqueViolationError } = require('objection');
 
 const { Referee } = require('../../models');
 
@@ -63,9 +59,6 @@ const getReferee = async (req, res, next) => {
     }
     return res.status(200).json({ referee });
   } catch (err) {
-    if (err instanceof DataError) {
-      return next(new BadRequest('Referee Id format is invalid'));
-    }
     return next();
   }
 };
@@ -121,9 +114,6 @@ const update = async (req, res, next) => {
     }
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
-    }
-    if (err instanceof DataError) {
-      return next(new BadRequest('Referee Id format is invalid'));
     }
     return next();
   }
