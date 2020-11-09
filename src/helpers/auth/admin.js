@@ -15,15 +15,19 @@ const ADMIN_USERS = [
 ];
 
 const validateAdminUser = (email, password) => {
-  return ADMIN_USERS.find((user) => {
+  const users = ADMIN_USERS.find((user) => {
     return user.email === email && user.password === password;
   });
+
+  return users.length;
 };
 
-const getAdminUser = (email) => {
-  return ADMIN_USERS.find((user) => {
-    return user.email === email;
+const getAdminUser = (userEmail) => {
+  const { email, role } = ADMIN_USERS.find((user) => {
+    return user.email === userEmail;
   });
+
+  return { email, role };
 };
 
 module.exports = {

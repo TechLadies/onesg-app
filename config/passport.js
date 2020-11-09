@@ -17,7 +17,6 @@ const options = {
 module.exports = (passport) => {
   const passportCallbackFn = (jwtPayload, done) => {
     const user = getAdminUser(jwtPayload.sub);
-
     if (user) {
       return done(null, user);
     }
