@@ -25,8 +25,9 @@ function sanitize(json) {
   if (json.phone) {
     if (Number.isInteger(json.phone) === true) {
       referee.phone = String(json.phone);
+    } else {
+      referee.phone = json.phone.trim();
     }
-    referee.phone = json.phone.trim();
   }
   if (json.email) {
     referee.email = json.email.toLowerCase().trim();
@@ -44,7 +45,15 @@ function sanitize(json) {
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const results = await Referee.query().select();
+  const results = await Referee.query().select(
+    'name',
+    'email',
+    'phone',
+    'organisation',
+    'refereeId',
+    'created_at',
+    'updated_at'
+  );
   return res.status(200).json({ results });
 };
 
@@ -56,7 +65,17 @@ const getAll = async (req, res) => {
 const getReferee = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const referee = await Referee.query().select().where('refereeId', id);
+    const referee = await Referee.query()
+      .select(
+        'name',
+        'email',
+        'phone',
+        'organisation',
+        'refereeId',
+        'created_at',
+        'updated_at'
+      )
+      .where('refereeId', id);
     if (referee.length === 0) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
@@ -75,6 +94,7 @@ const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
     const referee = await Referee.query()
+      .select()
       .insert(newReferee)
       .returning('refereeId');
     return res.status(201).json({ referee });
@@ -106,7 +126,15 @@ const update = async (req, res, next) => {
       .select()
       .patch(updateInfo)
       .where('refereeId', id)
-      .returning('*');
+      .returning(
+        'name',
+        'email',
+        'phone',
+        'organisation',
+        'refereeId',
+        'created_at',
+        'updated_at'
+      );
     if (referee.length === 0) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
