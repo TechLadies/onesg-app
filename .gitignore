@@ -4,10 +4,10 @@
 /config/env/development.js
 /env/
 
-# database files 
+# database files
 /database
 /dev.sqlite3/
 
 
 # key files
-/scripts/keys/
+keys/*

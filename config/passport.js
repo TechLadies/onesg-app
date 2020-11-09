@@ -1,12 +1,12 @@
-/* eslint-disable camelcase */
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const fs = require('fs');
 const path = require('path');
 
-const pathToKey = path.join(__dirname, '../scripts/keys/id_rsa_pub.pem');
+const pathToKey = `${path.resolve()}/keys/id_rsa_pub.pem`;
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
-const { getAdminUser } = require('../src/helpers/auth');
+
+const { getAdminUser } = require('../src/helpers/auth/admin');
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -15,11 +15,13 @@ const options = {
 };
 
 module.exports = (passport) => {
-  const passportCallbackFn = (jwt_payload, done) => {
-    const user = getAdminUser(jwt_payload.sub);
+  const passportCallbackFn = (jwtPayload, done) => {
+    const user = getAdminUser(jwtPayload.sub);
+
     if (user) {
       return done(null, user);
     }
+
     return done('user not found', false);
   };
 

@@ -1,36 +1,26 @@
-/* eslint-disable camelcase */
-
 // Assign JWT token
-const Utils = require('../../utils/utils');
-const { getAdminUser } = require('../../helpers/auth');
-/* ----------------- */
-
-// Get Admin data
-const getAll = (req, res) => {
-  res.status(200).json({ data: 'sample GET /v1/admin data :p' });
-};
-/* ----------------- */
+const { issueJWT } = require('../../utils/auth/passport');
+const { validateAdminUser } = require('../../helpers/auth/admin');
 
 // Validate an existing user and issue a JWT
 const login = (req, res) => {
-  if (getAdminUser(req.body.email)) {
-    const tokenObject = Utils.issueJWT(getAdminUser(req.body.email));
+  const { email, password } = req.body;
+  const adminUser = validateAdminUser(email, password);
 
-    res.status(200).json({
-      success: true,
-      token: tokenObject.token,
-      expiresIn: tokenObject.expires,
-    });
-  } else {
-    res
+  // Return 404, if admin user not found
+  if (!adminUser) {
+    return res
       .status(404)
-      .json({ success: false, msg: 'No user found. Please contact admin.' });
+      .json({ message: 'No user found. Please contact admin.' });
   }
+
+  const tokenObject = issueJWT(adminUser);
+  return res.status(200).json({
+    token: tokenObject.token,
+    expiresIn: tokenObject.expires,
+  });
 };
 
-/* ----------------- */
-
 module.exports = {
-  getAll,
   login,
 };

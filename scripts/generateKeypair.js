@@ -3,8 +3,11 @@
  *
  * Make sure to save the private key elsewhere after generated!
  */
-const crypto = require('crypto');
 const fs = require('fs');
+const crypto = require('crypto');
+const path = require('path');
+
+const baseFolder = path.resolve();
 
 const genKeyPair = () => {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
@@ -20,11 +23,24 @@ const genKeyPair = () => {
     },
   });
 
+  const keysFolder = `${baseFolder}/keys`;
+
+  // create keys folder, if it doesnt exist
+  try {
+    if (!fs.existsSync(keysFolder)) {
+      fs.mkdirSync(keysFolder);
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    return;
+  }
+
   // Create the public key file
-  fs.writeFileSync(`${__dirname}/keys/id_rsa_pub.pem`, keyPair.publicKey);
+  fs.writeFileSync(`${baseFolder}/keys/id_rsa_pub.pem`, keyPair.publicKey);
 
   // Create the private key file
-  fs.writeFileSync(`${__dirname}/keys/id_rsa_priv.pem`, keyPair.privateKey);
+  fs.writeFileSync(`${baseFolder}/keys/id_rsa_priv.pem`, keyPair.privateKey);
 };
 
 // Generate the keypair

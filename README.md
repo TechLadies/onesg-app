@@ -10,7 +10,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Database Setup](#database-setup)
-- [Create Keys](#create-keys)
+- [Setup Keys for Passport](#setup-keys-for-passport)
 - [Project Structure](#project-structure)
 <br/>
 <br/>
@@ -42,12 +42,12 @@ npm run dev
 
 ## Database Setup
 
-1. Install PostgreSQL: 
+1. Install PostgreSQL:
 ```
 npm install pg
 ```
 
-2. Create the database 
+2. Create the database
 ```
 createdb onesg
 ```
@@ -64,16 +64,20 @@ knex seed:run --specific=referees.js
 knex seed:run --specific=case.js
 ```
 
-Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check. 
+Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
 
 <br/>
 
-## Create keys
+## Setup Keys for Passport
 
-1. To activate user authentication, run the following script to generate keys:
+To create keys required for authentication with `passport`, run the following command,
 
-npm gen-authcode
 ```
+npm run generate-keys
+```
+
+You should now have the generated public & private keys in a `keys` folder in root.
+
 <br/>
 
 ## Project Structure
