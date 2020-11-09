@@ -47,21 +47,12 @@ class Beneficiary extends Model {
   async $beforeInsert() {
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
-      .orderBy('id', 'desc')
+      .orderBy('created_at', 'desc')
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
-      lastInsertedBeneficiary[0].beneficiaryId,
-
-      console.log(`look here`, lastInsertedBeneficiary)
+      lastInsertedBeneficiary[0].beneficiaryId
     );
-    const increobj = increDB.rows[0].last_value;
-    const i = `000${increobj}`.substring(increobj.length);
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const id = `B${yyyy}${mm}-${i}`;
-    this.beneficiaryId = id;
   }
 
   static get jsonSchema() {
