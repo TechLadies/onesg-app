@@ -31,7 +31,6 @@ function getBeneficiaryId(previousId) {
   // use counter from previous insert
   if (year === currentYear && month === currentMonth) {
     beneficiaryIndex = parseInt(index, 10) + 1;
-    console.log(beneficiaryIndex, parseInt(index, 10));
   }
 
   // add leading 0s
