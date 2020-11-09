@@ -8,25 +8,48 @@ const paymentTypeEnum = {
 
 const tableBeneficiary = 'beneficiary';
 
+// helper functions
+function getBeneficiaryId(previousId) {
+  const [
+    // eslint-disable-next-line no-unused-vars
+    _,
+    year,
+    month,
+    index,
+  ] = previousId.match(/B(\d{4})(\d{2})-(\d{4})/);
+
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString();
+  const currentYear = today.getFullYear().toString();
+
+  let beneficiaryIndex = 1;
+  // If last inserted beneficiary is from the current month,
+  // use counter from previous insert
+  if (year === currentYear && month === currentMonth) {
+    beneficiaryIndex = parseInt(index, 10) + 1;
+    console.log(beneficiaryIndex, parseInt(index, 10));
+  }
+
+  // add leading 0s
+  const paddedIndex = String(beneficiaryIndex).padStart(4, '0');
+
+  return `B${currentYear}${currentMonth}-${paddedIndex}`;
+}
+
 class Beneficiary extends Model {
   static get tableName() {
     return tableBeneficiary;
   }
 
   async $beforeInsert() {
-    const knex = Beneficiary.knex();
-    const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1
-       ELSE last_value
-       END FROM "beneficiary_benId_seq";
-       `
+    const lastInsertedBeneficiary = await Beneficiary.query()
+      .select('beneficiaryId')
+      .orderBy('created_at', 'desc')
+      .limit(1);
+
+    this.beneficiaryId = getBeneficiaryId(
+      lastInsertedBeneficiary[0].beneficiaryId
     );
-    const increobj = increDB.rows[0].last_value;
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth();
-    const id = `B${yyyy}${mm}-${increobj}`;
-    this.beneficiaryId = id;
   }
 
   static get jsonSchema() {
