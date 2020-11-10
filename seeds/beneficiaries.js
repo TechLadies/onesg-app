@@ -9,7 +9,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
       // Inserts seed entries
       return knex(tableBeneficiary).insert([
         {
-          beneficiaryId: '0001',
+          beneficiaryId: 'B202011-0001',
           name: 'ziza',
           email: 'zizah@azizah@.com',
           phone: '596424222',

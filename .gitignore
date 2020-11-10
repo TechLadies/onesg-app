@@ -7,3 +7,6 @@
 # database files 
 /database
 /dev.sqlite3/
+
+# keys
+/source/utils/scripts/id_rsa_pub.pem

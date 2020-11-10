@@ -25,10 +25,10 @@ exports.up = function makeCasetable(knex) {
       .integer('beneficiaryId')
       .unsigned()
       .index()
-      .references('benId')
+      .references('id')
       .inTable(tableBeneficiary);
     table
-      .bigInteger('refereeId')
+      .integer('refereeId')
       .unsigned()
       .index()
       .references('refereeId')
