@@ -112,7 +112,16 @@ const update = async (req, res, next) => {
   const updateInfo = sanitize(req.body);
   try {
     const beneficiary = await Beneficiary.query()
-      .select()
+      .select(
+        'beneficiaryId',
+        'name',
+        'email',
+        'phone',
+        'occupation',
+        'householdIncome',
+        'householdSize',
+        'paymentType'
+      )
       .patch(updateInfo)
       .where('beneficiaryId', id)
       .returning(

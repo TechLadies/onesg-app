@@ -8,6 +8,11 @@
 /database
 /dev.sqlite3/
 
+
 # keys
 keys/id_rsa_priv.pem
 keys/id_rsa_pub.pem
+=======
+
+# key files
+keys/*

@@ -48,7 +48,7 @@ exports.up = function makeBeneficiarytable(knex) {
       .comment('Date of beneficiary update');
 
   })
-};
+}
 
 exports.down = function exportBeneficiarytable(knex) {
   return knex.schema.dropTable(tableBeneficiary);
