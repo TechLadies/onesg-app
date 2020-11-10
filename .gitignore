@@ -8,11 +8,6 @@
 /database
 /dev.sqlite3/
 
-<<<<<<< HEAD
-
-# key files
-keys/*
-=======
 # keys
-/source/utils/scripts/id_rsa_pub.pem
->>>>>>> change benId to id, hide benId from client
+keys/id_rsa_priv.pem
+keys/id_rsa_pub.pem
