@@ -26,7 +26,7 @@ function sanitize(json) {
     cases.fulfilment = json.fulfilment.trim();
   }
   if (json.POC) {
-    cases.POC = json.POC.toLowerCase().trim();
+    cases.POC = json.POC.trim();
   }
   if (json.description) {
     cases.description = json.description.trim();
