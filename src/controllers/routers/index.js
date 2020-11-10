@@ -7,11 +7,11 @@
 'use strict';
 
 const beneficiaries = require('./beneficiaries');
+const cases = require('./cases');
 const referees = require('./referees');
-// const cases = require('./cases');
 
 module.exports = {
   beneficiaries,
+  cases,
   referees,
-  // cases,
 };

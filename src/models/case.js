@@ -1,35 +1,35 @@
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 
 const RequestTypeEnum = {
-  CookedFood: 'cookedFood',
-  Diapers: 'diapers',
-  FinancialAssistance: 'financialAssistance',
-  MedicalBill: 'medicalBill',
-  MilkFormula: 'milkFormula',
-  SchoolFees: 'schoolFees',
-  TransportationFees: 'transportationFees',
-  UtilityBill: 'utilityBill',
+  cookedFood: 'cookedFood',
+  diapers: 'diapers',
+  financialAssistance: 'financialAssistance',
+  medicalBill: 'medicalBill',
+  milkFormula: 'milkFormula',
+  schoolFees: 'schoolFees',
+  transportationFees: 'transportationFees',
+  utilityBill: 'utilityBill',
 };
 
 const FulfilmentTypeEnum = {
-  InKindDonation: 'inKindDonation',
-  CashTransfer: 'cashTransfer',
-  ThirdpartyPayment: 'third-partyPayment',
-  PartnerReferral: 'partnerReferral',
+  inKindDonation: 'inKindDonation',
+  cashTransfer: 'cashTransfer',
+  thirdpartyPayment: 'third-partyPayment',
+  partnerReferral: 'partnerReferral',
 };
 
 const CaseStatusTypeEnum = {
-  New: 'new',
-  OnHold: 'onHold',
-  ReferredtoEFC: 'referredtoEFC',
-  Processing: 'processing',
-  Closed: 'closed',
+  new: 'new',
+  onHold: 'onHold',
+  referredtoEFC: 'referredtoEFC',
+  processing: 'processing',
+  closed: 'closed',
 };
 
 const ReferenceStatusTypeEnum = {
-  Unverified: 'unverified',
-  Pending: 'pending',
-  Verified: 'verified',
+  unverified: 'unverified',
+  pending: 'pending',
+  verified: 'verified',
 };
 const ApprovalTypeEnum = {
   NIL: '-',
@@ -48,21 +48,39 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['requestType', 'fulfilment', 'POC', 'amountRequested'],
       properties: {
         beneficiaryId: { type: 'integer' },
         refereeId: { type: 'integer' },
         caseId: { type: 'integer' },
-        requestType: { type: 'enum' },
-        fulfilment: { type: 'enum' },
-        POC: { type: 'varchar', maxLength: 255 },
+        requestType: { type: 'string', enum: RequestTypeEnum.key },
+        fulfilment: { type: 'string', enum: FulfilmentTypeEnum.key },
+        POC: { type: 'string', minLength: 1, maxLength: 255 },
         amountRequested: { type: 'decimal' },
-        description: { type: 'varchar', maxLength: 255 },
-        caseStatus: { type: 'enum' },
-        referenceStatus: { type: 'enum' },
-        approval: { type: 'enum' },
+        description: { type: 'string', maxLength: 255 },
+        caseStatus: { type: 'string', enum: CaseStatusTypeEnum.key },
+        referenceStatus: { type: 'string', enum: ReferenceStatusTypeEnum.key },
+        approval: { type: 'string', enum: ApprovalTypeEnum.key },
         amountGranted: { type: 'decimal' },
       },
     };
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    const cases = json;
+    // validate amountGranted < amountRequested
+    if (typeof cases.amountRequested === 'string') {
+      cases.amountRequested = parseFloat(json.amountRequested);
+    }
+    if (typeof cases.amountGranted === 'string') {
+      cases.amountGranted = parseFloat(json.amountGranted);
+    }
+    if (cases.amountRequested - cases.amountGranted < 0) {
+      throw new ValidationError({
+        message: 'Amount granted cannot be more than amount requested',
+      });
+    }
   }
 }
 
