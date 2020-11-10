@@ -13,6 +13,7 @@
 const express = require('express');
 
 const router = express.Router();
+const passport = require('passport');
 const {
   router: { beneficiaries },
 } = require('../../controllers');
@@ -21,7 +22,12 @@ const {
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
 // GET /v1/beneficiaries
-router.get('/', beneficiaries.getAll);
+
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  beneficiaries.getAll
+);
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);
