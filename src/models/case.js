@@ -70,13 +70,7 @@ class Case extends Model {
     super.$afterValidate(json);
     const cases = json;
     // validate amountGranted < amountRequested
-    if (typeof cases.amountRequested === 'string') {
-      cases.amountRequested = parseFloat(json.amountRequested);
-    }
-    if (typeof cases.amountGranted === 'string') {
-      cases.amountGranted = parseFloat(json.amountGranted);
-    }
-    if (cases.amountRequested - cases.amountGranted < 0) {
+    if (cases.amountGranted - cases.amountRequested > 0) {
       throw new ValidationError({
         message: 'Amount granted cannot be more than amount requested',
       });

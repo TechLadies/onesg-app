@@ -6,7 +6,7 @@
 
 'use strict';
 
-const { DataError, CheckViolationError } = require('objection');
+const { CheckViolationError, DataError } = require('objection');
 
 const { Case } = require('../../models');
 
@@ -14,6 +14,44 @@ const {
   errors: { BadRequest, InvalidInput },
 } = require('../../utils');
 
+/**
+ * Sanitize data from client. Call before an insert or an update.
+ */
+function sanitize(json) {
+  const cases = json;
+  if (json.requestType) {
+    cases.requestType = json.requestType.trim();
+  }
+  if (json.fulfilment) {
+    cases.fulfilment = json.fulfilment.trim();
+  }
+  if (json.POC) {
+    cases.POC = json.POC.toLowerCase().trim();
+  }
+  if (json.description) {
+    cases.description = json.description.trim();
+  }
+  if (json.caseStatus) {
+    cases.caseStatus = json.caseStatus.toLowerCase().trim();
+  }
+  if (json.approval) {
+    cases.approval = json.approval.toLowerCase().trim();
+  }
+  if (json.referenceStatus) {
+    cases.approval = json.approval.toLowerCase().trim();
+  }
+  if (json.amountRequested) {
+    if (typeof json.amountRequested === 'string') {
+      cases.amountRequested = parseFloat(json.amountRequested);
+    }
+  }
+  if (json.amountGranted) {
+    if (typeof cases.amountGranted === 'string') {
+      cases.amountGranted = parseFloat(json.amountGranted);
+    }
+  }
+  return cases;
+}
 /**
  * Retrieve all cases
  * @param {Request} req
@@ -30,8 +68,8 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  // const newCase = sanitize(req.body);
-  const newCase = req.body;
+  const newCase = sanitize(req.body);
+  // const newCase = req.body;
   try {
     const cases = await Case.query().insert(newCase).returning('caseId');
     return res.status(201).json({ cases });
