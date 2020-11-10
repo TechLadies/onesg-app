@@ -69,7 +69,6 @@ const getAll = async (req, res) => {
  */
 const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
-  // const newCase = req.body;
   try {
     const cases = await Case.query().insert(newCase).returning('caseId');
     return res.status(201).json({ cases });
