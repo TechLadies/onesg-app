@@ -9,27 +9,46 @@ const {
 } = require('../../utils');
 const { Beneficiary } = require('../../models');
 
-const sanitize = (json) => {
+/**
+ * Sanitize data from client. Call before an insert or an update.
+ */
+function sanitize(json) {
   const beneficiary = json;
   if (json.name) {
     beneficiary.name = json.name.trim();
   }
   if (json.phone) {
-    beneficiary.phone = json.phone.trim();
+    if (Number.isInteger(json.phone) === true) {
+      beneficiary.phone = String(json.phone);
+    } else {
+      beneficiary.phone = json.phone.trim();
+    }
   }
   if (json.email) {
     beneficiary.email = json.email.toLowerCase().trim();
   }
-  return beneficiary;
-};
+  if (json.organisation) {
+    beneficiary.organisation = json.organisation.trim();
+  }
 
+  return beneficiary;
+}
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const beneficiaries = await Beneficiary.query().select();
+  const beneficiaries = await Beneficiary.query().select(
+    'beneficiaryId',
+    'name',
+    'email',
+    'phone',
+    'occupation',
+    'householdIncome',
+    'householdSize',
+    'paymentType'
+  );
   res.status(200).json({ beneficiaries });
 };
 
@@ -42,8 +61,17 @@ const getBeneficiary = async (req, res, next) => {
   const { id } = req.params;
   try {
     const beneficiary = await Beneficiary.query()
-      .select()
-      .where('BeneficiaryId', id);
+      .select(
+        'beneficiaryId',
+        'name',
+        'email',
+        'phone',
+        'occupation',
+        'householdIncome',
+        'householdSize',
+        'paymentType'
+      )
+      .where('beneficiaryId', id);
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }
@@ -90,10 +118,28 @@ const update = async (req, res, next) => {
   const updateInfo = sanitize(req.body);
   try {
     const beneficiary = await Beneficiary.query()
-      .select()
+      .select(
+        'beneficiaryId',
+        'name',
+        'email',
+        'phone',
+        'occupation',
+        'householdIncome',
+        'householdSize',
+        'paymentType'
+      )
       .patch(updateInfo)
-      .where('BeneficiaryId', id)
-      .returning('*');
+      .where('beneficiaryId', id)
+      .returning(
+        'beneficiaryId',
+        'name',
+        'email',
+        'phone',
+        'occupation',
+        'householdIncome',
+        'householdSize',
+        'paymentType'
+      );
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }

@@ -8,6 +8,7 @@ const { tableStaff } = require('../src/models/staff.js');
 exports.up = function makeBeneficiarytable(knex) {
   return knex.schema.createTable(tableBeneficiary, (table) => {
     table.increments('id').primary();
+<<<<<<< HEAD
     table
       .string('beneficiaryNumber', 11)
       .index()
@@ -18,6 +19,13 @@ exports.up = function makeBeneficiarytable(knex) {
     table.string('phone', 8).notNullable().unique();
     table.string('address', 255);
     table.string('occupation', 50);
+=======
+    table.varchar('beneficiaryId').index();
+    table.string('name').index();
+    table.string('email').unique();
+    table.string('phone').unique();
+    table.string('occupation');
+>>>>>>> change benId to id, hide benId from client
     table.decimal('householdIncome');
     table.specificType('householdSize', 'smallint').unsigned();
     table.specificType('paymentType', 'text[]');

@@ -34,11 +34,19 @@ exports.up = function makeCasetable(knex) {
       .inTable(tableBeneficiary)
       .notNullable()
       .unsigned()
+<<<<<<< HEAD
       .comment('Beneficiary id that is related to this case');
     table
       .integer('refereeId')
       .references('id')
       .inTable(tableReferee)
+=======
+      .index()
+      .references('id')
+      .inTable(tableBeneficiary);
+    table
+      .integer('refereeId')
+>>>>>>> change benId to id, hide benId from client
       .unsigned()
       .comment('Referee id that is related to this case');
     table
