@@ -1,13 +1,15 @@
+/* eslint-disable no-console */
 // Assign JWT token
 const { issueJWT } = require('../../utils/auth/passport');
-const { validateAdminUser } = require('../../helpers/auth/admin');
+const { isvalidateAdminUser } = require('../../helpers/auth/admin');
 
 // Validate an existing user and issue a JWT
 const login = (req, res) => {
   const { email, password } = req.body;
-  const hasValidCredentials = validateAdminUser(email, password);
+  // returns a boolean that is true and therefore is logged in.
+  const hasValidCredentials = isvalidateAdminUser(email, password);
 
-  // Return 404, if admin user not found
+  // Return 404, if admin user not found !hasValidCredential means false boolean
   if (!hasValidCredentials) {
     return res
       .status(404)
