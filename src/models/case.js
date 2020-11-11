@@ -51,7 +51,7 @@ function getCaseId(previousId) {
   ] = previousId.match(/EF\s(\d{4})-(\d{2})(\d{2})/);
 
   const today = new Date();
-  const currentMonth = (today.getMonth() + 1).toString();
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
 
   let caseIndex = 1;

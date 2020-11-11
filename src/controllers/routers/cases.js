@@ -69,6 +69,7 @@ const create = async (req, res, next) => {
     const cases = await Case.query().insert(newCase).returning('caseId');
     return res.status(201).json({ cases });
   } catch (err) {
+    console.log(err);
     // DataError for invalid types, CheckViolationError for not in enum
     if (err instanceof DataError || CheckViolationError) {
       return next(new InvalidInput(err.message));
