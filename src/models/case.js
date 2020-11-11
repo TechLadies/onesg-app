@@ -45,6 +45,23 @@ class Case extends Model {
     return tableCase;
   }
 
+  async $beforeInsert() {
+    const knex = Case.knex();
+    const increDB = await knex.raw(
+      `SELECT CASE WHEN is_called THEN last_value + 1
+      ELSE last_value
+      END FROM "cases_id_seq";
+      `
+    );
+    const increobj = increDB.rows[0].last_value;
+    const i = `00${increobj}`.substring(increobj.length);
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = d.getMonth() + 1;
+    const id = `EF ${yyyy}-${mm}${i}`;
+    this.caseId = id;
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
@@ -52,12 +69,12 @@ class Case extends Model {
       properties: {
         beneficiaryId: { type: 'integer' },
         refereeId: { type: 'integer' },
-        caseId: { type: 'integer' },
+        caseId: { type: 'varchar' },
         requestType: { type: 'string', enum: RequestTypeEnum.key },
         fulfilment: { type: 'string', enum: FulfilmentTypeEnum.key },
         POC: { type: 'string', minLength: 1, maxLength: 255 },
         amountRequested: { type: 'decimal' },
-        description: { type: 'string', maxLength: 255 },
+        description: { type: 'varchar', maxLength: 255 },
         caseStatus: { type: 'string', enum: CaseStatusTypeEnum.key },
         referenceStatus: { type: 'string', enum: ReferenceStatusTypeEnum.key },
         approval: { type: 'string', enum: ApprovalTypeEnum.key },
@@ -69,7 +86,7 @@ class Case extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const cases = json;
-    // validate amountGranted < amountRequested
+    // validate amountGranted must be <= amountRequested
     if (cases.amountGranted - cases.amountRequested > 0) {
       throw new ValidationError({
         message: 'Amount granted cannot be more than amount requested',

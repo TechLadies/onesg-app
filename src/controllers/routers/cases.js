@@ -40,15 +40,11 @@ function sanitize(json) {
   if (json.referenceStatus) {
     cases.approval = json.approval.toLowerCase().trim();
   }
-  if (json.amountRequested) {
-    if (typeof json.amountRequested === 'string') {
-      cases.amountRequested = parseFloat(json.amountRequested);
-    }
+  if (json.amountRequested && typeof json.amountRequested === 'string') {
+    cases.amountRequested = parseFloat(json.amountRequested);
   }
-  if (json.amountGranted) {
-    if (typeof cases.amountGranted === 'string') {
-      cases.amountGranted = parseFloat(json.amountGranted);
-    }
+  if (json.amountGranted && typeof cases.amountGranted === 'string') {
+    cases.amountGranted = parseFloat(json.amountGranted);
   }
   return cases;
 }
