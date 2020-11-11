@@ -46,7 +46,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           paymentType: ['PAYNOW', 'BANK_TRANSFER'],
           createdBy: 1,
           updatedBy: 2,
-        }
+        },
       ]);
     });
 };
