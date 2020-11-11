@@ -40,26 +40,45 @@ const ApprovalTypeEnum = {
 
 const tableCase = 'cases';
 
+// helper functions
+function getCaseId(previousId) {
+  const [
+    // eslint-disable-next-line no-unused-vars
+    _,
+    year,
+    month,
+    index,
+  ] = previousId.match(/EF\s(\d{4})-(\d{2})(\d{2})/);
+
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString();
+  const currentYear = today.getFullYear().toString();
+
+  let caseIndex = 1;
+  // If last inserted beneficiary is from the current month,
+  // use counter from previous insert
+  if (year === currentYear && month === currentMonth) {
+    caseIndex = parseInt(index, 10) + 1;
+  }
+
+  // add leading 0s
+  const paddedIndex = String(caseIndex).padStart(2, '0');
+
+  return `EF ${currentYear}-${currentMonth}${paddedIndex}`;
+}
+
 class Case extends Model {
   static get tableName() {
     return tableCase;
   }
 
   async $beforeInsert() {
-    const knex = Case.knex();
-    const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1
-      ELSE last_value
-      END FROM "cases_id_seq";
-      `
-    );
-    const increobj = increDB.rows[0].last_value;
-    const i = `00${increobj}`.substring(increobj.length);
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const id = `EF ${yyyy}-${mm}${i}`;
-    this.caseId = id;
+    const lastInsertedCase = await Case.query()
+      .select('caseId')
+      .orderBy('created_at', 'desc')
+      .limit(1);
+
+    this.caseId = getCaseId(lastInsertedCase[0].caseId);
   }
 
   static get jsonSchema() {
@@ -67,8 +86,8 @@ class Case extends Model {
       type: 'object',
       required: ['requestType', 'fulfilment', 'POC', 'amountRequested'],
       properties: {
-        beneficiaryId: { type: 'integer' },
-        refereeId: { type: 'integer' },
+        beneficiaryId: { type: 'varchar' },
+        refereeId: { type: 'varchar' },
         caseId: { type: 'varchar' },
         requestType: { type: 'string', enum: RequestTypeEnum.key },
         fulfilment: { type: 'string', enum: FulfilmentTypeEnum.key },
