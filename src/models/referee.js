@@ -36,7 +36,7 @@ class Referee extends Model {
         name: { type: 'string', minLength: 1, maxLength: 255 },
         email: { maxLength: 255 },
         phone: {
-          type: 'string',
+          type: 'varchar',
           minLength: 8,
           maxLength: 8,
         },

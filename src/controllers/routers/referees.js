@@ -22,12 +22,8 @@ function sanitize(json) {
   if (json.name) {
     referee.name = json.name.trim();
   }
-  if (json.phone) {
-    if (Number.isInteger(json.phone) === true) {
-      referee.phone = String(json.phone);
-    } else {
-      referee.phone = json.phone.trim();
-    }
+  if (json.phone && !Number.isInteger(json.phone)) {
+    referee.phone = json.phone.trim();
   }
   if (json.email) {
     referee.email = json.email.toLowerCase().trim();
