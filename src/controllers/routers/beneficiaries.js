@@ -23,6 +23,7 @@ function sanitize(json) {
 
   return beneficiary;
 }
+
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -30,7 +31,6 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select(
-    'beneficiaryId',
     'name',
     'email',
     'phone',
@@ -54,7 +54,6 @@ const getBeneficiarybyId = async (req, res, next) => {
   try {
     const beneficiary = await Beneficiary.query()
       .select(
-        'beneficiaryId',
         'name',
         'email',
         'phone',
@@ -115,16 +114,7 @@ const update = async (req, res, next) => {
   const updateInfo = sanitize(req.body);
   try {
     const beneficiary = await Beneficiary.query()
-      .select(
-        'beneficiaryId',
-        'name',
-        'email',
-        'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType'
-      )
+      .select()
       .patch(updateInfo)
       .where('beneficiaryId', id)
       .returning(

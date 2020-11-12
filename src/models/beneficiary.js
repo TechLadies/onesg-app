@@ -62,6 +62,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
+<<<<<<< HEAD
          beneficiaryNumber: {
           type: 'string',
           minLength: 11,
@@ -75,6 +76,15 @@ class Beneficiary extends Model {
         occupation: { type: 'string', maxLength: 50 },
         householdIncome: {
           type: 'number',
+=======
+        beneficiaryId: { type: 'string' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { type: 'string', minLength: 1, maxLength: 255 },
+        phone: {
+          type: 'varchar',
+          minLength: 8,
+          maxLength: 8,
+>>>>>>> changed created_at to beneficiary_id in code generator
         },
         householdSize: { type: 'integer' },
     }
