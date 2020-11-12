@@ -15,18 +15,18 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
+          beneficiaryId: 'B202011-0001',
           refereeId: 'R202011-0001',
-          name: 'Atu',
-          email: 'ahl@aok.com',
-          phone: '34673662',
-          organisation: 'Techladies',
-        },
-        {
-          refereeId: 'R202011-0002',
-          name: 'Siddique',
-          email: 'cropoc@hotmail.com.',
-          phone: '90093711',
-          organisation: 'Siddique Impex',
+          caseId: 'EF2020-110001',
+          requestType: requestTypeEnum.cookedFood,
+          fulfilment: fulfilmentTypeEnum.inKindDonation,
+          POC: 'Techladies',
+          amountRequested: '450.03',
+          description: 'due to debt',
+          caseStatus: caseStatusTypeEnum.new,
+          referenceStatus: referenceStatusTypeEnum.unverified,
+          approval: approvalTypeEnum.NIL,
+          amountGranted: '450.03',
         },
       ]);
     });

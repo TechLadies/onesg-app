@@ -43,7 +43,7 @@ class Beneficiary extends Model {
   async $beforeInsert() {
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
-      .orderBy('beneficiaryId', 'desc')
+      .orderBy('id', 'desc')
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
@@ -58,19 +58,14 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['email', 'name', 'phone'],
       properties: {
-        beneficiaryId: { type: 'string' },
+        beneficiaryId: { type: 'varchar' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
         email: { type: 'string', minLength: 1, maxLength: 255 },
-<<<<<<< HEAD
-        phone: { type: 'varchar', maxLength: 12 },
-        address: { type: 'varchar', maxLength: 255 },
-=======
         phone: {
           type: 'varchar',
           minLength: 8,
           maxLength: 8,
         },
->>>>>>> changed created_at to beneficiary_id in code generator
         occupation: { type: 'string', maxLength: 255 },
         householdIncome: { type: 'decimal', minLength: 1 },
         householdSize: { type: 'integer' },
