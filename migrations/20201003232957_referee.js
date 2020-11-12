@@ -3,6 +3,7 @@ const { tableStaff } = require('../src/models/staff.js');
 
 exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
+<<<<<<< HEAD
 
     table.increments('id').primary();
     table
@@ -36,11 +37,6 @@ exports.up = function makeRefereetable(knex) {
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of referee update');
-    table.text('name');
-    table.text('email').unique();
-    table.text('phone').unique();
-    table.text('organisation');
-    table.timestamps(true, true);
   });
 };
 
