@@ -48,7 +48,7 @@ function getCaseId(previousId) {
     year,
     month,
     index,
-  ] = previousId.match(/EF\s(\d{4})-(\d{2})(\d{2})/);
+  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{2})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -62,9 +62,9 @@ function getCaseId(previousId) {
   }
 
   // add leading 0s
-  const paddedIndex = String(caseIndex).padStart(2, '0');
+  const paddedIndex = String(caseIndex).padStart(4, '0');
 
-  return `EF ${currentYear}-${currentMonth}${paddedIndex}`;
+  return `EF${currentYear}-${currentMonth}${paddedIndex}`;
 }
 
 class Case extends Model {
