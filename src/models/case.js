@@ -18,6 +18,7 @@ class Case extends Model {
       type: 'object',
       required: ['amountRequested', 'beneficiaryId', 'createdBy', 'updatedBy'],
       properties: {
+<<<<<<< HEAD
         caseNumber: { type: 'string', minLength: 12, maxLength: 12 },
         caseStatus: { type: 'string', enum: caseStatusEnum, default: 'NEW' },
         appliedOn: { type: 'date', $comment: 'YYYY-MM-DD' },
@@ -63,6 +64,20 @@ class Case extends Model {
           from: 'cases.refereeId',
           to: 'referees.refereeId',
         },
+=======
+        beneficiaryId: { type: 'varchar' },
+        refereeId: { type: 'varchar' },
+        caseId: { type: 'varchar' },
+        requestType: { type: 'enum' },
+        fulfilment: { type: 'enum' },
+        POC: { type: 'varchar', maxLength: 255 },
+        amountRequested: { type: 'decimal' },
+        description: { type: 'varchar', maxLength: 255 },
+        caseStatus: { type: 'enum' },
+        referenceStatus: { type: 'enum' },
+        approval: { type: 'enum' },
+        amountGranted: { type: 'decimal' },
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
       },
     };
   }

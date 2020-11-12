@@ -47,7 +47,7 @@ class Beneficiary extends Model {
   async $beforeInsert() {
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
-      .orderBy('beneficiaryId', 'desc')
+      .orderBy('id', 'desc')
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
@@ -62,7 +62,6 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
-        beneficiaryNumber: {
           type: 'string',
           minLength: 11,
           maxLength: 11,
@@ -77,15 +76,6 @@ class Beneficiary extends Model {
           type: 'number',
         },
         householdSize: { type: 'integer' },
-        paymentType: {
-          type: 'array',
-          $comment:
-            'Expected value of the array element is from paymentTypeEnum',
-        },
-        notes: { type: 'string' },
-        createdBy: { type: 'integer' },
-        updatedBy: { type: 'integer' },
-      },
     };
   }
 
