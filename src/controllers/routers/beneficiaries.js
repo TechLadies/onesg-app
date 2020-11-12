@@ -38,7 +38,9 @@ const getAll = async (req, res) => {
     'notes',
     'householdIncome',
     'householdSize',
-    'paymentType'
+    'paymentType',
+    'created_at',
+    'updated_at'
   );
   res.status(200).json({ beneficiaries });
 };
@@ -61,7 +63,9 @@ const getBeneficiarybyId = async (req, res, next) => {
         'notes',
         'householdIncome',
         'householdSize',
-        'paymentType'
+        'paymentType',
+        'created_at',
+        'updated_at'
       )
       .where('beneficiaryId', id)
       .withGraphFetched('[cases, referees]');
@@ -112,16 +116,7 @@ const update = async (req, res, next) => {
   const updateInfo = sanitize(req.body);
   try {
     const beneficiary = await Beneficiary.query()
-      .select(
-        'beneficiaryId',
-        'name',
-        'email',
-        'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType'
-      )
+      .select()
       .patch(updateInfo)
       .where('beneficiaryId', id)
       .returning(
