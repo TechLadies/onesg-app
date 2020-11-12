@@ -11,7 +11,8 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('caseId').primary();
+    table.increments('id').primary();
+    table.string('caseId').index().unique();
     table.enum('requestType', Object.values(requestTypeEnum));
     table.enum('fulfilment', Object.values(fulfilmentTypeEnum));
     table.text('POC');
@@ -22,13 +23,13 @@ exports.up = function makeCasetable(knex) {
     table.enum('referenceStatus', Object.values(referenceStatusTypeEnum));
     table.decimal('amountGranted');
     table
-      .integer('beneficiaryId')
+      .varchar('beneficiaryId')
       .unsigned()
       .index()
-      .references('id')
+      .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .integer('refereeId')
+      .varchar('refereeId')
       .unsigned()
       .index()
       .references('refereeId')

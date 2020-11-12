@@ -49,9 +49,9 @@ class Case extends Model {
     return {
       type: 'object',
       properties: {
-        beneficiaryId: { type: 'integer' },
-        refereeId: { type: 'integer' },
-        caseId: { type: 'integer' },
+        beneficiaryId: { type: 'varchar' },
+        refereeId: { type: 'varchar' },
+        caseId: { type: 'varchar' },
         requestType: { type: 'enum' },
         fulfilment: { type: 'enum' },
         POC: { type: 'varchar', maxLength: 255 },

@@ -15,9 +15,9 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-          beneficiaryId: '0001',
-          refereeId: '1002',
-          caseId: '20002',
+          beneficiaryId: 'B202011-0001',
+          refereeId: 'R202011-0001',
+          caseId: 'EF2020-110001',
           requestType: requestTypeEnum.cookedFood,
           fulfilment: fulfilmentTypeEnum.inKindDonation,
           POC: 'Techladies',
