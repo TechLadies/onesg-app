@@ -1,9 +1,5 @@
 /* eslint-disable no-console */
-const {
-  DataError,
-  ValidationError,
-  UniqueViolationError,
-} = require('objection');
+const { ValidationError, UniqueViolationError } = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
@@ -17,12 +13,8 @@ function sanitize(json) {
   if (json.name) {
     beneficiary.name = json.name.trim();
   }
-  if (json.phone) {
-    if (Number.isInteger(json.phone) === true) {
-      beneficiary.phone = String(json.phone);
-    } else {
-      beneficiary.phone = json.phone.trim();
-    }
+  if (json.phone && !Number.isInteger(json.phone)) {
+    beneficiary.phone = json.phone.trim();
   }
   if (json.email) {
     beneficiary.email = json.email.toLowerCase().trim();
@@ -33,6 +25,7 @@ function sanitize(json) {
 
   return beneficiary;
 }
+
 /**
  * Retrieve all beneficiaries
  * @param {Request} req
@@ -40,14 +33,15 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select(
-    'beneficiaryId',
     'name',
     'email',
     'phone',
     'occupation',
     'householdIncome',
     'householdSize',
-    'paymentType'
+    'paymentType',
+    'created_at',
+    'updated_at'
   );
   res.status(200).json({ beneficiaries });
 };
@@ -62,14 +56,15 @@ const getBeneficiary = async (req, res, next) => {
   try {
     const beneficiary = await Beneficiary.query()
       .select(
-        'beneficiaryId',
         'name',
         'email',
         'phone',
         'occupation',
         'householdIncome',
         'householdSize',
-        'paymentType'
+        'paymentType',
+        'created_at',
+        'updated_at'
       )
       .where('beneficiaryId', id);
     if (beneficiary.length === 0) {
@@ -77,9 +72,6 @@ const getBeneficiary = async (req, res, next) => {
     }
     return res.status(200).json({ beneficiary });
   } catch (err) {
-    if (err instanceof DataError) {
-      return next(new BadRequest('Beneficiary Id format is invalid'));
-    }
     return next();
   }
 };
@@ -90,21 +82,25 @@ const getBeneficiary = async (req, res, next) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
+  const newBeneficiary = sanitize(req.body);
   try {
-    const newBen = req.body;
     const ben = await Beneficiary.query()
-      .insert(newBen)
+      .select()
+      .insert(newBeneficiary)
       .returning('beneficiaryId');
 
-    return res.status(201).json(ben);
+    return res.status(201).json({ ben });
   } catch (err) {
     if (err instanceof ValidationError) {
-      return res.json(new InvalidInput(err.message));
+      return next(new InvalidInput(err.message));
     }
     if (err instanceof UniqueViolationError) {
-      return res.json(new BadRequest(err.nativeError.detail));
+      return next(new BadRequest(err.nativeError.detail));
     }
-    return next(err);
+    // handles rest of the error
+    // from objection's documentation, the structure below should hold
+    // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
+    return next(new BadRequest(err.nativeError.detail));
   }
 };
 
@@ -118,16 +114,7 @@ const update = async (req, res, next) => {
   const updateInfo = sanitize(req.body);
   try {
     const beneficiary = await Beneficiary.query()
-      .select(
-        'beneficiaryId',
-        'name',
-        'email',
-        'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType'
-      )
+      .select()
       .patch(updateInfo)
       .where('beneficiaryId', id)
       .returning(
@@ -138,7 +125,9 @@ const update = async (req, res, next) => {
         'occupation',
         'householdIncome',
         'householdSize',
-        'paymentType'
+        'paymentType',
+        'created_at',
+        'updated_at'
       );
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
@@ -150,9 +139,6 @@ const update = async (req, res, next) => {
     }
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
-    }
-    if (err instanceof DataError) {
-      return next(new BadRequest('Beneficiary Id format is invalid'));
     }
     return next();
   }
