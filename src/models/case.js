@@ -84,7 +84,15 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['requestType', 'fulfilment', 'POC', 'amountRequested'],
+      required: [
+        'requestType',
+        'fulfilment',
+        'POC',
+        'amountRequested',
+        'caseStatus',
+        'referenceStatus',
+        'amountGranted',
+      ],
       properties: {
         beneficiaryId: { type: 'varchar' },
         refereeId: { type: 'varchar' },
@@ -92,12 +100,12 @@ class Case extends Model {
         requestType: { type: 'varchar', enum: RequestTypeEnum.key },
         fulfilment: { type: 'varchar', enum: FulfilmentTypeEnum.key },
         POC: { type: 'varchar', minLength: 1, maxLength: 255 },
-        amountRequested: { type: 'decimal' },
+        amountRequested: { type: 'varchar' },
         description: { type: 'varchar', maxLength: 255 },
         caseStatus: { type: 'varchar', enum: CaseStatusTypeEnum.key },
         referenceStatus: { type: 'varchar', enum: ReferenceStatusTypeEnum.key },
         approval: { type: 'varchar', enum: ApprovalTypeEnum.key },
-        amountGranted: { type: 'decimal' },
+        amountGranted: { type: 'varchar' },
       },
     };
   }
@@ -105,8 +113,34 @@ class Case extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const cases = json;
+    if (cases.requestType === null) {
+      throw new ValidationError({
+        message: `Request type cannot be null`,
+      });
+    }
+    if (cases.fulfilment === null) {
+      throw new ValidationError({
+        message: `Fulfilment cannot be null`,
+      });
+    }
+    if (cases.caseStatus === null) {
+      throw new ValidationError({
+        message: `Case status cannot be null`,
+      });
+    }
+    if (cases.referenceStatus === null) {
+      throw new ValidationError({
+        message: `Reference status cannot be null`,
+      });
+    }
+    if (cases.approval === null) {
+      throw new ValidationError({
+        message: `Approval cannot be null`,
+      });
+    }
+
     // validate amountGranted must be <= amountRequested
-    if (cases.amountGranted - cases.amountRequested > 0) {
+    if (cases.amountGranted > cases.amountRequested) {
       throw new ValidationError({
         message: 'Amount granted cannot be more than amount requested',
       });

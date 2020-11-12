@@ -19,10 +19,10 @@ const {
  */
 function sanitize(json) {
   const cases = json;
-  if (json.requestType) {
+  if (json.requestType && json.requestType !== null) {
     cases.requestType = json.requestType.trim();
   }
-  if (json.fulfilment) {
+  if (json.fulfilment && json.fulfilment !== null) {
     cases.fulfilment = json.fulfilment.trim();
   }
   if (json.POC) {
@@ -31,20 +31,20 @@ function sanitize(json) {
   if (json.description) {
     cases.description = json.description.trim();
   }
-  if (json.caseStatus) {
+  if (json.caseStatus && json.caseStatus !== null) {
     cases.caseStatus = json.caseStatus.toLowerCase().trim();
   }
-  if (json.approval) {
+  if (json.approval && json.approval !== null) {
     cases.approval = json.approval.toLowerCase().trim();
   }
-  if (json.referenceStatus) {
-    cases.approval = json.approval.toLowerCase().trim();
+  if (json.referenceStatus && json.referenceStatus !== null) {
+    cases.referenceStatus = json.referenceStatus.toLowerCase().trim();
   }
   if (json.amountRequested && typeof json.amountRequested === 'string') {
-    cases.amountRequested = parseFloat(json.amountRequested);
+    cases.amountRequested = json.amountRequested.trim();
   }
-  if (json.amountGranted && typeof cases.amountGranted === 'string') {
-    cases.amountGranted = parseFloat(json.amountGranted);
+  if (json.amountGranted && typeof json.amountGranted === 'string') {
+    cases.amountGranted = json.amountGranted.trim();
   }
   return cases;
 }
