@@ -52,10 +52,16 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
+<<<<<<< HEAD
         refereeNumber: { type: 'string', $comment: 'Format: RYYYY-MM999' },
         name: { type: 'string', minLength: 1, maxLength: 100 },
         email: { type: ['string', 'null'], maxLength: 50 },
         phone: {
+=======
+        refereeId: { type: 'varchar' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        email: {
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
           type: 'string',
           minLength: 8,
           maxLength: 8,

@@ -8,13 +8,6 @@
 /database
 /dev.sqlite3/
 
-<<<<<<< HEAD
-
-# key files
-keys/*
-
-=======
 # keys
 keys/id_rsa_priv.pem
 keys/id_rsa_pub.pem
->>>>>>> changed created_at to beneficiary_id in code generator

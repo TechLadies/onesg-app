@@ -47,7 +47,7 @@ class Beneficiary extends Model {
   async $beforeInsert() {
     const lastInsertedBeneficiary = await Beneficiary.query()
       .select('beneficiaryId')
-      .orderBy('beneficiaryId', 'desc')
+      .orderBy('id', 'desc')
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(

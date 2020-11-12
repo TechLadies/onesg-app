@@ -8,7 +8,11 @@ exports.seed = function seedRefereeTable(knex) {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
+<<<<<<< HEAD
           refereeNumber: 'R2020-11001',
+=======
+          refereeId: 'R202011-0001',
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
           name: 'Atu',
           email: 'ahl@aok.com',
           phone: '67346628',

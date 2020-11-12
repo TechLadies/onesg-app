@@ -4,6 +4,7 @@ const { tableStaff } = require('../src/models/staff.js');
 exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
     table.increments('id').primary();
+<<<<<<< HEAD
     table
       .string('refereeNumber', 11)
       .index()
@@ -35,6 +36,14 @@ exports.up = function makeRefereetable(knex) {
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of referee update');
+=======
+    table.string('refereeId').index().unique();
+    table.text('name');
+    table.text('email').unique();
+    table.text('phone').unique();
+    table.text('organisation');
+    table.timestamps(true, true);
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
   });
 };
 

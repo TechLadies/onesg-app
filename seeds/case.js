@@ -8,6 +8,7 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
+<<<<<<< HEAD
           caseNumber: 'EF2020-11001',
           caseStatus: 'NEW',
           appliedOn: '2020-11-01', // YYYY-MM-DD
@@ -32,6 +33,20 @@ exports.seed = function seedCaseTable(knex) {
           beneficiaryId: 2,
           createdBy: 2,
           updatedBy: 2,
+=======
+          beneficiaryId: 'B202011-0001',
+          refereeId: 'R202011-0001',
+          caseId: 'EF2020-110001',
+          requestType: requestTypeEnum.cookedFood,
+          fulfilment: fulfilmentTypeEnum.inKindDonation,
+          POC: 'Techladies',
+          amountRequested: '450.03',
+          description: 'due to debt',
+          caseStatus: caseStatusTypeEnum.new,
+          referenceStatus: referenceStatusTypeEnum.unverified,
+          approval: approvalTypeEnum.NIL,
+          amountGranted: '450.03',
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
         },
       ]);
     })

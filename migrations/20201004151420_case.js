@@ -10,6 +10,7 @@ const {
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
     table.increments('id').primary();
+<<<<<<< HEAD
     table
       .string('caseNumber', 12)
       .index()
@@ -39,6 +40,26 @@ exports.up = function makeCasetable(knex) {
       .integer('refereeId')
       .references('id')
       .inTable(tableReferee)
+=======
+    table.string('caseId').index().unique();
+    table.enum('requestType', Object.values(requestTypeEnum));
+    table.enum('fulfilment', Object.values(fulfilmentTypeEnum));
+    table.text('POC');
+    table.decimal('amountRequested');
+    table.text('description');
+    table.enum('caseStatus', Object.values(caseStatusTypeEnum));
+    table.enum('approval', Object.values(approvalTypeEnum));
+    table.enum('referenceStatus', Object.values(referenceStatusTypeEnum));
+    table.decimal('amountGranted');
+    table
+      .varchar('beneficiaryId')
+      .unsigned()
+      .index()
+      .references('beneficiaryId')
+      .inTable(tableBeneficiary);
+    table
+      .varchar('refereeId')
+>>>>>>> cleaned migration files and change created_at to id in idgenerator
       .unsigned()
       .comment('Referee id that is related to this case');
     table
