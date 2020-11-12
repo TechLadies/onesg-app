@@ -28,10 +28,10 @@ exports.up = function makeCasetable(knex) {
       .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .integer('refereeId')
+      .bigInteger('refereeId')
       .unsigned()
       .index()
-      .references('refereeId')
+      .references('refId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });

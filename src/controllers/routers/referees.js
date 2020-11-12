@@ -11,7 +11,7 @@ const { ValidationError, UniqueViolationError } = require('objection');
 const { Referee } = require('../../models');
 
 const {
-  errors: { BadRequest, InvalidInput },
+  errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 
 /**
@@ -22,7 +22,7 @@ function sanitize(json) {
   if (json.name) {
     referee.name = json.name.trim();
   }
-  if (json.phone) {
+  if (json.phone && !Number.isInteger(json.phone)) {
     referee.phone = json.phone.trim();
   }
   if (json.email) {
@@ -41,8 +41,44 @@ function sanitize(json) {
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const referees = await Referee.query().select();
-  return res.status(200).json({ results: referees });
+  const results = await Referee.query().select(
+    'name',
+    'email',
+    'phone',
+    'organisation',
+    'refereeId',
+    'created_at',
+    'updated_at'
+  );
+  return res.status(200).json({ results });
+};
+
+/**
+ * Retrieve specific referee by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getReferee = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const referee = await Referee.query()
+      .select(
+        'name',
+        'email',
+        'phone',
+        'organisation',
+        'refereeId',
+        'created_at',
+        'updated_at'
+      )
+      .where('refereeId', id);
+    if (referee.length === 0) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
+    }
+    return res.status(200).json({ referee });
+  } catch (err) {
+    return next();
+  }
 };
 
 /**
@@ -53,8 +89,11 @@ const getAll = async (req, res) => {
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
-    const ref = await Referee.query().insert(newReferee).returning('refereeId');
-    return res.status(201).json({ referee: ref });
+    const referee = await Referee.query()
+      .select()
+      .insert(newReferee)
+      .returning('refereeId');
+    return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
@@ -70,7 +109,46 @@ const create = async (req, res, next) => {
   }
 };
 
+/**
+ * Update existing referee
+ * @param {Request} req
+ * @param {Response} res
+ */
+const update = async (req, res, next) => {
+  const { id } = req.params;
+  const updateInfo = sanitize(req.body);
+  try {
+    const referee = await Referee.query()
+      .select()
+      .patch(updateInfo)
+      .where('refereeId', id)
+      .returning(
+        'name',
+        'email',
+        'phone',
+        'organisation',
+        'refereeId',
+        'created_at',
+        'updated_at'
+      );
+    if (referee.length === 0) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
+    }
+    return res.status(200).json({ referee });
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return next(new BadRequest(err.nativeError.detail));
+    }
+    return next();
+  }
+};
+
 module.exports = {
   getAll,
+  getReferee,
   create,
+  update,
 };
