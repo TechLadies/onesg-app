@@ -32,7 +32,7 @@ exports.up = function makeCasetable(knex) {
       .varchar('refereeId')
       .unsigned()
       .index()
-      .references('refereeId')
+      .references('refId')
       .inTable(tableReferee);
     table.timestamps(true, true);
   });
