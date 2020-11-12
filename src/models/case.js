@@ -48,7 +48,7 @@ function getCaseId(previousId) {
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{2})/);
+  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{4})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -89,14 +89,14 @@ class Case extends Model {
         beneficiaryId: { type: 'varchar' },
         refereeId: { type: 'varchar' },
         caseId: { type: 'varchar' },
-        requestType: { type: 'string', enum: RequestTypeEnum.key },
-        fulfilment: { type: 'string', enum: FulfilmentTypeEnum.key },
-        POC: { type: 'string', minLength: 1, maxLength: 255 },
+        requestType: { type: 'varchar', enum: RequestTypeEnum.key },
+        fulfilment: { type: 'varchar', enum: FulfilmentTypeEnum.key },
+        POC: { type: 'varchar', minLength: 1, maxLength: 255 },
         amountRequested: { type: 'decimal' },
         description: { type: 'varchar', maxLength: 255 },
-        caseStatus: { type: 'string', enum: CaseStatusTypeEnum.key },
-        referenceStatus: { type: 'string', enum: ReferenceStatusTypeEnum.key },
-        approval: { type: 'string', enum: ApprovalTypeEnum.key },
+        caseStatus: { type: 'varchar', enum: CaseStatusTypeEnum.key },
+        referenceStatus: { type: 'varchar', enum: ReferenceStatusTypeEnum.key },
+        approval: { type: 'varchar', enum: ApprovalTypeEnum.key },
         amountGranted: { type: 'decimal' },
       },
     };
