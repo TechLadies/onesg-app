@@ -142,7 +142,8 @@ const update = async (req, res, next) => {
       return next(new BadRequest(err.nativeError.detail));
     }
     return next();
-
+  }
+};
 /**
  * Delete Beneficiaries
  * @param {Request} req
