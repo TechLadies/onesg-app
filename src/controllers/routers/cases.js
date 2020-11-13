@@ -40,10 +40,16 @@ function sanitize(json) {
   if (json.referenceStatus && json.referenceStatus !== null) {
     cases.referenceStatus = json.referenceStatus.toLowerCase().trim();
   }
-  if (json.amountRequested && typeof json.amountRequested === 'string') {
+  if (
+    json.amountRequested &&
+    Number.isNaN(parseFloat(json.amountRequested)) === false
+  ) {
     cases.amountRequested = json.amountRequested.trim();
   }
-  if (json.amountGranted && typeof json.amountGranted === 'string') {
+  if (
+    json.amountGranted &&
+    Number.isNaN(parseFloat(json.amountGranted)) === false
+  ) {
     cases.amountGranted = json.amountGranted.trim();
   }
   return cases;
