@@ -1,49 +1,56 @@
-/* eslint-disable no-console */
+/*!
+ * OneSG API Server by TL Bootcamp#6 OneSG Team
+ * Copyright(c) 2020 TechLadies
+ * MIT Licensed
+ */
+
+'use strict';
+
 const { ValidationError, UniqueViolationError } = require('objection');
+
+const { Referee } = require('../../models');
+
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
-const { Beneficiary } = require('../../models');
 
 /**
  * Sanitize data from client. Call before an insert or an update.
  */
 function sanitize(json) {
-  const beneficiary = json;
+  const referee = json;
   if (json.name) {
-    beneficiary.name = json.name.trim();
+    referee.name = json.name.trim();
   }
   if (json.phone && !Number.isInteger(json.phone)) {
-    beneficiary.phone = json.phone.trim();
+    referee.phone = json.phone.trim();
   }
   if (json.email) {
-    beneficiary.email = json.email.toLowerCase().trim();
+    referee.email = json.email.toLowerCase().trim();
   }
   if (json.organisation) {
-    beneficiary.organisation = json.organisation.trim();
+    referee.organisation = json.organisation.trim();
   }
 
-  return beneficiary;
+  return referee;
 }
 
 /**
- * Retrieve all beneficiaries
+ * Retrieve all referees
  * @param {Request} req
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const beneficiaries = await Beneficiary.query().select(
+  const results = await Referee.query().select(
     'name',
     'email',
     'phone',
-    'occupation',
-    'householdIncome',
-    'householdSize',
-    'paymentType',
+    'organisation',
+    'refereeId',
     'created_at',
     'updated_at'
   );
-  res.status(200).json({ beneficiaries });
+  return res.status(200).json({ results });
 };
 
 /**
@@ -51,45 +58,42 @@ const getAll = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const getBeneficiary = async (req, res, next) => {
+const getReferee = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const beneficiary = await Beneficiary.query()
+    const referee = await Referee.query()
       .select(
         'name',
         'email',
         'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType',
+        'organisation',
+        'refereeId',
         'created_at',
         'updated_at'
       )
-      .where('beneficiaryId', id);
-    if (beneficiary.length === 0) {
-      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+      .where('refereeId', id);
+    if (referee.length === 0) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
-    return res.status(200).json({ beneficiary });
+    return res.status(200).json({ referee });
   } catch (err) {
     return next();
   }
 };
 
 /**
- * Create new Beneficiaries
+ * Create new referee
  * @param {Request} req
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  const newBeneficiary = sanitize(req.body);
+  const newReferee = sanitize(req.body);
   try {
-    const ben = await Beneficiary.query()
+    const referee = await Referee.query()
       .select()
-      .insert(newBeneficiary)
-      .returning('beneficiaryId');
-
-    return res.status(201).json({ ben });
+      .insert(newReferee)
+      .returning('refereeId');
+    return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
@@ -97,6 +101,7 @@ const create = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
+
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
@@ -105,7 +110,7 @@ const create = async (req, res, next) => {
 };
 
 /**
- * Update existing beneficiary
+ * Update existing referee
  * @param {Request} req
  * @param {Response} res
  */
@@ -113,26 +118,23 @@ const update = async (req, res, next) => {
   const { id } = req.params;
   const updateInfo = sanitize(req.body);
   try {
-    const beneficiary = await Beneficiary.query()
+    const referee = await Referee.query()
       .select()
       .patch(updateInfo)
-      .where('beneficiaryId', id)
+      .where('refereeId', id)
       .returning(
-        'beneficiaryId',
         'name',
         'email',
         'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType',
+        'organisation',
+        'refereeId',
         'created_at',
         'updated_at'
       );
-    if (beneficiary.length === 0) {
-      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+    if (referee.length === 0) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
-    return res.status(200).json({ beneficiary });
+    return res.status(200).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
@@ -143,31 +145,10 @@ const update = async (req, res, next) => {
     return next();
   }
 };
-/**
- * Delete Beneficiaries
- * @param {Request} req
- * @param {Response} res
- */
-
-const del = async (req, res) => {
-  try {
-    await Beneficiary.query()
-      .delete()
-      .where({ BeneficiaryId: req.body.beneficiaryId });
-    return res
-      .status(201)
-      .json({ message: `${req.body.Name} successfully deleted` });
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ message: 'Beneficiary cannot be deleted', error: err });
-  }
-};
 
 module.exports = {
   getAll,
-  getBeneficiary,
+  getReferee,
   create,
   update,
-  del,
 };
