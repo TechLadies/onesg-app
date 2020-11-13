@@ -49,7 +49,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
         },
         {
           beneficiaryId: 'B202011-0002',
-          name: 'veronica',
+          name: 'gurindam',
           email: 'jojojuju@gmail.com',
           phone: '90093955',
           occupation: 'homemaker',
@@ -82,7 +82,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
         },
         {
           beneficiaryId: 'B202011-0005',
-          name: 'gurinda',
+          name: 'veronica',
           email: 'salagh@gmail.com',
           phone: '97577645',
           occupation: 'tech',

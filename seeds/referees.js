@@ -32,6 +32,13 @@ exports.seed = function seedRefereeTable(knex) {
           createdBy: 2,
           updatedBy: 1,
         },
+        {
+          refereeId: 'R202011-0002',
+          name: 'Siddique',
+          email: 'cropoc@hotmail.com.',
+          phone: '90093711',
+          organisation: 'Siddique Impex',
+        },
       ]);
     });
 };
