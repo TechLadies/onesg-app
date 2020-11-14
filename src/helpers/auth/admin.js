@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Admin  are hard-coded
 const ADMIN_USERS = [
   {
@@ -15,7 +14,7 @@ const ADMIN_USERS = [
   },
 ];
 
-const isvalidateAdminUser = (email, password) => {
+const isValidateAdminUser = (email, password) => {
   const users = ADMIN_USERS.find((user) => {
     return user.email === email && user.password === password;
   });
@@ -33,5 +32,5 @@ const getAdminUser = (userEmail) => {
 
 module.exports = {
   getAdminUser,
-  isvalidateAdminUser,
+  isValidateAdminUser,
 };
