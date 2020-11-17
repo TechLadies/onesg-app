@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-/* eslint-disable no-console */
 const { raw } = require('objection');
 const { Beneficiary, Referee, Case } = require('../../models');
 const {
@@ -15,19 +14,73 @@ const search = async (req, res) => {
   let searchFields;
   if (type === 'beneficiary') {
     model = Beneficiary;
-    searchFields = ['"name"', '"email"'];
+    searchFields = ['beneficiary."name"', 'beneficiary."email"'];
   } else if (type === 'case') {
     model = Case;
     searchFields = ['"caseId"'];
   } else if (type === 'referee') {
     model = Referee;
-    searchFields = ['"name"', '"refereeId"', '"email"', '"organisation"'];
+    searchFields = [
+      'referees."name"',
+      'referees."email"',
+      'referees."organisation"',
+    ];
   } else {
     return res.json(new BadRequest(`Type is missing.`));
   }
 
   // TODO : create custom join login based on entities.
   const entities = include_entities ? include_entities.split('&') : [];
+  let joinFrom;
+  let joinTable1;
+  let joinOn1;
+  let joinWith1;
+  let joinTable2;
+  let joinOn2;
+  let joinWith2;
+  let order;
+  if (type === 'beneficiary' && entities.includes('cases')) {
+    joinFrom = 'beneficiary';
+    joinTable1 = 'cases';
+    joinOn1 = 'beneficiary.beneficiaryId';
+    joinWith1 = 'cases.beneficiaryId';
+    joinTable2 = 'referees';
+    joinOn2 = 'referees.refereeId';
+    joinWith2 = 'cases.refereeId';
+    order = 'beneficiary.name';
+  }
+
+  if (type === 'referee' && entities.includes('cases')) {
+    joinFrom = 'referees';
+    joinTable1 = 'cases';
+    joinOn1 = 'referees.refereeId';
+    joinWith1 = 'cases.refereeId';
+    joinTable2 = 'beneficiary';
+    joinOn2 = 'beneficiary.beneficiaryId';
+    joinWith2 = 'cases.beneficiaryId';
+    order = 'referees.name';
+  }
+  if (type === 'case' && entities.includes('beneficiary')) {
+    joinFrom = 'cases';
+    joinTable1 = 'beneficiary';
+    joinOn1 = 'beneficiary.beneficiaryId';
+    joinWith1 = 'cases.beneficiaryId';
+    joinTable2 = 'referees';
+    joinOn2 = 'referees.refereeId';
+    joinWith2 = 'cases.refereeId';
+    order = 'cases.caseId';
+  }
+
+  if (type === 'case' && entities.includes('referees')) {
+    joinFrom = 'cases';
+    joinTable1 = 'referees';
+    joinOn1 = 'referees.refereeId';
+    joinWith1 = 'cases.refereeId';
+    joinTable2 = 'beneficiary';
+    joinOn2 = 'beneficiary.beneficiaryId';
+    joinWith2 = 'cases.beneficiaryId';
+    order = 'cases.caseId';
+  }
 
   // Setting up params for limit, offset and per_page
   const searchBody = searchFields.join(`||`);
@@ -39,31 +92,18 @@ const search = async (req, res) => {
   // Execute the transaction
   const results = await model
     .query()
-    .select(raw(`*`))
-    .from('cases')
-    .innerJoin(
-      `beneficiary`,
-      `cases.beneficiaryId`,
-      `=`,
-      `beneficiary.beneficiaryId`
+    .select(
+      raw(
+        `cases."caseId", beneficiary."beneficiaryId", beneficiary."name" AS beneficiary_name, beneficiary."email" As beneficiary_email, beneficiary."phone" AS beneficiary_phone, beneficiary."occupation" AS beneficiary_occupation, cases."requestType", cases."created_at", cases."updated_at", cases."fulfilment",cases."approval",cases."referenceStatus",referees."name" AS referee_name, referees."email" AS referee_email, referees."organisation",referees."phone" AS referee_phone, referees."refereeId"`
+      )
     )
+    .from(joinFrom)
+    .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
+    .innerJoin(joinTable2, joinOn2, `=`, joinWith2)
     .where(raw(sqlQuery, { searchBody: q }))
+    .orderBy(order)
     .limit(limit)
     .offset(offset);
-
-  console.log(results);
-  // if (entities.indexOf('cases') > -1) {
-  const caseEntities = await model
-    .knex()
-    .from('beneficiary')
-    .innerJoin(`cases`, `beneficiary.beneficiaryId`, `=`, `cases.beneficiaryId`)
-    .select(`cases.caseId`)
-    .where(`beneficiary.beneficiaryId`, results[0].beneficiaryId);
-  // }
-
-  if (entities.includes('cases')) {
-    entities.push(caseEntities[0]);
-  }
 
   // Envelope the results with paging information
   const response = {
