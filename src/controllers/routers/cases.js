@@ -6,7 +6,11 @@
 
 'use strict';
 
-const { CheckViolationError, DataError } = require('objection');
+const {
+  CheckViolationError,
+  DataError,
+  ForeignKeyViolationError,
+} = require('objection');
 
 const { Case } = require('../../models');
 
@@ -75,9 +79,28 @@ const create = async (req, res, next) => {
     const cases = await Case.query().insert(newCase).returning('caseId');
     return res.status(201).json({ cases });
   } catch (err) {
-    // DataError for invalid types, CheckViolationError for not in enum
-    if (err instanceof DataError || CheckViolationError) {
-      return next(new InvalidInput(err.message));
+    // DataError for invalid types
+    if (err instanceof DataError) {
+      return next(new InvalidInput(err));
+    }
+    // CheckViolationError for input not in enum
+    if (err instanceof CheckViolationError) {
+      return next(new InvalidInput(err));
+    }
+    // ForeignKeyViolationError for beneficiaryId or refereeId that are not present
+    if (err instanceof ForeignKeyViolationError) {
+      if (err.constraint === 'cases_beneficiaryid_foreign') {
+        return next(
+          new BadRequest(
+            `Benficiary id ${newCase.beneficiaryId} is not present`
+          )
+        );
+      }
+      if (err.constraint === 'cases_refereeid_foreign') {
+        return next(
+          new BadRequest(`Referee id ${newCase.refereeId} is not present`)
+        );
+      }
     }
     // handles rest of the error
     // from objection's documentation, the structure below should hold
