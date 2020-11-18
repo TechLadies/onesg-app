@@ -1,10 +1,7 @@
 const { tableCase } = require('../src/models/case');
 const {
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  CaseStatusTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
+  caseStatusEnum,
+  referenceStatusEnum,
 } = require('../src/models/case.js');
 
 exports.seed = function seedCaseTable(knex) {
@@ -15,18 +12,30 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
-          beneficiaryId: '0001',
+          caseStatus: caseStatusEnum.new,
+          appliedOn: '2020-11-01', // 2018-11-13
+          pointOfContact: 'Sarah Tan',
+          referenceStatus: referenceStatusEnum.unverified,
+          amountRequested: '350.55',
+          amountGranted: '350.55',
+          documents: `{{'Application form', 'http://www.link.com'}, {'Receipt', 'http://www.receipt/com'}}`,
           refereeId: '0001',
-          caseId: '20002',
-          requestType: RequestTypeEnum.CookedFood,
-          fulfilment: FulfilmentTypeEnum.InKindDonation,
-          POC: 'Techladies',
-          amountRequested: '450.03',
-          description: 'due to debt',
-          caseStatus: CaseStatusTypeEnum.New,
-          referenceStatus: ReferenceStatusTypeEnum.Unverified,
-          approval: ApprovalTypeEnum.NIL,
-          amountGranted: '450.03',
+          beneficiaryId: '0001',
+          createdBy: '1',
+          updatedBy: '1',
+        },
+        {
+          caseStatus: caseStatusEnum.pending,
+          appliedOn: '2020-11-02', // 2018-11-13
+          pointOfContact: 'John Lim',
+          referenceStatus: referenceStatusEnum.pending,
+          pendingStatusReason: 'Beneficiary uncontactable',
+          amountRequested: '100',
+          documents: `{{'Application form', 'http://www.anotherlink.com'}}`,
+          refereeId: '0002',
+          beneficiaryId: '0002',
+          createdBy: '2',
+          updatedBy: '2',
         },
       ]);
     });

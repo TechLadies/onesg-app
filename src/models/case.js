@@ -1,42 +1,18 @@
 const { Model } = require('objection');
 
-// const RequestTypeEnum = {
-//   CookedFood: 'cookedFood',
-//   Diapers: 'diapers',
-//   FinancialAssistance: 'financialAssistance',
-//   MedicalBill: 'medicalBill',
-//   MilkFormula: 'milkFormula',
-//   SchoolFees: 'schoolFees',
-//   TransportationFees: 'transportationFees',
-//   UtilityBill: 'utilityBill',
-// };
+const caseStatusEnum = {
+  new: 'NEW',
+  pending: 'PENDING',
+  referred: 'REFERRED',
+  processing: 'PROCESSING',
+  closed: 'CLOSED',
+};
 
-// const FulfilmentTypeEnum = {
-//   InKindDonation: 'inKindDonation',
-//   CashTransfer: 'cashTransfer',
-//   ThirdpartyPayment: 'third-partyPayment',
-//   PartnerReferral: 'partnerReferral',
-// };
-
-// const CaseStatusTypeEnum = {
-//   New: 'new',
-//   OnHold: 'onHold',
-//   ReferredtoEFC: 'referredtoEFC',
-//   Processing: 'processing',
-//   Closed: 'closed',
-// };
-
-// const ReferenceStatusTypeEnum = {
-//   Unverified: 'unverified',
-//   Pending: 'pending',
-//   Verified: 'verified',
-// };
-// const ApprovalTypeEnum = {
-//   NIL: '-',
-//   full: 'full',
-//   partial: 'partial',
-//   rejected: 'rejected',
-// };
+const referenceStatusEnum = {
+  unverified: 'UNVERIFIED',
+  pending: 'PENDING',
+  verified: 'VERIFIED',
+};
 
 const tableCase = 'cases';
 
@@ -50,6 +26,7 @@ class Case extends Model {
       type: 'object',
       properties: {
         caseId: { type: 'varchar' },
+        caseStatus: { type: 'enum' },
         appliedOn: { type: 'date' }, // 2018-11-13
         pointOfContact: { type: 'varchar' },
         referenceStatus: { type: 'enum' },
@@ -60,7 +37,7 @@ class Case extends Model {
         refereeId: { type: 'varchar' },
         beneficiaryId: { type: 'varchar' },
         createdBy: { type: 'integer' },
-        updateBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }
@@ -70,9 +47,6 @@ module.exports = {
   Case,
   model: Case,
   tableCase,
-  // RequestTypeEnum,
-  // FulfilmentTypeEnum,
-  // ReferenceStatusTypeEnum,
-  // ApprovalTypeEnum,
-  // CaseStatusTypeEnum,
+  caseStatusEnum,
+  referenceStatusEnum,
 };
