@@ -31,7 +31,7 @@ function getRefereeId(previousId) {
   return `B${currentYear}${currentMonth}-${paddedIndex}`;
 }
 
-const tableReferee = 'referees';
+const tableReferee = 'referee';
 class Referee extends Model {
   static get tableName() {
     return tableReferee;

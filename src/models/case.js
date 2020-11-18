@@ -14,7 +14,7 @@ const referenceStatusEnum = {
   verified: 'VERIFIED',
 };
 
-const tableCase = 'cases';
+const tableCase = 'case';
 
 // helper functions
 function getCaseId(previousId) {

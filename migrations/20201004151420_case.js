@@ -8,7 +8,7 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.string('caseId').primary().index();
+    table.string('caseId').primary().index().unique();
     table.string('caseStatus', Object.values(caseStatusEnum));
     table.date('appliedOn');
     table.text('pointOfContact');
