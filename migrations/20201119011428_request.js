@@ -1,5 +1,8 @@
 const { tableCase } = require('../src/models/case.js');
 const { tableRequest } = require('../src/models/request.js');
+const { tableRequestType } = require('../src/models/requestType.js');
+
+console.log(tableRequestType);
 const {
   fulfilmentTypeEnum,
   requestStatusEnum,
@@ -14,11 +17,12 @@ exports.up = function exportRequestTable(knex) {
       .index()
       .references('caseId')
       .inTable(tableCase);
-    table.integer('requestTypeId');
-    //   .unsigned()
-    //   .index()
-    //   .references('caseId')
-    //   .inTable(tableCase);
+    table
+      .integer('requestTypeId')
+      .unsigned()
+      .index()
+      .references('id')
+      .inTable(tableRequestType);
     table.enum('fulfilmentType', Object.values(fulfilmentTypeEnum));
     table.text('fulfilmentChecklist'); // , Object.values();
     table.text('description');
