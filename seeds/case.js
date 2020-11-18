@@ -16,7 +16,6 @@ exports.seed = function seedCaseTable(knex) {
       return knex(tableCase).insert([
         {
           beneficiaryId: 'B202011-0001',
-          refereeId: 'R202011-0001',
           caseId: 'EF2020-110001',
           requestType: requestTypeEnum.milkFormula,
           fulfilment: fulfilmentTypeEnum.cashTransfer,

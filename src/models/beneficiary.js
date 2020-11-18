@@ -67,6 +67,7 @@ class Beneficiary extends Model {
           maxLength: 8,
         },
         occupation: { type: 'string', maxLength: 255 },
+        notes: { type: 'text', maxLength: 255 },
         householdIncome: { type: 'decimal', minLength: 1 },
         householdSize: { type: 'integer' },
         paymentType: { type: 'enum' },
