@@ -12,6 +12,7 @@ exports.seed = function seedCaseTable(knex) {
       // Inserts seed entries
       return knex(tableCase).insert([
         {
+          caseId: 'EF2020-11001',
           caseStatus: caseStatusEnum.new,
           appliedOn: '2020-11-01', // 2018-11-13
           pointOfContact: 'Sarah Tan',
@@ -19,12 +20,13 @@ exports.seed = function seedCaseTable(knex) {
           amountRequested: '350.55',
           amountGranted: '350.55',
           documents: `{{'Application form', 'http://www.link.com'}, {'Receipt', 'http://www.receipt/com'}}`,
-          refereeId: '0001',
-          beneficiaryId: '0001',
+          refereeId: 'R202011-001',
+          beneficiaryId: 'B202011-002',
           createdBy: '1',
           updatedBy: '1',
         },
         {
+          caseId: 'EF2020-11002',
           caseStatus: caseStatusEnum.pending,
           appliedOn: '2020-11-02', // 2018-11-13
           pointOfContact: 'John Lim',
@@ -32,8 +34,8 @@ exports.seed = function seedCaseTable(knex) {
           pendingStatusReason: 'Beneficiary uncontactable',
           amountRequested: '100',
           documents: `{{'Application form', 'http://www.anotherlink.com'}}`,
-          refereeId: '0002',
-          beneficiaryId: '0002',
+          refereeId: 'R202011-002',
+          beneficiaryId: 'B202011-003',
           createdBy: '2',
           updatedBy: '2',
         },

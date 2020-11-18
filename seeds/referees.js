@@ -8,20 +8,20 @@ exports.seed = function seedRefereeTable(knex) {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
-          refereeId: '0001',
+          refereeId: 'R202011-001',
           name: 'Atu',
           email: 'ahl@aok.com',
-          phone: '34673662',
+          phone: '346736628',
           organisation: 'Techladies',
         },
         {
-          refereeId: '0002',
+          refereeId: 'R202011-002',
           name: 'Brenda Song',
-          phone: '911111111',
+          phone: '91111111',
           organisation: 'Google',
         },
         {
-          refereeId: '0003',
+          refereeId: 'R202011-003',
           name: 'Chong Yee',
           phone: '61113333',
         },
