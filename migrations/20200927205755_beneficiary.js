@@ -8,6 +8,7 @@ exports.up = function makeBeneficiarytable(knex) {
     table.string('name').index();
     table.string('email').unique();
     table.string('phone').unique();
+    table.text('notes');
     table.string('occupation');
     table.decimal('householdIncome');
     table.integer('householdSize');
