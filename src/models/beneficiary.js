@@ -69,6 +69,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
+         beneficiaryNumber: {
           type: 'string',
           minLength: 11,
           maxLength: 11,
@@ -83,8 +84,9 @@ class Beneficiary extends Model {
           type: 'number',
         },
         householdSize: { type: 'integer' },
-    };
+    }
   }
+}
 
 static get relationMappings() {
     return {

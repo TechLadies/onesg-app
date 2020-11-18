@@ -192,8 +192,8 @@ const search = async (req, res) => {
   if (type === 'referee' && entities.includes('cases')) {
     joinFrom = 'referees';
     joinTable1 = 'cases';
-    joinOn1 = 'referees.refereeId';
-    joinWith1 = 'cases.refereeId';
+    joinOn1 = 'referees.id';
+    joinWith1 = 'cases.id';
     joinTable2 = 'beneficiary';
     joinOn2 = 'beneficiary.beneficiaryId';
     joinWith2 = 'cases.beneficiaryId';
@@ -205,16 +205,16 @@ const search = async (req, res) => {
     joinOn1 = 'beneficiary.beneficiaryId';
     joinWith1 = 'cases.beneficiaryId';
     joinTable2 = 'referees';
-    joinOn2 = 'referees.refereeId';
-    joinWith2 = 'cases.refereeId';
+    joinOn2 = 'referees.id';
+    joinWith2 = 'cases.id';
     order = 'cases.caseId';
   }
 
   if (type === 'case' && entities.includes('referees')) {
     joinFrom = 'cases';
     joinTable1 = 'referees';
-    joinOn1 = 'referees.refereeId';
-    joinWith1 = 'cases.refereeId';
+    joinOn1 = 'referees.id';
+    joinWith1 = 'cases.id';
     joinTable2 = 'beneficiary';
     joinOn2 = 'beneficiary.beneficiaryId';
     joinWith2 = 'cases.beneficiaryId';
@@ -233,12 +233,12 @@ const search = async (req, res) => {
     .query()
     .select(
       raw(
-        `cases."caseId", beneficiary."beneficiaryId", beneficiary."name" AS beneficiary_name, beneficiary."email" As beneficiary_email, beneficiary."phone" AS beneficiary_phone, beneficiary."occupation" AS beneficiary_occupation, cases."requestType", cases."created_at", cases."updated_at", cases."fulfilment",cases."approval",cases."referenceStatus",referees."name" AS referee_name, referees."email" AS referee_email, referees."organisation",referees."phone" AS referee_phone, referees."refereeId"`
+        `cases."caseId", beneficiary."beneficiaryId", beneficiary."name" AS beneficiary_name, beneficiary."email" AS beneficiary_email,beneficiary."notes" AS beneficiary_notes, beneficiary."phone" AS beneficiary_phone, beneficiary."occupation" AS beneficiary_occupation, cases."requestType", cases."created_at", cases."updated_at", cases."fulfilment",cases."approval",cases."referenceStatus",referees."name" AS referee_name, referees."email" AS referee_email, referees."organisation",referees."phone" AS referee_phone, referees."refereeId"`
       )
     )
     .from(joinFrom)
     .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
-    .innerJoin(joinTable2, joinOn2, `=`, joinWith2)
+    .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
     .where(raw(sqlQuery, { searchBody: q }))
     .orderBy(order)
     .limit(limit)
