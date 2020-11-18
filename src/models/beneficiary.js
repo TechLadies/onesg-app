@@ -76,6 +76,12 @@ class Beneficiary extends Model {
         householdIncome: {
           type: 'number',
         },
+<<<<<<< HEAD
+=======
+        occupation: { type: 'string', maxLength: 255 },
+        notes: { type: 'text', maxLength: 255 },
+        householdIncome: { type: 'decimal', minLength: 1 },
+>>>>>>> update: add notes & revised search
         householdSize: { type: 'integer' },
         paymentType: {
           type: 'array',

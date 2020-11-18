@@ -72,9 +72,11 @@ Ensure that the database  `onesg` exists in the localhost, with the tables popul
 
 5. Install psql and pg_trgm
 ```
-psql
+\c onesg;
 ```
-CREATE EXTENSION pg_trgm
+psql;
+```
+CREATE EXTENSION pg_trgm;
 ```
 
 
