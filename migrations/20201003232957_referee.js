@@ -2,7 +2,7 @@ const { tableReferee } = require('../src/models/referee.js');
 
 exports.up = function makeRefereetable(knex) {
   return knex.schema.createTable(tableReferee, (table) => {
-    table.increments('refId').primary();
+    table.increments('id').primary();
     table.string('refereeId').index();
     table.string('name');
     table.string('email').unique();
