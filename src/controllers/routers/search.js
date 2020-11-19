@@ -169,7 +169,9 @@ const search = async (req, res) => {
   }
 
   // TODO : create custom join login based on entities.
+  const searchBody = searchFields.join(`||`);
   const entities = include_entities ? include_entities.split('&') : [];
+  const sqlQuery = `similarity (':searchBody:', ${searchBody}) > 0.08`;
   let joinFrom;
   let joinTable1;
   let joinOn1;
@@ -186,7 +188,7 @@ const search = async (req, res) => {
     joinTable2 = 'referees';
     joinOn2 = 'referees.refereeId';
     joinWith2 = 'cases.refereeId';
-    order = 'beneficiary.name';
+    order = `similarity(beneficiary."name", '${q}') DESC`;
   }
 
   if (type === 'referee' && entities.includes('cases')) {
@@ -197,7 +199,7 @@ const search = async (req, res) => {
     joinTable2 = 'beneficiary';
     joinOn2 = 'beneficiary.beneficiaryId';
     joinWith2 = 'cases.beneficiaryId';
-    order = 'referees.name';
+    order = `similarity(referees."name", '${q}') DESC`;
   }
   if (type === 'case' && entities.includes('beneficiary')) {
     joinFrom = 'cases';
@@ -207,7 +209,7 @@ const search = async (req, res) => {
     joinTable2 = 'referees';
     joinOn2 = 'referees.id';
     joinWith2 = 'cases.id';
-    order = 'cases.caseId';
+    order = `similarity("caseId", '${q}') DESC`;
   }
 
   if (type === 'case' && entities.includes('referees')) {
@@ -218,12 +220,10 @@ const search = async (req, res) => {
     joinTable2 = 'beneficiary';
     joinOn2 = 'beneficiary.beneficiaryId';
     joinWith2 = 'cases.beneficiaryId';
-    order = 'cases.caseId';
+    order = `similarity("caseId", '${q}') DESC`;
   }
 
   // Setting up params for limit, offset and per_page
-  const searchBody = searchFields.join(`||`);
-  const sqlQuery = `similarity (':searchBody:', ${searchBody}) > 0.08`;
   const limit = parseInt(per_page, 10) || 10;
   const currentPage = parseInt(page, 10) || 1;
   const offset = limit * currentPage - limit;
@@ -240,7 +240,7 @@ const search = async (req, res) => {
     .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
     .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
     .where(raw(sqlQuery, { searchBody: q }))
-    .orderBy(order)
+    .orderByRaw(order)
     .limit(limit)
     .offset(offset);
 
