@@ -15,6 +15,7 @@
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referee": "knex seed:run --specific=referees.js",
     "seed-case": "knex seed:run --specific=case.js",
+    "seed-requestType": "knex seed:run --specific=requestType.js",
     "seed-request": "knex seed:run --specific=request.js"
   },
   "repository": {

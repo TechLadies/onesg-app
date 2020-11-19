@@ -13,7 +13,7 @@ function getBeneficiaryId(previousId) {
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})(\d{2})-(\d{3})/);
+  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -29,7 +29,7 @@ function getBeneficiaryId(previousId) {
   // add leading 0s
   const paddedIndex = String(beneficiaryIndex).padStart(3, '0');
 
-  return `B${currentYear}${currentMonth}-${paddedIndex}`;
+  return `B${currentYear}-${currentMonth}${paddedIndex}`;
 }
 
 const tableBeneficiary = 'beneficiary';

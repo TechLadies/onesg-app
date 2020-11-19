@@ -9,7 +9,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
       // Inserts seed entries
       return knex(tableBeneficiary).insert([
         {
-          beneficiaryId: 'B202011-001',
+          beneficiaryId: 'B2020-11001',
           name: 'Ziza',
           email: 'zizah@azizah@.com',
           phone: '596424222',
@@ -20,7 +20,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           paymentType: PaymentTypeEnum.PayNow,
         },
         {
-          beneficiaryId: 'B202011-002',
+          beneficiaryId: 'B2020-11002',
           name: 'Alex Plus',
           email: 'alex.p22@gmail.com',
           phone: '91112222',
@@ -31,7 +31,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           paymentType: PaymentTypeEnum.BankTransfer,
         },
         {
-          beneficiaryId: 'B202011-003',
+          beneficiaryId: 'B2020-11003',
           name: 'Praveen Kumar',
           email: 'praveen_k@hotmail.com.sg',
           phone: '62226222',

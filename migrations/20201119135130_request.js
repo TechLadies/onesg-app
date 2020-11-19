@@ -2,13 +2,12 @@ const { tableCase } = require('../src/models/case.js');
 const { tableRequest } = require('../src/models/request.js');
 const { tableRequestType } = require('../src/models/requestType.js');
 
-console.log(tableRequestType);
 const {
   fulfilmentTypeEnum,
   requestStatusEnum,
 } = require('../src/models/request.js');
 
-exports.up = function exportRequestTable(knex) {
+exports.up = function makeRequestTable(knex) {
   return knex.schema.createTable(tableRequest, (table) => {
     table.increments('id').primary().index();
     table
