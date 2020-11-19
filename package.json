@@ -14,6 +14,7 @@
     "generate-keys": "node scripts/generateKeypair.js",
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referee": "knex seed:run --specific=referees.js",
+    "seed-staff": "knex seed:run --specific=staff.js",
     "seed-case": "knex seed:run --specific=case.js",
     "seed-requestType": "knex seed:run --specific=requestType.js",
     "seed-request": "knex seed:run --specific=request.js"
