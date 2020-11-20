@@ -56,7 +56,7 @@ class Request extends Model {
       type: 'object',
       required: [],
       properties: {
-        caseId: { type: 'varchar' },
+        caseId: { type: 'varchar', minLength: 11, maxLength: 11 },
         requestTypeId: { type: 'integer' },
         fulfilmentType: { type: 'enum' },
         fulfilmentChecklist: { type: 'array' },

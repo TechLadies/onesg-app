@@ -9,31 +9,31 @@ exports.seed = function seedRequestTypeTable(knex) {
       return knex(tableRequestType).insert([
         {
           id: '1',
-          requestTypeName: 'COOKED_FOOD',
+          description: 'COOKED_FOOD',
         },
         {
           id: '2',
-          requestTypeName: 'DIAPERS',
+          description: 'DIAPERS',
         },
         {
           id: '3',
-          requestTypeName: 'FINANCIAL_ASSISTANCE',
+          description: 'FINANCIAL_ASSISTANCE',
         },
         {
           id: '4',
-          requestTypeName: 'MEDICAL_BILL',
+          description: 'MEDICAL_BILL',
         },
         {
           id: '5',
-          requestTypeName: 'MILK_FORMULA',
+          description: 'MILK_FORMULA',
         },
         {
           id: '6',
-          requestTypeName: 'SCHOOL_FEES',
+          description: 'SCHOOL_FEES',
         },
         {
           id: '7',
-          requestTypeName: 'TRANSPORTATION_FEES',
+          description: 'TRANSPORTATION_FEES',
         },
       ]);
     });
