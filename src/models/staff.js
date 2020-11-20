@@ -22,7 +22,7 @@ class Staff extends Model {
         username: { type: 'varchar' },
         email: { maxLength: 255 },
         isAdmin: { type: 'boolean' },
-        status: { type: 'enum' },
+        status: { type: 'enum', enum: staffStatusEnum },
       },
     };
   }

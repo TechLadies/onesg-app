@@ -58,10 +58,10 @@ class Request extends Model {
       properties: {
         caseId: { type: 'varchar', minLength: 11, maxLength: 11 },
         requestTypeId: { type: 'integer' },
-        fulfilmentType: { type: 'enum' },
+        fulfilmentType: { type: 'enum', num: fulfilmentTypeEnum },
         fulfilmentChecklist: { type: 'array' },
         description: { type: 'varchar' },
-        requestStatus: { type: 'enum' },
+        requestStatus: { type: 'enum', enum: requestStatusEnum },
         approvedOn: { type: 'date' },
         completedOn: { type: 'date' },
       },

@@ -62,10 +62,10 @@ class Case extends Model {
       type: 'object',
       properties: {
         caseId: { type: 'varchar', minLength: 11, maxLength: 11 },
-        caseStatus: { type: 'enum' },
+        caseStatus: { type: 'enum', enum: caseStatusEnum },
         appliedOn: { type: 'date' }, // 2018-11-13
         pointOfContact: { type: 'varchar', maxLength: 255 },
-        referenceStatus: { type: 'enum' },
+        referenceStatus: { type: 'enum', enum: referenceStatusEnum },
         pendingStatusReason: { type: 'varchar', maxLength: 255 },
         amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
         amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },

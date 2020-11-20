@@ -13,7 +13,8 @@ exports.up = function makeBeneficiarytable(knex) {
     table.decimal('householdIncome');
     table.integer('householdSize');
     table.enum('paymentType', Object.values(PaymentTypeEnum));
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

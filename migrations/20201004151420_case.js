@@ -29,9 +29,10 @@ exports.up = function makeCasetable(knex) {
       .index()
       .references('refereeId')
       .inTable(tableReferee);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.integer('createdBy');
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
     table.integer('updatedBy');
-    table.timestamps(true, true);
   });
 };
 

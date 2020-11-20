@@ -8,7 +8,8 @@ exports.up = function makeRefereetable(knex) {
     table.string('email').unique();
     table.string('phone').unique();
     table.string('organisation');
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 
