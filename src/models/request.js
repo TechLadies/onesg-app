@@ -11,34 +11,23 @@ const fulfilmentTypeEnum = {
   cashTransfer: 'CASH_TRANSFER',
 };
 
-const fulfilmentChecklistEnum = {
-  inKindDonation: {
+const fulfilmentChecklistEnum = [
+  {
     itemsPurchased: 'ITEMS_PURCHASED',
     purchaseAndReimbursement: 'PURCHASE_AND_REIMBURSEMENT',
     reimbursementPaid: 'REIMBURSEMENT_PAID',
     deliveredToBeneficiary: 'DELIVERED_TO_BENEFICIARY',
   },
-  partnerReferral: {
+  {
     referredToPartner: 'REFERRED_TO_PARTNER',
     referralApproved: 'REFERRAL_APPROVED',
     deliveredToBeneficiary: 'DELIVERED_TO_BENEFICIARY',
   },
-  thirdPartyPayment: {
+  {
     purchaseVoucher: 'PURCHASE_VOUCHER',
     paymentProcessed: 'PAYMENT_PROCESSED',
   },
-  cashTransfer: {
-    purchaseVoucher: 'PURCHASE_VOUCHER',
-    paymentProcessed: 'PAYMENT_PROCESSED',
-  },
-};
-
-const fulfilmentChecklistArray = Object.entries(fulfilmentChecklistEnum).map(
-  ([fulfilmentType, fulfilmentChecklist]) => ({
-    fulfilmentType,
-    fulfilmentChecklist,
-  })
-);
+];
 
 const requestStatusEnum = {
   accept: 'ACCEPT',
@@ -59,7 +48,7 @@ class Request extends Model {
         caseId: { type: 'varchar', minLength: 11, maxLength: 11 },
         requestTypeId: { type: 'integer' },
         fulfilmentType: { type: 'enum', enum: fulfilmentTypeEnum },
-        fulfilmentChecklist: { type: 'array' },
+        fulfilmentChecklist: { type: 'array', enum: fulfilmentChecklistEnum },
         description: { type: 'varchar' },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
         approvedOn: { type: 'date' },
@@ -74,6 +63,6 @@ module.exports = {
   model: Request,
   tableRequest,
   fulfilmentTypeEnum,
-  fulfilmentChecklistArray,
+  fulfilmentChecklistEnum,
   requestStatusEnum,
 };
