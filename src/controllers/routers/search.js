@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable camelcase */
 const { raw } = require('objection');
 const { Beneficiary, Referee, Case } = require('../../models');
@@ -9,7 +8,6 @@ const {
 const search = async (req, res) => {
   // Extract all query params
   const { q, type, page, per_page, include_entities } = req.query;
-  console.log(req.query);
   // Choose database based on `type` query param
   let model;
   let searchFields;
