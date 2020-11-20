@@ -11,11 +11,11 @@
 'use strict';
 
 const express = require('express');
-
+const passport = require('passport');
 const { isNull } = require('../../../config/isNull');
 
 const router = express.Router();
-const passport = require('passport');
+
 const {
   router: { beneficiaries },
 } = require('../../controllers');
