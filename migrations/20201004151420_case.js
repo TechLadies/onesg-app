@@ -8,23 +8,25 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.string('caseId').primary().index().unique();
-    table.string('caseStatus', Object.values(caseStatusEnum));
+    table.string('caseId', 12).primary().index().unique();
+    table.enum('caseStatus', Object.values(caseStatusEnum)).defaultTo('NEW');
     table.date('appliedOn');
-    table.text('pointOfContact');
-    table.enum('referenceStatus', Object.values(referenceStatusEnum));
-    table.string('pendingStatusReason');
+    table.string('pointOfContact');
+    table
+      .enum('referenceStatus', Object.values(referenceStatusEnum))
+      .defaultTo(referenceStatusEnum.unverified);
+    table.string('casePendingReason');
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
-    table.specificType('documents', 'text ARRAY');
+    table.specificType('documents', 'json[]');
     table
-      .string('beneficiaryId')
+      .string('beneficiaryId', 11)
       .unsigned()
       .index()
       .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .string('refereeId')
+      .string('refereeId', 11)
       .unsigned()
       .index()
       .references('refereeId')

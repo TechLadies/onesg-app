@@ -16,22 +16,26 @@ exports.seed = function seedRequestTable(knex) {
           caseId: 'EF2020-11001',
           requestTypeId: '1',
           fulfilmentType: fulfilmentTypeEnum.inKindDonation,
-          fulfilmentChecklist:
-            '{"ITEMS_PURCHASED","PURCHASE_AND_REIMBURSEMENT"}',
+          completedFulfilmentItems: Object.values({
+            test1: 'ITEMS_PURCHASED',
+            test2: 'HELLO',
+          }),
           description: 'Donation',
           requestStatus: requestStatusEnum.accept,
-          approvedOn: '2020-11-04',
-          completedOn: '2020-11-04',
+          reviewedOn: '2020-11-04',
+          fulfilledOn: '2020-11-04',
         },
         {
           caseId: 'EF2020-11002',
           requestTypeId: '2',
           fulfilmentType: fulfilmentTypeEnum.partnerReferral,
-          fulfilmentChecklist: Object.values(fulfilmentChecklistEnum[1]), // fulfilmentChecklistArray[1].fulfilmentChecklist
+          completedFulfilmentItems: Object.values(
+            fulfilmentChecklistEnum.partnerReferral
+          ), // fulfilmentChecklistArray[1].fulfilmentChecklist
           description: 'Referred cooked food',
           requestStatus: requestStatusEnum.reject,
-          approvedOn: '2020-11-03',
-          completedOn: '2020-11-05',
+          reviewedOn: '2020-11-03',
+          fulfilledOn: '2020-11-05',
         },
       ]);
     });

@@ -12,7 +12,7 @@ exports.up = function makeRequestTable(knex) {
   return knex.schema.createTable(tableRequest, (table) => {
     table.increments('id').primary().index();
     table
-      .string('caseId')
+      .string('caseId', 12)
       .unsigned()
       .index()
       .references('caseId')
@@ -24,11 +24,14 @@ exports.up = function makeRequestTable(knex) {
       .references('id')
       .inTable(tableRequestType);
     table.enum('fulfilmentType', Object.values(fulfilmentTypeEnum));
-    table.text('fulfilmentChecklist', Object.values(fulfilmentChecklistEnum));
+    table.enum(
+      'completedFulfilmentItems',
+      Object.values(fulfilmentChecklistEnum)
+    );
     table.text('description');
     table.enum('requestStatus', Object.values(requestStatusEnum));
-    table.date('approvedOn');
-    table.date('completedOn');
+    table.date('reviewedOn');
+    table.date('fulfilledOn');
   });
 };
 
