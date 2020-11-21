@@ -229,20 +229,30 @@ const search = async (req, res) => {
   const offset = limit * currentPage - limit;
 
   // Execute the transaction
-  const results = await model
-    .query()
-    .select(
-      raw(
-        `cases."caseId", beneficiary."beneficiaryId", beneficiary."name" AS beneficiary_name, beneficiary."email" AS beneficiary_email,beneficiary."notes" AS beneficiary_notes, beneficiary."phone" AS beneficiary_phone, beneficiary."occupation" AS beneficiary_occupation, cases."requestType", cases."created_at", cases."updated_at", cases."fulfilment",cases."approval",cases."referenceStatus",referees."name" AS referee_name, referees."email" AS referee_email, referees."organisation",referees."phone" AS referee_phone, referees."refereeId"`
+  let results;
+  if (entities.length) {
+    results = await model
+      .query()
+      .select(
+        raw(
+          `cases."caseId", beneficiary."beneficiaryId", beneficiary."name" AS beneficiary_name, beneficiary."email" AS beneficiary_email,beneficiary."notes" AS beneficiary_notes, beneficiary."phone" AS beneficiary_phone, beneficiary."occupation" AS beneficiary_occupation, cases."requestType", cases."created_at", cases."updated_at", cases."fulfilment",cases."approval",cases."referenceStatus",referees."name" AS referee_name, referees."email" AS referee_email, referees."organisation",referees."phone" AS referee_phone, referees."refereeId"`
+        )
       )
-    )
-    .from(joinFrom)
-    .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
-    .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
-    .where(raw(sqlQuery, { searchBody: q }))
-    .orderByRaw(order)
-    .limit(limit)
-    .offset(offset);
+      .from(joinFrom)
+      .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
+      .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
+      .where(raw(sqlQuery, { searchBody: q }))
+      .orderByRaw(order)
+      .limit(limit)
+      .offset(offset);
+  } else {
+    results = await model
+      .query()
+      .select(raw(`*`))
+      .where(raw(sqlQuery, { searchBody: q }))
+      .limit(limit)
+      .offset(offset);
+  }
 
   // Envelope the results with paging information
   const response = {
