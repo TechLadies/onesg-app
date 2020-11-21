@@ -67,6 +67,31 @@ class Referee extends Model {
     };
   }
 
+  static get relationMappings() {
+    return {
+      cases: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'referees.refereeId',
+          to: 'cases.refereeId',
+        },
+        beneficiary: {
+          relation: Model.ManyToManyRelation,
+          modelClass: Beneficiary,
+          join: {
+            from: 'referees.refereeId',
+            through: {
+              from: 'cases.refereeId',
+              to: 'cases.beneficiaryId',
+            },
+            to: 'beneficiary.beneficiaryId',
+          },
+        },
+      },
+    };
+  }
+
   $afterValidate(referee) {
     super.$afterValidate(referee);
 
@@ -86,9 +111,9 @@ class Referee extends Model {
         });
       }
     }
-  }
+  
 }
-
+}
 module.exports = {
   Referee,
   model: Referee,

@@ -48,10 +48,23 @@ const getAll = async (req, res) => {
 };
 
 /**
+ * Retrieve specific beneficiary with cases
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getBeneficiarybyCase = async (req, res) => {
+  const byCase = await Beneficiary.query().withGraphFetched(
+    '[cases, referees]'
+  );
+  res.status(200).json({ byCase });
+};
+
+/**
  * Retrieve specific referee by id
  * @param {Request} req
  * @param {Response} res
  */
+
 const getBeneficiary = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -173,4 +186,5 @@ module.exports = {
   create,
   update,
   del,
+  getBeneficiarybyCase,
 };

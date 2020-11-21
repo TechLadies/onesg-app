@@ -29,7 +29,7 @@ const {
 // GET /v1/beneficiaries
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
-// POST /v1/beneficiaries
+// POST /v1/beneficiaries:id
 router.post('/', isNull, beneficiaries.create);
 
 // PATCH /v1/beneficiaries/:id
