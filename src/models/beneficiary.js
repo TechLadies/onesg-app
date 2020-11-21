@@ -1,15 +1,7 @@
-
-
-'use strict';
-
-const { Model } = require('objection');
+/* eslint-disable global-require */
 
 const { Model, ValidationError } = require('objection');
 
-const paymentTypeEnum = {
-  PayNow: 'payNow',
-  BankTransfer: 'bankTransfer',
-};
 const tableBeneficiary = 'beneficiary';
 
 // helper functions
@@ -60,7 +52,7 @@ class Beneficiary extends Model {
       type: 'object',
       required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
-         beneficiaryNumber: {
+        beneficiaryNumber: {
           type: 'string',
           minLength: 11,
           maxLength: 11,
@@ -75,11 +67,11 @@ class Beneficiary extends Model {
           type: 'number',
         },
         householdSize: { type: 'integer' },
-    }
+      },
+    };
   }
-}
 
-static get relationMappings() {
+  static get relationMappings() {
     return {
       cases: {
         relation: Model.HasManyRelation,
@@ -101,11 +93,11 @@ static get relationMappings() {
           },
           to: 'referees.refereeId',
         },
-      }
-    }
-}   
-    
-    $afterValidate(beneficiary) {
+      },
+    };
+  }
+
+  $afterValidate(beneficiary) {
     super.$afterValidate(beneficiary);
 
     // validate email
