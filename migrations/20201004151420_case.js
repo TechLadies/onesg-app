@@ -14,7 +14,7 @@ exports.up = function makeCasetable(knex) {
     table.string('pointOfContact');
     table
       .enum('referenceStatus', Object.values(referenceStatusEnum))
-      .defaultTo(referenceStatusEnum.unverified);
+      .defaultTo('UNVERIFIED');
     table.string('casePendingReason');
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
