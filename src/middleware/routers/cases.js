@@ -13,25 +13,13 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  router: { referees },
+  router: { cases },
 } = require('../../controllers');
 
 /**
  * Routing for references endpoints (/v1/referees)
  */
 // GET /v1/referees
-router.get('/', referees.getAll);
-
-// POST /v1/referees
-router.post('/', referees.create);
-
-// GET /v1/referees/:id
-router.get('/:id', referees.getReferee);
-
-// GET /v1/referees/bycase
-router.get('/bycase', referees.getRefereebyCase);
-
-// PATCH /v1/referees/:id
-router.patch('/:id', referees.update);
+router.get('/', cases.getAll);
 
 module.exports = router;

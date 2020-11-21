@@ -15,7 +15,8 @@ const search = require('./search');
 
 const router = express.Router();
 const beneficiaries = require('./beneficiaries');
-// const cases = require('./cases');
+const cases = require('./cases');
+const referee = require('./referees');
 
 /**
  * Main server-side router
@@ -28,6 +29,7 @@ router.get('/v1/healthcheck', function healthcheck(req, res) {
 
 router.use('/v1/beneficiaries', beneficiaries);
 router.use('/v1/search', search);
-// router.use('/v1/cases', cases);
+router.use('/v1/cases', cases);
+router.use('/v1/referee', referee);
 
 module.exports = router;

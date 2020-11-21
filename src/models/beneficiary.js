@@ -1,5 +1,8 @@
-/* eslint-disable no-console */
+/* eslint-disable global-require */
+
 const { Model, ValidationError } = require('objection');
+const { Case } = require('./case');
+const { Referee } = require('./referee');
 
 const paymentTypeEnum = {
   PayNow: 'payNow',
@@ -47,9 +50,7 @@ class Beneficiary extends Model {
       .limit(1);
 
     this.beneficiaryId = getBeneficiaryId(
-      lastInsertedBeneficiary[0].beneficiaryId,
-
-      console.log(`look here`, lastInsertedBeneficiary)
+      lastInsertedBeneficiary[0].beneficiaryId
     );
   }
 
@@ -71,6 +72,32 @@ class Beneficiary extends Model {
         householdIncome: { type: 'decimal', minLength: 1 },
         householdSize: { type: 'integer' },
         paymentType: { type: 'enum' },
+      },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      cases: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'beneficiary.beneficiaryId',
+          to: 'cases.beneficiaryId',
+        },
+      },
+      referees: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Referee,
+        join: {
+          from: 'beneficiary.beneficiaryId',
+          through: {
+            // persons_movies is the join table.
+            from: 'cases.beneficiaryId',
+            to: 'cases.refereeId',
+          },
+          to: 'referees.refereeId',
+        },
       },
     };
   }

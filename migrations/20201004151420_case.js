@@ -11,8 +11,7 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('id').primary();
-    table.string('caseId').index().unique();
+    table.string('caseId').primary().index().unique();
     table.enum('requestType', Object.values(requestTypeEnum));
     table.enum('fulfilment', Object.values(fulfilmentTypeEnum));
     table.text('POC');

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -24,8 +25,9 @@ const {
  */
 // GET /v1/beneficiaries
 router.get('/', beneficiaries.getAll);
+router.get('/bycase', beneficiaries.getBeneficiarybyCase);
 
-// POST /v1/beneficiaries
+// POST /v1/beneficiaries:id
 router.post('/', isNull, beneficiaries.create);
 
 // PATCH /v1/beneficiaries/:id

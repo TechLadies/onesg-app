@@ -3,6 +3,8 @@
 'use strict';
 
 const { Model } = require('objection');
+const { Case } = require('./case');
+const { Beneficiary } = require('./beneficiary');
 
 const tableReferee = 'referees';
 
@@ -28,7 +30,33 @@ class Referee extends Model {
       },
     };
   }
+
+  static get relationMappings() {
+    return {
+      cases: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'referees.refereeId',
+          to: 'cases.refereeId',
+        },
+        beneficiary: {
+          relation: Model.ManyToManyRelation,
+          modelClass: Beneficiary,
+          join: {
+            from: 'referees.refereeId',
+            through: {
+              from: 'cases.refereeId',
+              to: 'cases.beneficiaryId',
+            },
+            to: 'beneficiary.beneficiaryId',
+          },
+        },
+      },
+    };
+  }
 }
+
 module.exports = {
   Referee,
   model: Referee,
