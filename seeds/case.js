@@ -13,9 +13,9 @@ exports.seed = function seedCaseTable(knex) {
       return knex(tableCase).insert([
         {
           caseId: 'EF2020-11001',
-          caseStatus: caseStatusEnum.new,
+          // caseStatus: caseStatusEnum.new,
           appliedOn: '2020-11-01', // YYYY-MM-DD
-          pointOfContact: 'Sarah Tan',
+          pointOfContact: '',
           referenceStatus: referenceStatusEnum.unverified,
           amountRequested: '350.55',
           amountGranted: '350',

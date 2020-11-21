@@ -16,10 +16,7 @@ exports.seed = function seedRequestTable(knex) {
           caseId: 'EF2020-11001',
           requestTypeId: '1',
           fulfilmentType: fulfilmentTypeEnum.inKindDonation,
-          completedFulfilmentItems: Object.values({
-            test1: 'ITEMS_PURCHASED',
-            test2: 'HELLO',
-          }),
+          completedFulfilmentItems: fulfilmentChecklistEnum.inKindDonation,
           description: 'Donation',
           requestStatus: requestStatusEnum.accept,
           reviewedOn: '2020-11-04',
@@ -29,9 +26,7 @@ exports.seed = function seedRequestTable(knex) {
           caseId: 'EF2020-11002',
           requestTypeId: '2',
           fulfilmentType: fulfilmentTypeEnum.partnerReferral,
-          completedFulfilmentItems: Object.values(
-            fulfilmentChecklistEnum.partnerReferral
-          ), // fulfilmentChecklistArray[1].fulfilmentChecklist
+          completedFulfilmentItems: fulfilmentChecklistEnum.partnerReferral,
           description: 'Referred cooked food',
           requestStatus: requestStatusEnum.reject,
           reviewedOn: '2020-11-03',

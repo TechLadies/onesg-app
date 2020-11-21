@@ -18,6 +18,7 @@ exports.seed = function seedBeneficiaryTable(knex) {
           householdIncome: '1333',
           householdSize: '4',
           paymentType: PaymentTypeEnum.PayNow,
+          notes: 'Repeated request',
         },
         {
           beneficiaryId: 'B2020-11002',

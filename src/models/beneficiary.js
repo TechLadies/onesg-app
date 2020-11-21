@@ -59,9 +59,15 @@ class Beneficiary extends Model {
         phone: { type: 'varchar', maxLength: 12 },
         address: { type: 'varchar', maxLength: 255 },
         occupation: { type: 'string', maxLength: 255 },
-        householdIncome: { type: 'decimal', minLength: 1 },
+        householdIncome: {
+          type: 'decimal',
+          minLength: 1,
+          maxLength: 8,
+          multipleOf: '1.00',
+        },
         householdSize: { type: 'integer' },
         paymentType: { type: 'enum' },
+        notes: { type: 'string' },
       },
     };
   }

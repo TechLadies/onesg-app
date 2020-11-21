@@ -4,7 +4,6 @@ const { tableRequestType } = require('../src/models/requestType.js');
 
 const {
   fulfilmentTypeEnum,
-  fulfilmentChecklistEnum,
   requestStatusEnum,
 } = require('../src/models/request.js');
 
@@ -24,10 +23,7 @@ exports.up = function makeRequestTable(knex) {
       .references('id')
       .inTable(tableRequestType);
     table.enum('fulfilmentType', Object.values(fulfilmentTypeEnum));
-    table.enum(
-      'completedFulfilmentItems',
-      Object.values(fulfilmentChecklistEnum)
-    );
+    table.string('completedFulfilmentItems');
     table.text('description');
     table.enum('requestStatus', Object.values(requestStatusEnum));
     table.date('reviewedOn');

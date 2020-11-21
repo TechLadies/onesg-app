@@ -8,13 +8,12 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.string('caseId', 12).primary().index().unique();
-    table.enum('caseStatus', Object.values(caseStatusEnum)).defaultTo('NEW');
+    table.increments('id').primary().index();
+    table.string('caseId', 12).unique();
+    table.enum('caseStatus', Object.values(caseStatusEnum));
     table.date('appliedOn');
     table.string('pointOfContact');
-    table
-      .enum('referenceStatus', Object.values(referenceStatusEnum))
-      .defaultTo('UNVERIFIED');
+    table.enum('referenceStatus', Object.values(referenceStatusEnum));
     table.string('casePendingReason');
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
