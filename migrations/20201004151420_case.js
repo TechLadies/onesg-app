@@ -2,39 +2,38 @@ const { tableCase } = require('../src/models/case.js');
 const { tableBeneficiary } = require('../src/models/beneficiary.js');
 const { tableReferee } = require('../src/models/referee.js');
 const {
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  CaseStatusTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
+  caseStatusEnum,
+  referenceStatusEnum,
 } = require('../src/models/case.js');
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('id').primary();
-    table.varchar('caseId').index().unique();
-    table.enum('requestType', Object.values(RequestTypeEnum));
-    table.enum('fulfilment', Object.values(FulfilmentTypeEnum));
-    table.text('POC');
-    table.decimal('amountRequested');
-    table.text('description');
-    table.enum('caseStatus', Object.values(CaseStatusTypeEnum));
-    table.enum('approval', Object.values(ApprovalTypeEnum));
-    table.enum('referenceStatus', Object.values(ReferenceStatusTypeEnum));
+    table.increments('id').primary().index();
+    table.string('caseId', 12).unique();
+    table.enum('caseStatus', Object.values(caseStatusEnum));
+    table.date('appliedOn');
+    table.string('pointOfContact');
+    table.enum('referenceStatus', Object.values(referenceStatusEnum));
+    table.string('casePendingReason');
+    table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
+    table.specificType('documents', 'json[]');
     table
-      .varchar('beneficiaryId')
+      .string('beneficiaryId', 11)
       .unsigned()
       .index()
       .references('beneficiaryId')
       .inTable(tableBeneficiary);
     table
-      .varchar('refereeId')
+      .string('refereeId', 11)
       .unsigned()
       .index()
-      .references('refId')
+      .references('refereeId')
       .inTable(tableReferee);
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.integer('createdBy');
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
+    table.integer('updatedBy');
   });
 };
 

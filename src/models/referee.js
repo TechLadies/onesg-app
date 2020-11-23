@@ -4,27 +4,46 @@
 
 const { Model, ValidationError } = require('objection');
 
-const tableReferee = 'referees';
+// helper functions
+function getRefereeId(previousId) {
+  const [
+    // eslint-disable-next-line no-unused-vars
+    _,
+    year,
+    month,
+    index,
+  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
+
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+  const currentYear = today.getFullYear().toString();
+
+  let refereeIndex = 1;
+  // If last inserted beneficiary is from the current month,
+  // use counter from previous insert
+  if (year === currentYear && month === currentMonth) {
+    refereeIndex = parseInt(index, 10) + 1;
+  }
+
+  // add leading 0s
+  const paddedIndex = String(refereeIndex).padStart(3, '0');
+
+  return `R${currentYear}-${currentMonth}${paddedIndex}`;
+}
+
+const tableReferee = 'referee';
 class Referee extends Model {
   static get tableName() {
     return tableReferee;
   }
 
   async $beforeInsert() {
-    const knex = Referee.knex();
-    const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1
-      ELSE last_value
-      END FROM "referees_refId_seq";
-      `
-    );
-    const increobj = increDB.rows[0].last_value;
-    const i = `0000${increobj}`.substring(increobj.length);
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const id = `R${yyyy}${mm}-${i}`;
-    this.refereeId = id;
+    const lastInsertedCase = await Referee.query()
+      .select('refereeId')
+      .orderBy('created_at', 'desc')
+      .limit(1);
+
+    this.caseId = getRefereeId(lastInsertedCase[0].refereeId);
   }
 
   static get jsonSchema() {

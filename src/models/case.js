@@ -1,44 +1,20 @@
 const { Model, ValidationError } = require('objection');
 
-const RequestTypeEnum = {
-  cookedFood: 'cookedFood',
-  diapers: 'diapers',
-  financialAssistance: 'financialAssistance',
-  medicalBill: 'medicalBill',
-  milkFormula: 'milkFormula',
-  schoolFees: 'schoolFees',
-  transportationFees: 'transportationFees',
-  utilityBill: 'utilityBill',
+const caseStatusEnum = {
+  new: 'NEW',
+  pending: 'PENDING',
+  referred: 'REFERRED',
+  processing: 'PROCESSING',
+  closed: 'CLOSED',
 };
 
-const FulfilmentTypeEnum = {
-  inKindDonation: 'inKindDonation',
-  cashTransfer: 'cashTransfer',
-  thirdpartyPayment: 'third-partyPayment',
-  partnerReferral: 'partnerReferral',
+const referenceStatusEnum = {
+  unverified: 'UNVERIFIED',
+  pending: 'PENDING',
+  verified: 'VERIFIED',
 };
 
-const CaseStatusTypeEnum = {
-  new: 'new',
-  onHold: 'onHold',
-  referredtoEFC: 'referredtoEFC',
-  processing: 'processing',
-  closed: 'closed',
-};
-
-const ReferenceStatusTypeEnum = {
-  unverified: 'unverified',
-  pending: 'pending',
-  verified: 'verified',
-};
-const ApprovalTypeEnum = {
-  NIL: '-',
-  full: 'full',
-  partial: 'partial',
-  rejected: 'rejected',
-};
-
-const tableCase = 'cases';
+const tableCase = 'case';
 
 // helper functions
 function getCaseId(previousId) {
@@ -48,10 +24,10 @@ function getCaseId(previousId) {
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{4})/);
+  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
-  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+  const currentMonth = (today.getMonth() + 1).toString().padStart(3, '0');
   const currentYear = today.getFullYear().toString();
 
   let caseIndex = 1;
@@ -94,20 +70,19 @@ class Case extends Model {
         'amountGranted',
       ],
       properties: {
-        beneficiaryId: { type: 'varchar' },
-        refereeId: { type: 'varchar' },
-        caseId: { type: 'varchar' },
-        POC: { type: 'varchar', minLength: 1, maxLength: 255 },
-        amountRequested: { type: 'varchar' },
-        // applicationDate: {},
-        requestType: { type: 'varchar', enum: RequestTypeEnum.key },
-        fulfilment: { type: 'varchar', enum: FulfilmentTypeEnum.key },
-        description: { type: 'varchar', maxLength: 255 },
-        // document: {},
-        caseStatus: { type: 'varchar', enum: CaseStatusTypeEnum.key },
-        referenceStatus: { type: 'varchar', enum: ReferenceStatusTypeEnum.key },
-        approval: { type: 'varchar', enum: ApprovalTypeEnum.key },
-        amountGranted: { type: 'varchar' },
+        caseId: { type: 'string', minLength: 11, maxLength: 11 },
+        caseStatus: { type: 'enum', enum: caseStatusEnum },
+        appliedOn: { type: 'date' }, // 2018-11-13
+        pointOfContact: { type: 'varchar', maxLength: 255 },
+        referenceStatus: { type: 'enum', enum: referenceStatusEnum },
+        casePendingReason: { type: 'varchar', maxLength: 255 },
+        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
+        amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
+        documents: { type: 'array' },
+        refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
+        beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }
@@ -154,9 +129,6 @@ module.exports = {
   Case,
   model: Case,
   tableCase,
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
-  CaseStatusTypeEnum,
+  caseStatusEnum,
+  referenceStatusEnum,
 };
