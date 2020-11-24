@@ -60,6 +60,15 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: [
+        'caseStatus',
+        'appliedOn',
+        'pointOfContact',
+        'referenceStatus',
+        'amountRequested',
+        'createdBy',
+        'updatedBy',
+      ],
       properties: {
         caseId: { type: 'string', minLength: 11, maxLength: 11 },
         caseStatus: { type: 'enum', enum: caseStatusEnum },
