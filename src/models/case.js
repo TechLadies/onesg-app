@@ -59,7 +59,6 @@ class Case extends Model {
         casePendingReason: { type: 'varchar', maxLength: 255 },
         amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '0.01' },
         amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '0.01' },
-        documents: { type: 'array' },
         refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
         beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },
         createdBy: { type: 'integer' },
