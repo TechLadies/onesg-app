@@ -1,18 +1,8 @@
 const { Model } = require('objection');
 
-const caseStatusEnum = {
-  new: 'NEW',
-  pending: 'PENDING',
-  referred: 'REFERRED',
-  processing: 'PROCESSING',
-  closed: 'CLOSED',
-};
+const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
-const referenceStatusEnum = {
-  unverified: 'UNVERIFIED',
-  pending: 'PENDING',
-  verified: 'VERIFIED',
-};
+const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 
 const tableCase = 'case';
 
@@ -60,24 +50,15 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: [
-        'caseStatus',
-        'appliedOn',
-        'pointOfContact',
-        'referenceStatus',
-        'amountRequested',
-        'createdBy',
-        'updatedBy',
-      ],
       properties: {
-        caseId: { type: 'string', minLength: 11, maxLength: 11 },
+        caseId: { type: 'string', minLength: 12, maxLength: 12 },
         caseStatus: { type: 'enum', enum: caseStatusEnum },
         appliedOn: { type: 'date' }, // 2018-11-13
         pointOfContact: { type: 'varchar', maxLength: 255 },
         referenceStatus: { type: 'enum', enum: referenceStatusEnum },
         casePendingReason: { type: 'varchar', maxLength: 255 },
-        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
-        amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
+        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '0.01' },
+        amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '0.01' },
         documents: { type: 'array' },
         refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
         beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },

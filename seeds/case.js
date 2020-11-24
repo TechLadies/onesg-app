@@ -1,8 +1,4 @@
 const { tableCase } = require('../src/models/case');
-const {
-  caseStatusEnum,
-  referenceStatusEnum,
-} = require('../src/models/case.js');
 
 exports.seed = function seedCaseTable(knex) {
   // Deletes ALL existing entries
@@ -13,10 +9,10 @@ exports.seed = function seedCaseTable(knex) {
       return knex(tableCase).insert([
         {
           caseId: 'EF2020-11001',
-          // caseStatus: caseStatusEnum.new,
+          caseStatus: 'NEW',
           appliedOn: '2020-11-01', // YYYY-MM-DD
           pointOfContact: '',
-          referenceStatus: referenceStatusEnum.unverified,
+          referenceStatus: 'UNVERIFIED',
           amountRequested: '350.55',
           amountGranted: '350',
           documents: [
@@ -30,10 +26,10 @@ exports.seed = function seedCaseTable(knex) {
         },
         {
           caseId: 'EF2020-11002',
-          caseStatus: caseStatusEnum.pending,
+          caseStatus: 'PENDING',
           appliedOn: '2020-11-02', // 2018-11-13
           pointOfContact: 'John Lim',
-          referenceStatus: referenceStatusEnum.pending,
+          referenceStatus: 'PENDING',
           casePendingReason: 'Beneficiary uncontactable',
           amountRequested: '175.50',
           documents: [
