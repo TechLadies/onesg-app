@@ -72,12 +72,8 @@ class Case extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const cases = json;
-    // if (cases.requestType === null) {
-    //   throw new ValidationError({
-    //     message: `Request type cannot be null`,
-    //   });
-    // }
 
+    // if referenceStatus is pending, casePendingReason cannot be empty
     if (cases.referenceStatus === 'PENDING') {
       if (cases.casePendingReason === '' || cases.casePendingReason === null) {
         throw new ValidationError({
