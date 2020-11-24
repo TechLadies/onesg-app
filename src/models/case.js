@@ -51,7 +51,7 @@ class Case extends Model {
   async $beforeInsert() {
     const lastInsertedCase = await Case.query()
       .select('caseId')
-      .orderBy('created_at', 'desc')
+      .orderBy('createdAt', 'desc')
       .limit(1);
 
     this.caseId = getCaseId(lastInsertedCase[0].caseId);
@@ -60,24 +60,15 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: [
-        'requestType',
-        'fulfilment',
-        'POC',
-        'amountRequested',
-        'caseStatus',
-        'referenceStatus',
-        'amountGranted',
-      ],
       properties: {
         caseId: { type: 'string', minLength: 11, maxLength: 11 },
-        caseStatus: { type: 'enum', enum: caseStatusEnum },
+        caseStatus: { type: 'enum' },
         appliedOn: { type: 'date' }, // 2018-11-13
         pointOfContact: { type: 'varchar', maxLength: 255 },
-        referenceStatus: { type: 'enum', enum: referenceStatusEnum },
+        referenceStatus: { type: 'enum' },
         casePendingReason: { type: 'varchar', maxLength: 255 },
-        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
-        amountGranted: { type: 'decimal', maxLength: 8, multipleOf: '1.00' },
+        amountRequested: { type: 'decimal', maxLength: 8 },
+        amountGranted: { type: 'decimal', maxLength: 8 },
         documents: { type: 'array' },
         refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
         beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },

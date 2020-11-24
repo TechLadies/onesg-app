@@ -47,8 +47,8 @@ const getAll = async (req, res) => {
     'phone',
     'organisation',
     'refereeId',
-    'created_at',
-    'updated_at'
+    'createdAt',
+    'updatedAt'
   );
   return res.status(200).json({ results });
 };
@@ -68,7 +68,7 @@ const getReferee = async (req, res, next) => {
         'phone',
         'organisation',
         'refereeId',
-        'created_at',
+        'createdAt',
         'updated_at'
       )
       .where('refereeId', id);
@@ -128,7 +128,7 @@ const update = async (req, res, next) => {
         'phone',
         'organisation',
         'refereeId',
-        'created_at',
+        'createdAt',
         'updated_at'
       );
     if (referee.length === 0) {

@@ -48,7 +48,7 @@ class Request extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: [],
+      required: ['requestTypeId', 'fulfilmentType', 'requestStatus'],
       properties: {
         caseId: { type: 'varchar', minLength: 11, maxLength: 11 },
         requestTypeId: { type: 'integer' },

@@ -40,7 +40,7 @@ class Referee extends Model {
   async $beforeInsert() {
     const lastInsertedCase = await Referee.query()
       .select('refereeId')
-      .orderBy('created_at', 'desc')
+      .orderBy('createdAt', 'desc')
       .limit(1);
 
     this.caseId = getRefereeId(lastInsertedCase[0].refereeId);

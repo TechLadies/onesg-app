@@ -21,41 +21,33 @@ const {
 /**
  * Sanitize data from client. Call before an insert or an update.
  */
+
 function sanitize(json) {
   const cases = json;
-  if (json.requestType && json.requestType !== null) {
-    cases.requestType = json.requestType.trim();
-  }
-  if (json.fulfilment && json.fulfilment !== null) {
-    cases.fulfilment = json.fulfilment.trim();
-  }
-  if (json.POC) {
-    cases.POC = json.POC.trim();
-  }
-  if (json.description) {
-    cases.description = json.description.trim();
-  }
-  if (json.caseStatus && json.caseStatus !== null) {
+  if (json.caseStatus) {
     cases.caseStatus = json.caseStatus.toLowerCase().trim();
   }
-  if (json.approval && json.approval !== null) {
-    cases.approval = json.approval.toLowerCase().trim();
+  if (json.pointOfContact) {
+    cases.pointOfContact = json.pointOfContact.trim();
   }
-  if (json.referenceStatus && json.referenceStatus !== null) {
+  if (json.referenceStatus) {
     cases.referenceStatus = json.referenceStatus.toLowerCase().trim();
   }
-  if (
-    json.amountRequested &&
-    Number.isNaN(parseFloat(json.amountRequested)) === false
-  ) {
-    cases.amountRequested = json.amountRequested.trim();
+  if (json.casePendingReason) {
+    cases.casePendingReason = json.casePendingReason.trim();
   }
-  if (
-    json.amountGranted &&
-    Number.isNaN(parseFloat(json.amountGranted)) === false
-  ) {
-    cases.amountGranted = json.amountGranted.trim();
-  }
+  // if (
+  //   json.amountRequested &&
+  //   Number.isNaN(parseFloat(json.amountRequested)) === false
+  // ) {
+  //   cases.amountRequested = json.amountRequested.trim();
+  // }
+  // if (
+  //   json.amountGranted &&
+  //   Number.isNaN(parseFloat(json.amountGranted)) === false
+  // ) {
+  //   cases.amountGranted = json.amountGranted.trim();
+  // }
   return cases;
 }
 /**
@@ -105,7 +97,8 @@ const create = async (req, res, next) => {
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(new BadRequest(err.message));
+    console.log(err);
+    return next(err);
   }
 };
 

@@ -18,6 +18,7 @@ class Staff extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['username', 'email', 'isAmin', 'status'],
       properties: {
         username: { type: 'varchar' },
         email: { maxLength: 255 },
