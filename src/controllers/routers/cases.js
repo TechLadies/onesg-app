@@ -7,9 +7,9 @@
 'use strict';
 
 const {
-  CheckViolationError,
   DataError,
   ForeignKeyViolationError,
+  ValidationError,
 } = require('objection');
 
 const { Case } = require('../../models');
@@ -25,29 +25,32 @@ const {
 function sanitize(json) {
   const cases = json;
   if (json.caseStatus) {
-    cases.caseStatus = json.caseStatus.toLowerCase().trim();
+    cases.caseStatus = json.caseStatus.toUpperCase().trim();
   }
   if (json.pointOfContact) {
     cases.pointOfContact = json.pointOfContact.trim();
   }
   if (json.referenceStatus) {
-    cases.referenceStatus = json.referenceStatus.toLowerCase().trim();
+    cases.referenceStatus = json.referenceStatus.toUpperCase().trim();
   }
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
   }
-  // if (
-  //   json.amountRequested &&
-  //   Number.isNaN(parseFloat(json.amountRequested)) === false
-  // ) {
-  //   cases.amountRequested = json.amountRequested.trim();
-  // }
-  // if (
-  //   json.amountGranted &&
-  //   Number.isNaN(parseFloat(json.amountGranted)) === false
-  // ) {
-  //   cases.amountGranted = json.amountGranted.trim();
-  // }
+  if (json.amountRequested) {
+    cases.amountRequested = parseFloat(json.amountRequested);
+  }
+  if (json.amountGranted) {
+    cases.amountGranted = parseFloat(json.amountGranted);
+  }
+  if (json.documents === null || json.documents === '') {
+    cases.documents = {};
+  }
+  if (json.createdBy) {
+    cases.createdBy = Number(json.createdBy);
+  }
+  if (json.updatedBy) {
+    cases.updatedBy = Number(json.updatedBy);
+  }
   return cases;
 }
 /**
@@ -71,33 +74,44 @@ const create = async (req, res, next) => {
     const cases = await Case.query().insert(newCase).returning('caseId');
     return res.status(201).json({ cases });
   } catch (err) {
-    // DataError for invalid types
+    console.log(err);
+    // ValidationError based on jsonSchema (eg beneficiaryId or refereeId > 11 characters, createdBy or updatedBy not in int format,
+    // amountRequested > amountGranted or casePendingReason is empty/null when caseStatus is pending)
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
+    }
+
+    // DataError for invalid types based on table (eg date format)
     if (err instanceof DataError) {
-      return next(new InvalidInput(err));
+      if (err.nativeError.routine === 'DateTimeParseError') {
+        return next(
+          new InvalidInput(
+            `${newCase.appliedOn} is not a valid date in YYYY-MM-DD format`
+          )
+        );
+      }
+      return next(new InvalidInput(err.message));
     }
-    // CheckViolationError for input not in enum
-    if (err instanceof CheckViolationError) {
-      return next(new InvalidInput(err));
-    }
+
     // ForeignKeyViolationError for beneficiaryId or refereeId that are not present
     if (err instanceof ForeignKeyViolationError) {
-      if (err.constraint === 'cases_beneficiaryid_foreign') {
+      if (err.constraint === 'case_beneficiaryid_foreign') {
         return next(
           new BadRequest(
             `Benficiary id ${newCase.beneficiaryId} is not present`
           )
         );
       }
-      if (err.constraint === 'cases_refereeid_foreign') {
+      if (err.constraint === 'case_refereeid_foreign') {
         return next(
           new BadRequest(`Referee id ${newCase.refereeId} is not present`)
         );
       }
     }
+
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    console.log(err);
     return next(err);
   }
 };

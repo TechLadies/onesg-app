@@ -1,18 +1,8 @@
-const { Model, ValidationError } = require('objection');
+const { ValidationError, Model } = require('objection');
 
-const caseStatusEnum = {
-  new: 'NEW',
-  pending: 'PENDING',
-  referred: 'REFERRED',
-  processing: 'PROCESSING',
-  closed: 'CLOSED',
-};
+const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
-const referenceStatusEnum = {
-  unverified: 'UNVERIFIED',
-  pending: 'PENDING',
-  verified: 'VERIFIED',
-};
+const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 
 const tableCase = 'case';
 
@@ -27,7 +17,7 @@ function getCaseId(previousId) {
   ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
-  const currentMonth = (today.getMonth() + 1).toString().padStart(3, '0');
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
 
   let caseIndex = 1;
@@ -38,7 +28,7 @@ function getCaseId(previousId) {
   }
 
   // add leading 0s
-  const paddedIndex = String(caseIndex).padStart(4, '0');
+  const paddedIndex = String(caseIndex).padStart(3, '0');
 
   return `EF${currentYear}-${currentMonth}${paddedIndex}`;
 }
@@ -51,6 +41,7 @@ class Case extends Model {
   async $beforeInsert() {
     const lastInsertedCase = await Case.query()
       .select('caseId')
+      .orderBy('caseId', 'desc')
       .orderBy('createdAt', 'desc')
       .limit(1);
 
@@ -60,16 +51,16 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['appliedOn', 'amountRequested', 'createdBy', 'updatedBy'],
       properties: {
-        caseId: { type: 'string', minLength: 11, maxLength: 11 },
-        caseStatus: { type: 'enum' },
+        caseId: { type: 'string', minLength: 12, maxLength: 12 },
+        caseStatus: { type: 'enum', enum: caseStatusEnum },
         appliedOn: { type: 'date' }, // 2018-11-13
         pointOfContact: { type: 'varchar', maxLength: 255 },
-        referenceStatus: { type: 'enum' },
+        referenceStatus: { type: 'enum', enum: referenceStatusEnum },
         casePendingReason: { type: 'varchar', maxLength: 255 },
         amountRequested: { type: 'decimal', maxLength: 8 },
         amountGranted: { type: 'decimal', maxLength: 8 },
-        documents: { type: 'array' },
         refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
         beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },
         createdBy: { type: 'integer' },
@@ -81,30 +72,18 @@ class Case extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const cases = json;
-    if (cases.requestType === null) {
-      throw new ValidationError({
-        message: `Request type cannot be null`,
-      });
-    }
-    if (cases.fulfilment === null) {
-      throw new ValidationError({
-        message: `Fulfilment cannot be null`,
-      });
-    }
-    if (cases.caseStatus === null) {
-      throw new ValidationError({
-        message: `Case status cannot be null`,
-      });
-    }
-    if (cases.referenceStatus === null) {
-      throw new ValidationError({
-        message: `Reference status cannot be null`,
-      });
-    }
-    if (cases.approval === null) {
-      throw new ValidationError({
-        message: `Approval cannot be null`,
-      });
+    // if (cases.requestType === null) {
+    //   throw new ValidationError({
+    //     message: `Request type cannot be null`,
+    //   });
+    // }
+
+    if (cases.referenceStatus === 'PENDING') {
+      if (cases.casePendingReason === '' || cases.casePendingReason === null) {
+        throw new ValidationError({
+          message: 'Case pending reason required',
+        });
+      }
     }
 
     // validate amountGranted must be <= amountRequested
