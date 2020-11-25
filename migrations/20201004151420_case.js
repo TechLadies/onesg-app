@@ -10,14 +10,14 @@ exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
     table.increments('id').primary().index();
     table.string('caseId', 12).unique();
-    table.enum('caseStatus', caseStatusEnum);
+    table.enum('caseStatus', caseStatusEnum).defaultTo('NEW');
     table.date('appliedOn');
     table.string('pointOfContact');
-    table.enum('referenceStatus', referenceStatusEnum);
+    table.enum('referenceStatus', referenceStatusEnum).defaultTo('UNVERIFIED');
     table.string('casePendingReason');
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
-    table.specificType('documents', 'json[]');
+    table.specificType('documents', 'text[]');
     table
       .string('beneficiaryId', 11)
       .unsigned()
