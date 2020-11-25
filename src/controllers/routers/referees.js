@@ -70,7 +70,7 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 const getRefereebyCase = async (req, res) => {
-  const byCase = await Referee.query().withGraphFetched('[cases, beneficiary]');
+  const byCase = await Referee.query().withGraphFetched('cases');
   res.status(200).json({ byCase });
 };
 
