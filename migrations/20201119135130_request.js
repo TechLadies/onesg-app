@@ -1,11 +1,10 @@
 const { tableCase } = require('../src/models/case.js');
-const { tableRequest } = require('../src/models/request.js');
-const { tableRequestType } = require('../src/models/requestType.js');
-
 const {
   fulfilmentTypeEnum,
   requestStatusEnum,
+  tableRequest,
 } = require('../src/models/request.js');
+const { tableRequestType } = require('../src/models/requestType.js');
 
 exports.up = function makeRequestTable(knex) {
   return knex.schema.createTable(tableRequest, (table) => {
@@ -22,10 +21,10 @@ exports.up = function makeRequestTable(knex) {
       .index()
       .references('id')
       .inTable(tableRequestType);
-    table.enum('fulfilmentType', Object.values(fulfilmentTypeEnum));
-    table.string('completedFulfilmentItems');
+    table.enum('fulfilmentType', fulfilmentTypeEnum);
+    table.specificType('completedFulfilmentItems', 'text[]');
     table.text('description');
-    table.enum('requestStatus', Object.values(requestStatusEnum));
+    table.enum('requestStatus', requestStatusEnum);
     table.date('reviewedOn');
     table.date('fulfilledOn');
   });

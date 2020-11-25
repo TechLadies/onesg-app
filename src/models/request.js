@@ -4,12 +4,12 @@
 
 const { Model } = require('objection');
 
-const fulfilmentTypeEnum = {
-  inKindDonation: 'IN_KIND_DONATION',
-  partnerReferral: 'PARTNER_REFERRAL',
-  thirdPartyPayment: 'THIRD_PARTY_PAYMENT',
-  cashTransfer: 'CASH_TRANSFER',
-};
+const fulfilmentTypeEnum = [
+  'IN_KIND_DONATION',
+  'PARTNER_REFERRAL',
+  'THIRD_PARTY_PAYMENT',
+  'CASH_TRANSFER',
+];
 
 const fulfilmentChecklistEnum = {
   inKindDonation: [
@@ -33,11 +33,7 @@ const fulfilmentChecklistEnum = {
 //   fulfilmentChecklistEnum.inKindDonation.includes(i)
 // );
 
-const requestStatusEnum = {
-  accept: 'ACCEPT',
-  reject: 'REJECT',
-  notReviewd: 'NOT_REVIEWED',
-};
+const requestStatusEnum = ['ACCEPT', 'REJECT', 'NOT_REVIEWED'];
 
 const tableRequest = 'request';
 class Request extends Model {
@@ -53,7 +49,13 @@ class Request extends Model {
         requestTypeId: { type: 'integer' },
         fulfilmentType: { type: 'enum', enum: fulfilmentTypeEnum },
         completedFulfilmentItems: {
-          type: 'array',
+          type: 'enum',
+          enum: [
+            fulfilmentChecklistEnum.inKindDonation,
+            fulfilmentChecklistEnum.partnerReferral,
+            fulfilmentChecklistEnum.thirdPartyPayment,
+            fulfilmentChecklistEnum.cashTransfer,
+          ],
         },
         description: { type: 'varchar' },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
