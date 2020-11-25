@@ -91,7 +91,6 @@ class Case extends Model {
 
 module.exports = {
   model: Case,
-  Case,
   tableCase,
   caseStatusEnum,
   referenceStatusEnum,

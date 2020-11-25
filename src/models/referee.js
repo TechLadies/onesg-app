@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable strict */
 
 'use strict';
@@ -116,22 +117,23 @@ class Referee extends Model {
     return {
       cases: {
         relation: Model.HasManyRelation,
-        modelClass: Case,
+        modelClass: `${__dirname}/Case`,
         join: {
           from: 'referees.refereeId',
           to: 'cases.refereeId',
         },
-        beneficiary: {
-          relation: Model.ManyToManyRelation,
-          modelClass: Beneficiary,
-          join: {
-            from: 'referees.refereeId',
-            through: {
-              from: 'cases.refereeId',
-              to: 'cases.beneficiaryId',
-            },
-            to: 'beneficiary.beneficiaryId',
+      },
+
+      beneficiary: {
+        relation: Model.ManyToManyRelation,
+        modelClass: `${__dirname}/Beneficiary`,
+        join: {
+          from: 'referees.refereeId',
+          through: {
+            from: 'cases.refereeId',
+            to: 'cases.beneficiaryId',
           },
+          to: 'beneficiary.beneficiaryId',
         },
       },
     };

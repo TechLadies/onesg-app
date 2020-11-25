@@ -122,7 +122,6 @@ class Beneficiary extends Model {
 }
 
 module.exports = {
-  Beneficiary,
   model: Beneficiary,
   tableBeneficiary,
 };
