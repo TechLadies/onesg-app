@@ -3,8 +3,8 @@
 'use strict';
 
 const { Model } = require('objection');
-const { Case } = require('./case');
 const { Beneficiary } = require('./beneficiary');
+const { Case } = require('./case');
 
 const tableReferee = 'referees';
 
