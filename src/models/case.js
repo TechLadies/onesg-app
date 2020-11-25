@@ -60,7 +60,7 @@ class Case extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Referee,
         join: {
-          from: 'cases.RefereeId',
+          from: 'cases.refereeId',
           to: 'referees.refereeId',
         },
       },
@@ -69,8 +69,8 @@ class Case extends Model {
 }
 
 module.exports = {
-  Case,
   model: Case,
+  Case,
   tableCase,
   caseStatusEnum,
   referenceStatusEnum,

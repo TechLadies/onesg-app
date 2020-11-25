@@ -71,14 +71,14 @@ class Referee extends Model {
     return {
       cases: {
         relation: Model.HasManyRelation,
-        modelClass: Case,
+        modelClass: `${__dirname}/Case`,
         join: {
           from: 'referees.refereeId',
           to: 'cases.refereeId',
         },
         beneficiary: {
           relation: Model.ManyToManyRelation,
-          modelClass: Beneficiary,
+          modelClass: `${__dirname}/Beneficiary`,
           join: {
             from: 'referees.refereeId',
             through: {
