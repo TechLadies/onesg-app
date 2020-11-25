@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable strict */
 
 'use strict';
@@ -87,6 +88,7 @@ class Referee extends Model {
             },
             to: 'beneficiary.beneficiaryId',
           },
+          to: 'beneficiary.beneficiaryId',
         },
       },
     };
