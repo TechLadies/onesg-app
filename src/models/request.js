@@ -68,7 +68,7 @@ class Request extends Model {
         fulfilmentType: { type: 'enum', enum: fulfilmentTypeEnum },
         completedFulfilmentItems: {
           type: 'enum',
-          enum: [fulfilmentChecklistEnum],
+          enum: fulfilmentChecklistEnum,
         },
         description: { type: 'varchar' },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
