@@ -22,7 +22,7 @@ exports.up = function makeRequestTable(knex) {
       .references('id')
       .inTable(tableRequestType);
     table.enum('fulfilmentType', fulfilmentTypeEnum);
-    table.specificType('completedFulfilmentItems', 'text[]');
+    table.specificType('completedFulfilmentItems', 'json[]');
     table.text('description');
     table.enum('requestStatus', requestStatusEnum);
     table.date('reviewedOn');

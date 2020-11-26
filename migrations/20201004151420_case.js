@@ -17,7 +17,7 @@ exports.up = function makeCasetable(knex) {
     table.string('casePendingReason');
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
-    table.specificType('documents', 'text[]');
+    table.specificType('documents', 'json[]');
     table
       .string('beneficiaryId', 11)
       .unsigned()
