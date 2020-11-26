@@ -27,7 +27,6 @@ exports.seed = function seedCaseTable(knex) {
         {
           caseId: 'EF2020-11002',
           caseStatus: 'PENDING',
-          appliedOn: '2020-11-02', // 2018-11-13
           pointOfContact: 'John Lim',
           referenceStatus: 'PENDING',
           casePendingReason: 'Beneficiary uncontactable',
