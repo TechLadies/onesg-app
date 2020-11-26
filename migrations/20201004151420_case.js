@@ -15,10 +15,10 @@ exports.up = function makeCasetable(knex) {
     table.date('appliedOn').defaultTo(knex.fn.now());
     table.string('pointOfContact');
     table.enum('referenceStatus', referenceStatusEnum).defaultTo('UNVERIFIED');
-    table.string('casePendingReason');
+    table.string('casePendingReason', 255);
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
-    table.specificType('documents', 'json[]');
+    table.specificType('documents', 'jsonb[]');
     table
       .string('beneficiaryId', 11)
       .unsigned()

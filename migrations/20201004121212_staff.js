@@ -8,6 +8,8 @@ exports.up = function makeStaffTable(knex) {
     table.string('email').unique();
     table.boolean('isAdmin');
     table.enum('status', Object.values(staffStatusEnum));
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 
