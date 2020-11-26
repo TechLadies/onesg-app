@@ -22,11 +22,13 @@ exports.up = function makeRequestTable(knex) {
       .references('id')
       .inTable(tableRequestType);
     table.enum('fulfilmentType', fulfilmentTypeEnum);
-    table.specificType('completedFulfilmentItems', 'json[]');
+    table.specificType('completedFulfilmentItems', 'jsonb[]');
     table.text('description');
     table.enum('requestStatus', requestStatusEnum);
     table.date('reviewedOn');
     table.date('fulfilledOn');
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

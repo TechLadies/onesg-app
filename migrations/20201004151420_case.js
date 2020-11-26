@@ -9,16 +9,17 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.increments('id').primary().index();
-    table.string('caseId', 12).unique();
+    table.dropPrimary();
+    table.increments('id').index();
+    table.string('caseId', 12).primary().unique();
     table.enum('caseStatus', caseStatusEnum).defaultTo('NEW');
     table.date('appliedOn').defaultTo(knex.fn.now());
     table.string('pointOfContact');
     table.enum('referenceStatus', referenceStatusEnum).defaultTo('UNVERIFIED');
-    table.string('casePendingReason');
+    table.string('casePendingReason', 255);
     table.decimal('amountRequested').notNullable();
     table.decimal('amountGranted');
-    table.specificType('documents', 'text[]');
+    table.specificType('documents', 'jsonb[]');
     table
       .string('beneficiaryId', 11)
       .unsigned()
