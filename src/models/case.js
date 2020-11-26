@@ -1,4 +1,5 @@
 const { ValidationError, Model } = require('objection');
+const { Request } = require('./request');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -36,6 +37,19 @@ function getCaseId(previousId) {
 class Case extends Model {
   static get tableName() {
     return tableCase;
+  }
+
+  static get relationMappings() {
+    return {
+      requestDetails: {
+        relation: Model.HasOneRelation,
+        modelClass: Request,
+        join: {
+          from: 'case.caseId',
+          to: 'request.caseId',
+        },
+      },
+    };
   }
 
   async $beforeInsert() {
