@@ -1,8 +1,6 @@
-const { tableRequest } = require('../src/models/request.js');
 const {
-  fulfilmentTypeEnum,
   fulfilmentChecklistEnum,
-  requestStatusEnum,
+  tableRequest,
 } = require('../src/models/request.js');
 
 exports.seed = function seedRequestTable(knex) {
@@ -15,20 +13,24 @@ exports.seed = function seedRequestTable(knex) {
         {
           caseId: 'EF2020-11001',
           requestTypeId: '1',
-          fulfilmentType: fulfilmentTypeEnum.inKindDonation,
-          completedFulfilmentItems: fulfilmentChecklistEnum.inKindDonation,
+          fulfilmentType: 'IN_KIND_DONATION',
+          completedFulfilmentItems: [fulfilmentChecklistEnum[0]],
           description: 'Donation',
-          requestStatus: requestStatusEnum.accept,
+          requestStatus: 'ACCEPT',
           reviewedOn: '2020-11-04',
           fulfilledOn: '2020-11-04',
         },
         {
           caseId: 'EF2020-11002',
           requestTypeId: '2',
-          fulfilmentType: fulfilmentTypeEnum.partnerReferral,
-          completedFulfilmentItems: fulfilmentChecklistEnum.partnerReferral,
+          fulfilmentType: 'PARTNER_REFERRAL',
+          completedFulfilmentItems: [
+            {
+              referredToPartner: 'REFERRED_TO_PARTNER',
+            },
+          ],
           description: 'Referred cooked food',
-          requestStatus: requestStatusEnum.reject,
+          requestStatus: 'REJECT',
           reviewedOn: '2020-11-03',
           fulfilledOn: '2020-11-05',
         },

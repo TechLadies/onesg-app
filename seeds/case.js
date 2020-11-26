@@ -27,14 +27,11 @@ exports.seed = function seedCaseTable(knex) {
         {
           caseId: 'EF2020-11002',
           caseStatus: 'PENDING',
-          appliedOn: '2020-11-02', // 2018-11-13
+          appliedOn: '2020-11-02',
           pointOfContact: 'John Lim',
           referenceStatus: 'PENDING',
           casePendingReason: 'Beneficiary uncontactable',
           amountRequested: '175.50',
-          documents: [
-            { title: 'Application form', url: 'http://www.anotherlink.com' },
-          ],
           refereeId: 'R2020-11002',
           beneficiaryId: 'B2020-11003',
           createdBy: '2',
