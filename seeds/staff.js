@@ -1,5 +1,4 @@
 const { tableStaff } = require('../src/models/staff.js');
-const { staffStatusEnum } = require('../src/models/staff.js');
 
 exports.seed = function seedStaffTable(knex) {
   // Deletes ALL existing entries
@@ -12,25 +11,25 @@ exports.seed = function seedStaffTable(knex) {
           username: 'Angela',
           email: 'angela@onesingapore.org.sg',
           isAdmin: false,
-          status: staffStatusEnum.active,
+          status: 'ACTIVE',
         },
         {
           username: 'Minnie',
           email: 'mrinalini@onesingapore.org.sg',
           isAdmin: true,
-          status: staffStatusEnum.active,
+          status: 'ACTIVE',
         },
         {
           username: 'Catherine',
           email: 'catherine@onesingapore.org.sg',
           isAdmin: false,
-          status: staffStatusEnum.disabled,
+          status: 'DISABLED',
         },
         {
           username: 'Hui Li',
           email: 'huili@onesingapore.org.sg',
           isAdmin: true,
-          status: staffStatusEnum.disabled,
+          status: 'DISABLED',
         },
       ]);
     });

@@ -4,10 +4,7 @@
 
 const { Model } = require('objection');
 
-const staffStatusEnum = {
-  active: 'ACTIVE',
-  disabled: 'DISABLED',
-};
+const staffStatusEnum = ['ACTIVE', 'DISABLED'];
 
 const tableStaff = 'staff';
 class Staff extends Model {
