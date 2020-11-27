@@ -34,21 +34,16 @@ const fulfilmentTypeEnum = [
 // // );
 
 const fulfilmentChecklistEnum = [
-  {
-    itemsPurchase: 'ITEMS_PURCHASED',
-    purchaseAndReimbursement: 'PURCHASE_AND_REIMBURSEMENT',
-    reimbursementPaid: 'REIMBURSEMENT_PAID',
-    deliveredToBeneficiary: 'DELIVERED_TO_BENEFICIARY',
-  },
-  {
-    referredToPartner: 'REFERRED_TO_PARTNER',
-    referralApproved: 'REFERRAL_APPROVED',
-    deliveredToBeneficiary: 'DELIVERED_TO_BENEFICIARY',
-  },
-  {
-    purchaseVoucher: 'PURCHASE_VOUCHER',
-    paymentProcessed: 'PAYMENT_PROCESSED',
-  },
+  [
+    'ITEMS_PURCHASED',
+    'PURCHASE_AND_REIMBURSEMENT',
+    'REIMBURSEMENT_PAID',
+    'DELIVERED_TO_BENEFICIARY',
+  ],
+
+  ['REFERRED_TO_PARTNER', 'REFERRAL_APPROVED', 'DELIVERED_TO_BENEFICIARY'],
+
+  ['PURCHASE_VOUCHER', 'PAYMENT_PROCESSED'],
 ];
 
 const requestStatusEnum = ['ACCEPT', 'REJECT', 'NOT_REVIEWED'];
@@ -68,6 +63,7 @@ class Request extends Model {
         fulfilmentType: { type: 'enum', enum: fulfilmentTypeEnum },
         completedFulfilmentItems: {
           type: 'enum',
+          enum: fulfilmentChecklistEnum,
         },
         description: { type: 'varchar' },
         requestStatus: { type: 'enum', enum: requestStatusEnum },

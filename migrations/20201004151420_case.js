@@ -22,16 +22,9 @@ exports.up = function makeCasetable(knex) {
     table.jsonb('documents');
     table
       .string('beneficiaryId', 11)
-      .unsigned()
-      .index()
       .references('beneficiaryId')
       .inTable(tableBeneficiary);
-    table
-      .string('refereeId', 11)
-      .unsigned()
-      .index()
-      .references('refereeId')
-      .inTable(tableReferee);
+    table.string('refereeId', 11).references('refereeId').inTable(tableReferee);
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.integer('createdBy').unsigned().references('id').inTable(tableStaff);
     table.timestamp('updatedAt').defaultTo(knex.fn.now());

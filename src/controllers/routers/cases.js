@@ -72,13 +72,6 @@ const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
   try {
     const cases = await Case.query().insertGraph(newCase).returning('caseId');
-    // const cases = await Case.transaction(async (trx) => {
-    //   const insertedCase = await Case.query(trx)
-    //     .insertGraph(newCase)
-    //     .returning('caseId');
-    //   console.log(insertedCase);
-    //   return insertedCase;
-    // });
     return res.status(201).json({ cases });
   } catch (err) {
     console.log(err);
