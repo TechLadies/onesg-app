@@ -12,7 +12,6 @@ exports.seed = function seedCaseTable(knex) {
             caseId: 'EF2020-11001',
             caseStatus: 'NEW',
             appliedOn: '2020-11-01', // YYYY-MM-DD
-            pointOfContact: '',
             referenceStatus: 'UNVERIFIED',
             amountRequested: '350.55',
             amountGranted: '350',
@@ -29,7 +28,7 @@ exports.seed = function seedCaseTable(knex) {
             referenceStatus: 'PENDING',
             casePendingReason: 'Beneficiary uncontactable',
             amountRequested: '175.50',
-            refereeId: 'R2020-11002',
+            amountGranted: '0',
             beneficiaryId: 'B2020-11003',
             createdBy: '2',
             updatedBy: '2',
