@@ -1,5 +1,8 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 const { raw } = require('objection');
+const { safeResource } = require('../../helpers/cleandata/removeid');
 const { Beneficiary, Referee, Case } = require('../../models');
 const {
   errors: { BadRequest },
@@ -115,11 +118,13 @@ const search = async (req, res) => {
       .offset(offset);
   }
 
+  const cleanedResults = results.map(safeResource);
+
   // Envelope the results with paging information
   const response = {
     page: currentPage,
     per_page: limit,
-    results,
+    cleanedResults,
     include_entities: entities,
   };
   return res.status(200).json(response);
