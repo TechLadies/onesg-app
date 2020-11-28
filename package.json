@@ -4,7 +4,7 @@
   "description": "first",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
