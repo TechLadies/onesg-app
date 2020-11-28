@@ -1,4 +1,8 @@
 /* eslint-disable no-restricted-syntax */
+<<<<<<< HEAD
+=======
+/* eslint-disable no-console */
+>>>>>>> added removeid
 /* eslint-disable camelcase */
 const { raw } = require('objection');
 const { safeResource } = require('../../helpers/cleandata/removeid');
