@@ -1,11 +1,14 @@
+const passport = require('passport');
+const { Forbidden } = require('../../utils/errors');
+
 // Admin  are hard-coded
 const ADMIN_USERS = [
-  // {
-  //   id: 1,
-  //   email: 'john',
-  //   password: 'password',
-  //   role: 'admin',
-  // },
+  {
+    id: 1,
+    email: 'john',
+    password: 'password',
+    role: 'admin',
+  },
   {
     id: 2,
     email: 'anna',
@@ -36,7 +39,19 @@ const getAdminUser = (userEmail) => {
   return null;
 };
 
+const isLoggedIn = (req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user) => {
+    // err === 'user not found' || user === false || user === undefined
+    if (err || !user) {
+      return next(new Forbidden(' You are forbidden to enter.'));
+    }
+
+    return next();
+  })(req, res, next);
+};
+
 module.exports = {
   getAdminUser,
   isValidateAdminUser,
+  isLoggedIn,
 };

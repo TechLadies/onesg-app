@@ -13,27 +13,17 @@
 const express = require('express');
 
 const router = express.Router();
-const passport = require('passport');
+
 const {
   router: { beneficiaries },
 } = require('../../controllers');
-const { Forbidden } = require('../../utils/errors');
 
+const { isLoggedIn } = require('../../../src/helpers/auth/admin');
 /**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
 
 // GET /v1/beneficiaries
-function isLoggedIn(req, res, next) {
-  passport.authenticate('jwt', { session: false }, (err, user) => {
-    // err === 'user not found' || user === false || user === undefined
-    if (err || !user) {
-      return next(new Forbidden(' You are forbidden to enter.'));
-    }
-
-    return next();
-  })(req, res, next);
-}
 
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
