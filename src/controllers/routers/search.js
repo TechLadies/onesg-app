@@ -73,7 +73,13 @@ const search = async (req, res) => {
     results = await model
       .query()
       .select(raw(`*`))
+<<<<<<< HEAD
       .withGraphFetched(fetchWith)
+=======
+      .from(joinFrom)
+      .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
+      .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
+>>>>>>> correct removeid
       .where(raw(sqlQuery, { searchBody: q }))
       .orderByRaw(order)
       .limit(limit)

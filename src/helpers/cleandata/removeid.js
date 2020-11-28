@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable no-console */
+>>>>>>> correct removeid
 const safeResource = ({ id, ...rest }) => {
   const restDuplicate = { ...rest };
   Object.keys(rest).forEach((property) => {
