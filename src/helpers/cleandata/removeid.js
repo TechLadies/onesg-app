@@ -1,46 +1,18 @@
-const safeResource = (resourceObject) => {
-  const { id, ...rest } = resourceObject;
-  // console.log(...rest);
-  // check for properties
-  // within `rest` object
-  Object.entries(rest).forEach((property) => {
+/* eslint-disable no-console */
+const safeResource = ({ id, ...rest }) => {
+  const restDuplicate = { ...rest };
+  Object.keys(rest).forEach((property) => {
     const propertyValue = rest[property];
-    if (Array.isArray(propertyValue)) {
-      rest[property] = rest[property].map(safeResource);
+    if (propertyValue === null) {
+      // do nothing
+    } else if (Array.isArray(propertyValue)) {
+      restDuplicate[property] = rest[property].map(safeResource);
     } else if (typeof propertyValue === 'object') {
-      rest[property] = safeResource(propertyValue);
+      restDuplicate[property] = safeResource(propertyValue);
     }
   });
-  return resourceObject;
+  return rest;
 };
-
-// function safeResource(resourceObject) {
-//   const { id, ...rest } = resourceObject;
-//   console.log(rest);
-//   for (const property of Object.entries(rest)) {
-//     const propertyValue = rest[property];
-
-//     if (Array.isArray(propertyValue)) {
-//       rest[property] = rest[property].map(safeResource);
-//     } else if (typeof propertyValue === 'object') {
-//       rest[property] = safeResource(propertyValue);
-//     }
-//   }
-//   return resourceObject;
-// }
-
-// function filterObject(obj, key) {
-//   const { id, ...rest } = obj;
-//     for (var i in Object.entries(obj) {
-//         if (!obj.hasOwnProperty(i)) continue;
-//         if (typeof obj[i] == 'object') {
-//             filterObject(obj[i], key);
-//         } else if (i == key) {
-//             delete key;
-//         }
-//     }
-//     return obj;
-// }
 
 module.exports = {
   safeResource,
