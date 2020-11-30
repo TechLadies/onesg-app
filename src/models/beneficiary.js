@@ -1,4 +1,9 @@
+/* eslint-disable strict */
+
+'use strict';
+
 const { Model } = require('objection');
+const { Case } = require('./case');
 
 const paymentTypeEnum = ['PAYNOW', 'BANK_TRANSFER'];
 
@@ -76,6 +81,19 @@ class Beneficiary extends Model {
         notes: { type: 'string' },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
+      },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      case: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'beneficiary.id',
+          to: 'request.beneficiaryId',
+        },
       },
     };
   }

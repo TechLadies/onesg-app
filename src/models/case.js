@@ -2,6 +2,7 @@ const { ValidationError, Model } = require('objection');
 const { Beneficiary } = require('./beneficiary');
 const { Referee } = require('./referee');
 const { Request } = require('./request');
+const { Staff } = require('./staff');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -99,6 +100,22 @@ class Case extends Model {
         join: {
           from: 'case.id',
           to: 'request.caseId',
+        },
+      },
+      createdBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'case.createdBy',
+          to: 'staff.id',
+        },
+      },
+      updatedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'case.updatedBy',
+          to: 'staff.id',
         },
       },
     };

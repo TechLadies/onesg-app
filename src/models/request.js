@@ -3,6 +3,7 @@
 'use strict';
 
 const { Model } = require('objection');
+const { RequestType } = require('./requestType');
 
 const fulfilmentTypeEnum = [
   'IN_KIND_DONATION',
@@ -60,6 +61,27 @@ class Request extends Model {
         reviewedOn: { type: 'date' },
         fulfilledOn: { type: 'date' },
         caseId: { type: 'integer' },
+      },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      requestType: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RequestType,
+        join: {
+          from: 'request.requestTypeId',
+          to: 'requestType.id',
+        },
+      },
+      requests: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Request,
+        join: {
+          from: 'request.caseId',
+          to: 'case.id',
+        },
       },
     };
   }
