@@ -4,6 +4,8 @@
 
 const { Model } = require('objection');
 
+const { Case } = require('./case');
+
 const staffStatusEnum = ['ACTIVE', 'DISABLED'];
 
 const tableStaff = 'staff';
@@ -25,6 +27,27 @@ class Staff extends Model {
           type: 'enum',
           enum: staffStatusEnum,
           $comment: 'Indicates if staff has admin access to OneSG app',
+        },
+      },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      createdBy: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'staff.id',
+          to: 'case.createdBy',
+        },
+      },
+      updatedBy: {
+        relation: Model.HasManyRelation,
+        modelClass: Case,
+        join: {
+          from: 'staff.id',
+          to: 'case.updatedBy',
         },
       },
     };
