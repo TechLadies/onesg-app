@@ -3,18 +3,15 @@ node_js:
 - 10.13.0
 install:
 - npm install
-- npm install pg
 script:
 - npm run dev
-- createdb onesg
-- npm run db-migrate 
-  branches:
+branches:
   only:
+  - develop
   - on-68-herokudeploy
 deploy:
   provider: heroku
   api_key:
-    secure: "A6cGhJsFmb5d+j7iaaPgtsk4UyVKPuR+KOML+1O350jQevt+1LHIZ1hy4okcStSOdbC8Ujmtg0wI63VvsGU+gDTesnS5Ey5+s5bYSSSfq3X33WnyNtiANWHexkzD1scHXgAZTBWokrFK0l3HyPEBr45u2LsYXejaoKrByuXP7XcwiOV44mcYsyEibuXrQVA8mipB1UtiFjUMLeYQYKsfHzgU/5eTzawCn1nbNQo98dA0uCW/p28b3knLq6Pf2oYWFUgg8FmtUfPIOfNzFP8ypN0x958tybnFgQ+nyNpc6Ld822PJ7tyueONPd9v62cqA45cQq74pcU6uRo07QHxXSu7w8jIzju2zX3kwGr/V+/wDSTHyrTWq90XaINRaX6RhBtpaKKEYQ53fpOHlvnDLFapu//uXAz890SZAD3RAJdRUSJ9aCNV3f+B65MS5L6NZzFiPmWb44vtEd2soQn5Q6JuPEc3pGTQmBg1s7tG3MlNVpY4CyVFy4d+gfjNSuj8P8lPeF8dCmg8ELEDaKtcxzZOgj5rh1AcFoWAj7UCcLUY25noFvhjnChPEA1DyBg19GiC+EbT7nI4dwxS9CVqseBzWkwDQjGQhe0OzdHlJhsToIGi+IsCGAEWRw9bjUM76Jf7mTGahR0Ktx640uPeZ2EJcdxHOsf4UezzQlZjprFg="
+    secure: F0zEZbDKXg3UVFR6KE1Bf3jLX+DPACtZA05ku5QkOadBCQZHFYRFGDjrT5/RflHJPVO0GDsnAIl77Ho+uGWgHxHxGZqnjBEdPWqw94R4bcWOd9lEHis1Q9+S5Dcuf4exorgwJvgai5VevCo6+FcEpQEgveJ/xDmrU8WEOJnlyrNzpRFU2FDAlAQvuGs+pudY76uxSrB9pvSnnYtRxBo+8fgEtOjq9l7CJdBbcbeQYMlNEmK9BJctNA8lhk3HX+zn9D9Ze9jiGSG1neINJlEIe7ufJRouJuk8qfTXnsTbxgzZKfGbGlsv11PVtNa6v9v1XXcBkcP5DbVtkvaYqFm6g8uWgMoPj28JMyMbQViGUuVBroMaljdBYNoZWUVYg4my43acDFDuMab90emHuAbOIzZLjk8aiMeBkpyo0tM9TuNK/qBi55aWdG1OjqoVj6hZraabyPohZtR+uoUfKvs9oJp1WzdnM3wFqHyOb6KICy6BwhZaO855pAm1EG62wDGvSeu7cj5OBeOagJGvKX+zvqbXGtUvq0qYBp1mdETIWdphR5j7PdX1t6BiUdYJ7yvcAVB1CDsx4FAvEieS5knk44IX/Td+jsm7ytR0Z4nFPsGJ2GXyaGWFb4Sbp0o9LyyZ+eB0GJUpsdjEB7nB2aXZYpll91PUh3pcnpQXZnPrc94=
   app:
     develop: one-sg-backend
-    
