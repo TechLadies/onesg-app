@@ -9,61 +9,60 @@ const {
 
 exports.up = function makeCasetable(knex) {
   return knex.schema.createTable(tableCase, (table) => {
-    table.dropPrimary();
-    table.increments('id').index();
+    table.increments('id').primary();
     table
-      .string('caseId', 12)
-      .primary()
+      .string('caseNumber', 12)
+      .index()
       .unique()
-      .comment('Case id for this case');
-    table
-      .enum('caseStatus', caseStatusEnum)
-      .defaultTo('NEW')
-      .comment('Status of case: new, pending, referred, processed or closed');
+      .comment('Case number for this case. Format: EFYYYY-MM999');
+    table.enum('caseStatus', caseStatusEnum).defaultTo('NEW');
     table
       .date('appliedOn')
       .defaultTo(knex.fn.now())
       .comment('Application date of case');
-    table.string('pointOfContact').comment('Point of contact from OneSG');
+    table.string('pointOfContact', 100).comment('Point of contact from OneSG');
+    table.enum('referenceStatus', referenceStatusEnum).defaultTo('UNVERIFIED');
     table
-      .enum('referenceStatus', referenceStatusEnum)
-      .defaultTo('UNVERIFIED')
-      .comment('Status of reference: unverified, pending or verified');
-    table.string('casePendingReason', 255).comment('Reason if case is pending');
-    table.decimal('amountRequested').notNullable().comment('Amount requested');
-    table.decimal('amountGranted').defaultTo('0').comment('Amount granted');
-    table.jsonb('documents').comment('Supporting document(s) for the case');
+      .string('casePendingReason', 255)
+      .comment('Reason the case is/was pending');
+    table.decimal('amountRequested').notNullable();
+    table.decimal('amountGranted').defaultTo(0.0);
+    table.jsonb('documents').comment('Supporting document(s) for this case');
     table
-      .string('beneficiaryId', 11)
-      .references('beneficiaryId')
+      .integer('beneficiaryId')
+      .references('id')
       .inTable(tableBeneficiary)
       .notNullable()
+      .unsigned()
       .comment('Beneficiary id that is related to this case');
     table
-      .string('refereeId', 11)
-      .references('refereeId')
+      .integer('refereeId')
+      .references('id')
       .inTable(tableReferee)
+      .unsigned()
       .comment('Referee id that is related to this case');
+    table
+      .integer('createdBy')
+      .references('id')
+      .inTable(tableStaff)
+      .unsigned()
+      .notNullable()
+      .comment('OneSG staff who created this case');
+    table
+      .integer('updatedBy')
+      .references('id')
+      .inTable(tableStaff)
+      .unsigned()
+      .notNullable()
+      .comment('OneSG staff who updated this case');
     table
       .timestamp('createdAt')
       .defaultTo(knex.fn.now())
       .comment('Date of case creation');
     table
-      .integer('createdBy')
-      .unsigned()
-      .references('id')
-      .inTable(tableStaff)
-      .comment('OneSG staff who created this case');
-    table
       .timestamp('updatedAt')
       .defaultTo(knex.fn.now())
       .comment('Date of case update');
-    table
-      .integer('updatedBy')
-      .unsigned()
-      .references('id')
-      .inTable(tableStaff)
-      .comment('OneSG staff who updated this case');
   });
 };
 

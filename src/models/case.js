@@ -1,4 +1,5 @@
 const { ValidationError, Model } = require('objection');
+const { Beneficiary } = require('./beneficiary');
 const { Request } = require('./request');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
@@ -39,13 +40,55 @@ class Case extends Model {
     return tableCase;
   }
 
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['amountRequested', 'beneficiaryId', 'createdBy', 'updatedBy'],
+      properties: {
+        caseNumber: { type: 'string', minLength: 12, maxLength: 12 },
+        caseStatus: { type: 'string', enum: caseStatusEnum, default: 'NEW' },
+        appliedOn: { type: 'date', $comment: 'YYYY-MM-DD' },
+        pointOfContact: { type: 'string', maxLength: 100 },
+        referenceStatus: {
+          type: 'string',
+          enum: referenceStatusEnum,
+          default: 'UNVERIFIED',
+        },
+        casePendingReason: {
+          type: 'string',
+          maxLength: 255,
+          $comment: 'Required if referenceStatus is PENDING',
+        },
+        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '0.01' }, // Represents number with 2 decimal places
+        amountGranted: {
+          type: 'decimal',
+          maxLength: 8,
+          multipleOf: '0.01', // Represents number with 2 decimal places
+          default: 0.0,
+        },
+        refereeId: { type: 'integer' },
+        beneficiaryId: { type: 'integer' },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
+      },
+    };
+  }
+
   static get relationMappings() {
     return {
-      requestDetails: {
-        relation: Model.HasOneRelation,
+      beneficiary: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Beneficiary,
+        join: {
+          from: 'case.beneficiaryId',
+          to: 'beneficiary.id',
+        },
+      },
+      requests: {
+        relation: Model.HasManyRelation,
         modelClass: Request,
         join: {
-          from: 'case.caseId',
+          from: 'case.id',
           to: 'request.caseId',
         },
       },
@@ -60,27 +103,6 @@ class Case extends Model {
       .limit(1);
 
     this.caseId = getCaseId(lastInsertedCase[0].caseId);
-  }
-
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['amountRequested'],
-      properties: {
-        caseId: { type: 'string', minLength: 12, maxLength: 12 },
-        caseStatus: { type: 'enum', enum: caseStatusEnum },
-        appliedOn: { type: 'date' }, // 2018-11-13
-        pointOfContact: { type: 'varchar', maxLength: 255 },
-        referenceStatus: { type: 'enum', enum: referenceStatusEnum },
-        casePendingReason: { type: 'varchar', maxLength: 255 },
-        amountRequested: { type: 'decimal', maxLength: 8 },
-        amountGranted: { type: 'decimal', maxLength: 8 },
-        refereeId: { type: 'varchar', minLength: 11, maxLength: 11 },
-        beneficiaryId: { type: 'varchar', minLength: 11, maxLength: 11 },
-        createdBy: { type: 'integer' },
-        updatedBy: { type: 'integer' },
-      },
-    };
   }
 
   $afterValidate(json) {

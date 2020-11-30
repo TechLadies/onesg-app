@@ -15,7 +15,7 @@ class RequestType extends Model {
       type: 'object',
       required: ['fieldName'],
       properties: {
-        description: { type: 'varchar', minLength: 1, maxLength: 255 },
+        description: { type: 'string', maxLength: 50 },
       },
     };
   }

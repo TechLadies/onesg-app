@@ -8,23 +8,29 @@ exports.seed = function seedRefereeTable(knex) {
       // Inserts seed entries
       return knex(tableReferee).insert([
         {
-          refereeId: 'R2020-11001',
+          refereeNumber: 'R2020-11001',
           name: 'Atu',
           email: 'ahl@aok.com',
-          phone: '346736628',
+          phone: '67346628',
           organisation: 'Techladies',
+          createdBy: 1,
+          updatedBy: 1,
         },
         {
-          refereeId: 'R2020-11002',
+          refereeNumber: 'R2020-11002',
           name: 'Brenda Song',
           phone: '91111111',
           organisation: 'Google',
+          createdBy: 1,
+          updatedBy: 2,
         },
         {
-          refereeId: 'R2020-11003',
+          refereeNumber: 'R2020-11003',
           name: 'Chong Yee',
           email: 'cy123@nalgene.com',
           phone: '61113333',
+          createdBy: 2,
+          updatedBy: 1,
         },
       ]);
     });

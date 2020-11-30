@@ -8,7 +8,7 @@ exports.seed = function seedRequestTable(knex) {
       // Inserts seed entries
       return knex(tableRequest).insert([
         {
-          caseId: 'EF2020-11001',
+          caseId: 1,
           requestTypeId: '1',
           fulfilmentType: 'IN_KIND_DONATION',
           completedFulfilmentItems: [
@@ -23,7 +23,7 @@ exports.seed = function seedRequestTable(knex) {
           fulfilledOn: '2020-11-04',
         },
         {
-          caseId: 'EF2020-11002',
+          caseId: 2,
           requestTypeId: '2',
           fulfilmentType: 'PARTNER_REFERRAL',
           completedFulfilmentItems: ['REFERRED_TO_PARTNER'],

@@ -8,25 +8,25 @@ exports.seed = function seedRequestTypeTable(knex) {
       // Inserts seed entries
       return knex(tableRequestType).insert([
         {
-          fieldName: 'Cooked Food',
+          type: 'Cooked Food',
         },
         {
-          fieldName: 'Diapers',
+          type: 'Diapers',
         },
         {
-          fieldName: 'Finanacial Assistance',
+          type: 'Finanacial Assistance',
         },
         {
-          fieldName: 'Medical Bill',
+          type: 'Medical Bill',
         },
         {
-          fieldName: 'Milk Formula',
+          type: 'Milk Formula',
         },
         {
-          fieldName: 'School Fees',
+          type: 'School Fees',
         },
         {
-          fieldName: 'Transportation Fees',
+          type: 'Transportation Fees',
         },
       ]);
     });

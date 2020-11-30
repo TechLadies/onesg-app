@@ -10,30 +10,32 @@ exports.up = function makeRequestTable(knex) {
   return knex.schema.createTable(tableRequest, (table) => {
     table.increments('id').primary().index();
     table
-      .string('caseId', 12)
-      .references('caseId')
-      .inTable(tableCase)
-      .comment('Case id that is related to this request');
-    table
       .integer('requestTypeId')
       .unsigned()
       .references('id')
       .inTable(tableRequestType)
-      .comment('Request type id');
-    table
-      .enum('fulfilmentType', fulfilmentTypeEnum)
-      .comment(
-        'Fulfilment type: in kind donation, partner referral, third party payment or cash transfer'
-      );
+      .comment('Type of request');
+    table.enum('fulfilmentType', fulfilmentTypeEnum);
     table
       .specificType('completedFulfilmentItems', 'text[]')
-      .comment('Checklist based on each fulfilment type');
-    table.text('description').comment('Description of the request');
+      .comment(
+        'Lists items that have been checked off from the fulfilment type checklist; each type has its own checklist'
+      );
+    table.string('description', 255).comment('Description of the request');
+    table.enum('requestStatus', requestStatusEnum);
     table
-      .enum('requestStatus', requestStatusEnum)
-      .comment('Status of request: accepted, rejected, under review');
-    table.date('reviewedOn').comment('Date of request review');
-    table.date('fulfilledOn').comment('Date of request fulfilment');
+      .date('reviewedOn')
+      .comment('Date the request has been accepted or rejected');
+    table
+      .date('fulfilledOn')
+      .comment(
+        'Date the request has completed; Completed when all fulfilment checklist items have been checked off'
+      );
+    table
+      .integer('caseId')
+      .references('id')
+      .inTable(tableCase)
+      .comment('Case this request belongs to');
     table
       .timestamp('createdAt')
       .defaultTo(knex.fn.now())

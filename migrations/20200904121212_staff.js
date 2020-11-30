@@ -5,22 +5,22 @@ exports.up = function makeStaffTable(knex) {
   return knex.schema.createTable(tableStaff, (table) => {
     table.increments('id').primary().index();
     table
-      .string('username', 255)
+      .string('username', 100)
       .notNullable()
       .comment('OneSG staff account username');
     table
-      .string('email', 255)
+      .string('email', 50)
       .unique()
       .notNullable()
       .comment('OneSG staff account email');
     table
       .boolean('isAdmin')
       .notNullable()
-      .comment('OneSG staff account admin status');
+      .comment('Indicates whether the staff has admin access to OneSG app');
     table
       .enum('status', staffStatusEnum)
       .notNullable()
-      .comment('OneSG staff account status: active or disabled');
+      .comment('Account status: active or disabled');
     table
       .timestamp('createdAt')
       .defaultTo(knex.fn.now())

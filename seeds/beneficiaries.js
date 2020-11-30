@@ -1,5 +1,4 @@
 const { tableBeneficiary } = require('../src/models/beneficiary');
-const { PaymentTypeEnum } = require('../src/models/beneficiary.js');
 
 exports.seed = function seedBeneficiaryTable(knex) {
   // Deletes ALL existing entries
@@ -9,19 +8,21 @@ exports.seed = function seedBeneficiaryTable(knex) {
       // Inserts seed entries
       return knex(tableBeneficiary).insert([
         {
-          beneficiaryId: 'B2020-11001',
+          beneficiaryNumber: 'B2020-11001',
           name: 'Ziza',
           email: 'zizah@azizah@.com',
-          phone: '596424222',
+          phone: '96424222',
           address: '100 victoria street',
           occupation: 'software engineer',
           householdIncome: '1333',
           householdSize: '4',
-          paymentType: PaymentTypeEnum.PayNow,
+          paymentType: ['PAYNOW'],
           notes: 'Repeated request',
+          createdBy: 1,
+          updatedBy: 1,
         },
         {
-          beneficiaryId: 'B2020-11002',
+          beneficiaryNumber: 'B2020-11002',
           name: 'Alex Plus',
           email: 'alex.p22@gmail.com',
           phone: '91112222',
@@ -29,10 +30,12 @@ exports.seed = function seedBeneficiaryTable(knex) {
           occupation: 'Security Guard',
           householdIncome: '1875',
           householdSize: '5',
-          paymentType: PaymentTypeEnum.BankTransfer,
+          paymentType: ['BANK_TRANSFER'],
+          createdBy: 2,
+          updatedBy: 1,
         },
         {
-          beneficiaryId: 'B2020-11003',
+          beneficiaryNumber: 'B2020-11003',
           name: 'Praveen Kumar',
           email: 'praveen_k@hotmail.com.sg',
           phone: '62226222',
@@ -40,7 +43,9 @@ exports.seed = function seedBeneficiaryTable(knex) {
           occupation: 'Hawker',
           householdIncome: '1700',
           householdSize: '6',
-          paymentType: PaymentTypeEnum.PayNow,
+          paymentType: ['PAYNOW', 'BANK_TRANSFER'],
+          createdBy: 1,
+          updatedBy: 2,
         },
       ]);
     });

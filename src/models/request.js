@@ -39,18 +39,27 @@ class Request extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['requestTypeId', 'fulfilmentType', 'requestStatus'],
       properties: {
-        caseId: { type: 'varchar', minLength: 12, maxLength: 12 },
-        requestTypeId: { type: 'integer' },
-        fulfilmentType: { type: 'enum', enum: fulfilmentTypeEnum },
+        requestTypeId: {
+          type: 'integer',
+          $comment: 'Id for the type of request',
+        },
+        fulfilmentType: {
+          type: 'string',
+          enum: fulfilmentTypeEnum,
+          $comment:
+            'Lists items that have been checked off from the fulfilment type checklist',
+        },
         completedFulfilmentItems: {
           type: 'enum',
           enum: fulfilmentChecklistEnum,
         },
-        description: { type: 'varchar' },
+        description: { type: 'string', maxLength: 255 },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
         reviewedOn: { type: 'date' },
         fulfilledOn: { type: 'date' },
+        caseId: { type: 'integer' },
       },
     };
   }
