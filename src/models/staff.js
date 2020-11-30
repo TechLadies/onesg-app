@@ -34,7 +34,7 @@ class Staff extends Model {
 
   static get relationMappings() {
     return {
-      createdBy: {
+      createdByStaff: {
         relation: Model.HasManyRelation,
         modelClass: Case,
         join: {
@@ -42,7 +42,7 @@ class Staff extends Model {
           to: 'case.createdBy',
         },
       },
-      updatedBy: {
+      updatedByStaff: {
         relation: Model.HasManyRelation,
         modelClass: Case,
         join: {

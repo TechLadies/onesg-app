@@ -11,14 +11,14 @@ const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 const tableCase = 'case';
 
 // helper functions
-function getCaseId(previousId) {
+function getCaseNumber(previousNumber) {
   const [
     // eslint-disable-next-line no-unused-vars
     _,
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
+  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -61,11 +61,10 @@ class Case extends Model {
           maxLength: 255,
           $comment: 'Required if referenceStatus is PENDING',
         },
-        amountRequested: { type: 'decimal', maxLength: 8, multipleOf: '0.01' }, // Represents number with 2 decimal places
+        amountRequested: { type: 'decimal', maxLength: 8 },
         amountGranted: {
           type: 'decimal',
           maxLength: 8,
-          multipleOf: '0.01', // Represents number with 2 decimal places
           default: 0.0,
         },
         refereeId: { type: 'integer' },
@@ -102,7 +101,7 @@ class Case extends Model {
           to: 'request.caseId',
         },
       },
-      createdBy: {
+      createdByStaff: {
         relation: Model.BelongsToOneRelation,
         modelClass: Staff,
         join: {
@@ -110,7 +109,7 @@ class Case extends Model {
           to: 'staff.id',
         },
       },
-      updatedBy: {
+      updatedByStaff: {
         relation: Model.BelongsToOneRelation,
         modelClass: Staff,
         join: {
@@ -123,12 +122,12 @@ class Case extends Model {
 
   async $beforeInsert() {
     const lastInsertedCase = await Case.query()
-      .select('caseId')
-      .orderBy('caseId', 'desc')
+      .select('caseNumber')
+      .orderBy('caseNumber', 'desc')
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    this.caseId = getCaseId(lastInsertedCase[0].caseId);
+    this.caseId = getCaseNumber(lastInsertedCase[0].caseNumber);
   }
 
   $afterValidate(json) {
