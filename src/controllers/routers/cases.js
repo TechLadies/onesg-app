@@ -71,9 +71,10 @@ const getAll = async (req, res) => {
 const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
   try {
-    const cases = await Case.query().insert(newCase).returning('caseId');
+    const cases = await Case.query().insertGraph(newCase).returning('caseId');
     return res.status(201).json({ cases });
   } catch (err) {
+    console.log(err);
     // ValidationError based on jsonSchema (eg beneficiaryId or refereeId > 11 characters, createdBy or updatedBy not in int format,
     // amountRequested > amountGranted or casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {

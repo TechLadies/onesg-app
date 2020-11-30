@@ -51,15 +51,17 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-        refereeId: { type: 'string' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { maxLength: 255 },
+        refereeId: { type: 'string', $comment: 'Format: RYYYY-MM999' },
+        name: { type: 'string', minLength: 1, maxLength: 100 },
+        email: { type: 'string', maxLength: 50 },
         phone: {
-          type: 'varchar',
+          type: 'string',
           minLength: 8,
           maxLength: 8,
         },
-        organisation: { type: 'varchar', maxLength: 255 },
+        organisation: { type: 'string', maxLength: 100 },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }

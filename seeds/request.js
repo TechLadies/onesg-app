@@ -1,7 +1,4 @@
-const {
-  fulfilmentChecklistEnum,
-  tableRequest,
-} = require('../src/models/request.js');
+const { tableRequest } = require('../src/models/request.js');
 
 exports.seed = function seedRequestTable(knex) {
   // Deletes ALL existing entries
@@ -11,28 +8,27 @@ exports.seed = function seedRequestTable(knex) {
       // Inserts seed entries
       return knex(tableRequest).insert([
         {
-          caseId: 'EF2020-11001',
+          caseId: 1,
           requestTypeId: '1',
           fulfilmentType: 'IN_KIND_DONATION',
-          completedFulfilmentItems: [fulfilmentChecklistEnum[0]],
+          completedFulfilmentItems: [
+            'ITEMS_PURCHASED',
+            'PURCHASE_AND_REIMBURSEMENT',
+            'REIMBURSEMENT_PAID',
+            'DELIVERED_TO_BENEFICIARY',
+          ],
           description: 'Donation',
-          requestStatus: 'ACCEPT',
+          requestStatus: 'ACCEPTED',
           reviewedOn: '2020-11-04',
           fulfilledOn: '2020-11-04',
         },
         {
-          caseId: 'EF2020-11002',
+          caseId: 2,
           requestTypeId: '2',
           fulfilmentType: 'PARTNER_REFERRAL',
-          completedFulfilmentItems: [
-            {
-              referredToPartner: 'REFERRED_TO_PARTNER',
-            },
-          ],
+          completedFulfilmentItems: ['REFERRED_TO_PARTNER'],
           description: 'Referred cooked food',
-          requestStatus: 'REJECT',
-          reviewedOn: '2020-11-03',
-          fulfilledOn: '2020-11-05',
+          requestStatus: 'REJECTED',
         },
       ]);
     });
