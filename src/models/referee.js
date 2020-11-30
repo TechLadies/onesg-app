@@ -7,14 +7,14 @@ const { Model, ValidationError } = require('objection');
 const { Case } = require('./case');
 
 // helper functions
-function getRefereeId(previousId) {
+function getRefereeNumber(previousNumber) {
   const [
     // eslint-disable-next-line no-unused-vars
     _,
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
+  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -40,12 +40,13 @@ class Referee extends Model {
   }
 
   async $beforeInsert() {
-    const lastInsertedCase = await Referee.query()
+    const lastInsertedReferee = await Referee.query()
       .select('refereeId')
-      .orderBy('created_at', 'desc')
+      .orderBy('createdAt', 'desc')
+      .orderBy('refereeNumber', 'desc')
       .limit(1);
 
-    this.caseId = getRefereeId(lastInsertedCase[0].refereeId);
+    this.refereeNumber = getRefereeNumber(lastInsertedReferee[0].refereeNumber);
   }
 
   static get jsonSchema() {

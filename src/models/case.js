@@ -127,7 +127,7 @@ class Case extends Model {
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    this.caseId = getCaseNumber(lastInsertedCase[0].caseNumber);
+    this.caseNumber = getCaseNumber(lastInsertedCase[0].caseNumber);
   }
 
   $afterValidate(json) {

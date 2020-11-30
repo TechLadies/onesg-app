@@ -8,14 +8,14 @@ const { Case } = require('./case');
 const paymentTypeEnum = ['PAYNOW', 'BANK_TRANSFER'];
 
 // helper functions
-function getBeneficiaryId(previousId) {
+function getBeneficiaryNumber(previousNumber) {
   const [
     // eslint-disable-next-line no-unused-vars
     _,
     year,
     month,
     index,
-  ] = previousId.match(/EF(\d{4})-(\d{2})(\d{3})/);
+  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -42,12 +42,15 @@ class Beneficiary extends Model {
   }
 
   async $beforeInsert() {
-    const lastInsertedCase = await Beneficiary.query()
-      .select('beneficiaryId')
-      .orderBy('created_at', 'desc')
+    const lastInsertedBeneficiary = await Beneficiary.query()
+      .select('beneficiaryNumber')
+      .orderBy('createdAt', 'desc')
+      .orderBy('beneficiaryNumber', 'desc')
       .limit(1);
 
-    this.caseId = getBeneficiaryId(lastInsertedCase[0].beneficiaryId);
+    this.beneficiaryNumber = getBeneficiaryNumber(
+      lastInsertedBeneficiary[0].beneficiaryNumber
+    );
   }
 
   static get jsonSchema() {
