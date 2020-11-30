@@ -7,7 +7,6 @@ script:
 - npm run dev
 branches:
   only:
-  - develop
   - on-68-herokudeploy
 deploy:
   provider: heroku
