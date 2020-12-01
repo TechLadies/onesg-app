@@ -2,11 +2,10 @@ language: node_js
 node_js:
 - 10.13.0
 install:
-- npm install
+- npm install ci
 - npm install pg
-- npm install nodemon --save
 script:
-- npm run dev
+- npm run start
 - createdb onesg
 - npm run db-migrate
 branches:
