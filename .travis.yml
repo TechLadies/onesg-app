@@ -2,18 +2,20 @@ language: node_js
 node_js:
 - 10.13.0
 env:
-  - DB=postgresql
   - NODE_TLS_REJECT_UNAUTHORIZED=‘0’
 services:
 - postgresql
 install:
 - npm install ci
-- npm install
 before script:
 - psql -c 'create database onesg;' -U postgres
 - npm run generate-keys
 script:
-- npm run build
+- npm run db-migrate
+- npm run seed-beneficiary
+- npm run seed-referees
+- npm run seed-cases
+- npm run start
 branches:
   only:
   - on-68-herokudeploy
