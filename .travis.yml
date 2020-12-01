@@ -6,11 +6,11 @@ services:
 install:
 - npm install ci
 - npm install pg
-before script:
 - npm generate-keys
+before script:
 - createdb onesg
 script:
-- npm run start
+- npm run build
 branches:
   only:
   - on-68-herokudeploy
