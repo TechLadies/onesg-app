@@ -1,13 +1,15 @@
 language: node_js
 node_js:
 - 10.13.0
+services:
+- postgresql
 install:
 - npm install ci
 - npm install pg
+before script:
+- createdb onesg
 script:
 - npm run start
-- createdb onesg
-- npm run db-migrate
 branches:
   only:
   - on-68-herokudeploy
