@@ -8,8 +8,8 @@ install:
 - npm install
 before script:
 - psql -c 'create database onesg;' -U postgres
+- npm run generate-keys
 script:
-- npm generate-keys
 - npm run build
 branches:
   only:
