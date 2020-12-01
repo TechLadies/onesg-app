@@ -7,6 +7,7 @@ install:
 - npm install ci
 - npm install pg
 before script:
+- npm generate-keys
 - createdb onesg
 script:
 - npm run start
