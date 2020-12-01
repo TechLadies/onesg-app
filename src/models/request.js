@@ -25,6 +25,12 @@ const fulfilmentChecklistEnum = [
 
 const requestStatusEnum = ['ACCEPTED', 'REJECTED', 'UNDER_REVIEW'];
 
+// // const x = ['ITEMS_PURCHASED', 'REFERRED_TO_PARTNER'];
+
+// // const result = x.every((i) =>
+// //   fulfilmentChecklistEnum.inKindDonation.includes(i)
+// // );
+
 const tableRequest = 'request';
 class Request extends Model {
   static get tableName() {

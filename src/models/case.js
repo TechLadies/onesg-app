@@ -143,7 +143,7 @@ class Case extends Model {
       }
     }
 
-    // validate amountrequested must be > 0
+    // validate amountRequested > 0 and amountGranted > 0 if there is input
     if (Number.isNaN(cases.amountRequested)) {
       throw new ValidationError({
         message: 'Amount requested must be a number greater than 0',
@@ -160,6 +160,24 @@ class Case extends Model {
       throw new ValidationError({
         message: 'Amount granted cannot be more than amount requested',
       });
+    }
+
+    // validate documents to be in the format [{title: , url: }]
+    if (cases.documents !== {}) {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < Object.keys(cases.documents).length; i++) {
+        const documentsPair = ['title', 'url'];
+        const result = documentsPair.every((key) =>
+          Object.keys(cases.documents[i]).includes(key)
+        );
+        // if the object does not contain both title and url, will return false
+        if (result === false) {
+          throw new ValidationError({
+            message: 'Title and url are required',
+          });
+        }
+      }
+      cases.documents = JSON.stringify(cases.documents);
     }
   }
 }
