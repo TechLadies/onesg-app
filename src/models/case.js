@@ -127,7 +127,7 @@ class Case extends Model {
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    this.caseId = getCaseNumber(lastInsertedCase[0].caseNumber);
+    this.caseNumber = getCaseNumber(lastInsertedCase[0].caseNumber);
   }
 
   $afterValidate(json) {
@@ -141,6 +141,18 @@ class Case extends Model {
           message: 'Case pending reason required',
         });
       }
+    }
+
+    // validate amountrequested must be > 0
+    if (Number.isNaN(cases.amountRequested)) {
+      throw new ValidationError({
+        message: 'Amount requested must be a number greater than 0',
+      });
+    }
+    if (Number.isNaN(cases.amountGranted)) {
+      throw new ValidationError({
+        message: 'Amount granted must be a number greater than 0',
+      });
     }
 
     // validate amountGranted must be <= amountRequested

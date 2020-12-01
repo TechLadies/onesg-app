@@ -36,14 +36,24 @@ function sanitize(json) {
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
   }
-  if (json.amountRequested) {
+  if (typeof json.amountRequested === 'string') {
     cases.amountRequested = parseFloat(json.amountRequested);
   }
-  if (json.amountGranted) {
+  if (typeof json.amountGranted === 'string') {
     cases.amountGranted = parseFloat(json.amountGranted);
   }
-  if (json.documents === null || json.documents === '') {
-    cases.documents = {};
+  if (json.documents) {
+    if (json.documents === null || json.documents === '') {
+      cases.documents = {};
+    } else {
+      cases.documents = JSON.stringify(json.documents);
+    }
+  }
+  if (json.refereeId) {
+    cases.refereeId = Number(json.refereeId);
+  }
+  if (json.beneficiaryId) {
+    cases.beneficiaryId = Number(json.beneficiaryId);
   }
   if (json.createdBy) {
     cases.createdBy = Number(json.createdBy);

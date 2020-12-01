@@ -46,10 +46,6 @@ class Request extends Model {
           $comment:
             'Lists items that have been checked off from the fulfilment type checklist',
         },
-        completedFulfilmentItems: {
-          type: 'enum',
-          enum: fulfilmentChecklistEnum,
-        },
         description: { type: 'string', maxLength: 255 },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
         reviewedOn: { type: 'date' },
