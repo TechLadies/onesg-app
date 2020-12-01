@@ -59,9 +59,12 @@ npm run db-migrate
 
 4. Populate the tables with the seed data with,
 ```
-knex seed:run --specific=beneficiaries.jS
-knex seed:run --specific=referees.js
+knex seed:run --specific=staff.js
+knex seed:run --specific=beneficiary.js
+knex seed:run --specific=referee.js
 knex seed:run --specific=case.js
+knex seed:run --specific=requestType.js
+knex seed:run --specific=request.js
 ```
 
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
