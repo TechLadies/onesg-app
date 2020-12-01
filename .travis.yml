@@ -5,11 +5,11 @@ services:
 - postgresql
 install:
 - npm install ci
-- npm install pg
-- npm generate-keys
+- npm install
 before script:
-- createdb onesg
+- psql -c 'create database onesg;' -U postgres
 script:
+- npm generate-keys
 - npm run build
 branches:
   only:
