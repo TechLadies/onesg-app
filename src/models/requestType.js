@@ -15,9 +15,9 @@ class RequestType extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['fieldName'],
+      required: ['type'],
       properties: {
-        description: { type: 'string', maxLength: 50 },
+        type: { type: 'string', maxLength: 50 },
       },
     };
   }

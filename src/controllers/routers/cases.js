@@ -79,7 +79,6 @@ const getAll = async (req, res) => {
  */
 const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
-  // console.log(Object.keys(newCase.documents[0]));
   try {
     const cases = await Case.query().insertGraph(newCase).returning('caseId');
     return res.status(201).json({ cases });

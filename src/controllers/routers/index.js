@@ -9,9 +9,11 @@
 const beneficiaries = require('./beneficiaries');
 const cases = require('./cases');
 const referees = require('./referees');
+const requestTypes = require('./requestTypes');
 
 module.exports = {
   beneficiaries,
   cases,
   referees,
+  requestTypes,
 };
