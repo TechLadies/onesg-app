@@ -1,2 +1,1 @@
-release: node scripts/generateKeypair.js
-web: node src/index.js
+web: node scripts/generateKeypair.js & node src/index.js
