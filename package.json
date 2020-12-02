@@ -8,9 +8,9 @@
   },
   "scripts": {
     "heroku-prebuild": "node scripts/generateKeypair.js",
-    "heroku-postbuild": "heroku run knex migrate:latest",
+    "heroku-postbuild": "knex migrate:latest",
     "start": "node src/index.js",
-    "build":" heroku run knex seed:run --specific=beneficiaries.js && heroku run knex seed:run --specific=referees.js && heroku run knex seed:run --specific=case.js",
+    "build":" knex seed:run --specific=beneficiaries.js && knex seed:run --specific=referees.js && knex seed:run --specific=case.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
