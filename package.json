@@ -7,8 +7,8 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "heroku-prebuild": "node scripts/generateKeypair.js && node createdb onesg",
-    "heroku-postbuild": "node knex migrate:latest",
+    "heroku-prebuild": "node scripts/generateKeypair.js",
+    "heroku-postbuild": "- psql -c 'create database onesg;' -U postgres && node knex migrate:latest",
     "start": "node src/index.js",
     "build":" node knex seed:run --specific=beneficiaries.js && node knex seed:run --specific=referees.js && node knex seed:run --specific=case.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
