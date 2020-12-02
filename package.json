@@ -8,7 +8,7 @@
   },
   "scripts": {
     "heroku-prebuild": "node scripts/generateKeypair.js",
-    "heroku-postbuild": "createdb onesg && npm knex migrate:latest",
+    "heroku-postbuild": "npm knex migrate:latest",
     "start": "node src/index.js",
     "build":" npm knex seed:run --specific=beneficiaries.js && npm knex seed:run --specific=referees.js && npm knex seed:run --specific=case.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
