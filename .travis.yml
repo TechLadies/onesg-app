@@ -8,6 +8,7 @@ services:
 install:
 - npm install ci
 script:
+- npm run generate-keys
 - npm run start
 branches:
   only:
