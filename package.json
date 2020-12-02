@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "description": "first",
   "main": "src/index.js",
+    "engines": {
+    "node": "12.18.4"
+  },
   "scripts": {
     "test": "jest",
-    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "lint": "eslint . --ext .js",
@@ -41,7 +43,8 @@
     "objection": "^2.2.3",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "pg": "^8.4.2"
+    "pg": "^8.4.2",
+    "supertest": "^6.0.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

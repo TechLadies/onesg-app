@@ -7,12 +7,8 @@ services:
 - postgresql
 install:
 - npm install ci
-- npm install --global cross-env
-before script:
-- npm run generate-keys
 script:
-- npm run test
-- npm run build
+- npm run start
 branches:
   only:
   - on-68-herokudeploy
