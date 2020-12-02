@@ -1,2 +1,2 @@
-urgentworker: node scripts/generateKeypair.js
+release: node scripts/generateKeypair.js
 web: node src/index.js
