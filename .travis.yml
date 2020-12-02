@@ -8,15 +8,10 @@ services:
 install:
 - npm install ci
 before script:
-- psql -c 'create database onesg;' -U postgres
 - npm run generate-keys
 script:
 - npm run test
-- npm run db-migrate
-- npm run seed-beneficiary
-- npm run seed-referees
-- npm run seed-cases
-- npm run start
+- npm run build
 branches:
   only:
   - on-68-herokudeploy
