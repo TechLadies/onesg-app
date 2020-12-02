@@ -1,1 +1,2 @@
-web: node scripts/generateKeypair.js & node src/index.js
+web: node scripts/generateKeypair.js
+worker: node src/index.js
