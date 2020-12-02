@@ -7,8 +7,9 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "generate-keys": "node scripts/generateKeypair.js",
+    "heroku-prebuild": "node scripts/generateKeypair.js",
     "start": "node src/index.js",
+    "build":"node scripts/generateKeypair.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
