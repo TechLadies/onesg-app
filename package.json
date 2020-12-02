@@ -8,9 +8,9 @@
   },
   "scripts": {
     "heroku-prebuild": "node scripts/generateKeypair.js",
-    "heroku-postbuild": "- psql -c 'create database onesg;' -U postgres && node knex migrate:latest",
+    "heroku-postbuild": "npm createdb onesg && npm knex migrate:latest",
     "start": "node src/index.js",
-    "build":" node knex seed:run --specific=beneficiaries.js && node knex seed:run --specific=referees.js && node knex seed:run --specific=case.js",
+    "build":" npm knex seed:run --specific=beneficiaries.js && npm knex seed:run --specific=referees.js && npm knex seed:run --specific=case.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
