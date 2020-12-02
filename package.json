@@ -7,7 +7,7 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "test": "jest",
+    "generate-keys": "node scripts/generateKeypair.js",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js --exec 'npm run lint && node'",
     "lint": "eslint . --ext .js",
@@ -15,7 +15,6 @@
     "prettier": "prettier --write src/**/*.{js,css}",
     "db-migrate": "knex migrate:latest",
     "db-make-table": "knex migrate:make ",
-    "generate-keys": "node scripts/generateKeypair.js",
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referees": "knex seed:run --specific=referees.js",
     "seed-cases": "knex seed:run --specific=case.js"
