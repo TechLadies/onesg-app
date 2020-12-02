@@ -7,7 +7,7 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "heroku-prebuild": "node scripts/generateKeypair.js && createdb onesg",
+    "heroku-prebuild": "node scripts/generateKeypair.js && node createdb onesg",
     "heroku-postbuild": "node knex migrate:latest",
     "start": "node src/index.js",
     "build":" node knex seed:run --specific=beneficiaries.js && node knex seed:run --specific=referees.js && node knex seed:run --specific=case.js",
