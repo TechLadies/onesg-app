@@ -21,6 +21,10 @@ module.exports = {
     seeds: {
       directory: './seeds',
     },
+    // SSL: https://help.heroku.com/MDM23G46/why-am-i-getting-an-error-when-i-upgrade-to-pg-8
+    ssl: {
+      rejectUnauthorized: false,
+    },
     useNullAsDefault: true,
   },
 };
