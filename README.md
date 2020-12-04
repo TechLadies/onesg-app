@@ -59,9 +59,9 @@ npm run db-migrate
 
 4. Populate the tables with the seed data with,
 ```
-knex seed:run --specific=beneficiaries.jS
-knex seed:run --specific=referees.js
-knex seed:run --specific=case.js
+heroku run knex seed:run --specific=beneficiaries.js
+heroku run knex seed:run --specific=referees.js
+heroku run knex seed:run --specific=case.js
 ```
 
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
@@ -79,6 +79,27 @@ npm run generate-keys
 You should now have the generated public & private keys in a `keys` folder in root.
 
 <br/>
+
+## Setup Postgres for Heroku
+
+After setting up Heroku, add Postgres( Hobby Dev) on Heroku.
+
+![Heroku Postgres](./images/heroku_postgres.png)
+
+Add NODE_TLS_REJECT_UNAUTHORIZED = 0 to Heroku's Config Var
+
+![Config Var](./images/configvar.png)
+
+Deploy the app on Travis by committing the project to github.
+
+After the build succeeds, run seeds in terminal.
+
+heroku run knex seed:run --specific=referees.js
+heroku run knex seed:run --specific=referees.js
+heroku run knex seed:run --specific=case.js
+
+
+
 
 ## Project Structure
 ```
