@@ -90,13 +90,16 @@ Add NODE_TLS_REJECT_UNAUTHORIZED = 0 to Heroku's Config Var
 
 ![Config Var](./images/configvar.png)
 
-Deploy the app on Travis by committing the project to github.
+Deploy the app on Travis and run the build on Heroku by committing the project to github.
 
 After the build succeeds, run seeds in terminal.
 
-heroku run knex seed:run --specific=referees.js
-heroku run knex seed:run --specific=referees.js
-heroku run knex seed:run --specific=case.js
+```
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=case.js -a onesg-backend-staging
+```
+
 
 
 
