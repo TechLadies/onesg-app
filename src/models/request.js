@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 const { RequestType } = require('./requestType');
 
 const fulfilmentTypeEnum = [
@@ -24,12 +24,6 @@ const fulfilmentChecklistEnum = [
 ];
 
 const requestStatusEnum = ['ACCEPTED', 'REJECTED', 'UNDER_REVIEW'];
-
-// // const x = ['ITEMS_PURCHASED', 'REFERRED_TO_PARTNER'];
-
-// // const result = x.every((i) =>
-// //   fulfilmentChecklistEnum.inKindDonation.includes(i)
-// // );
 
 const tableRequest = 'request';
 class Request extends Model {
@@ -80,6 +74,49 @@ class Request extends Model {
         },
       },
     };
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    const request = json;
+
+    const requestChecklist = request.completedFulfilmentItems;
+
+    if (request.fulfilmentType === 'IN_KIND_DONATION') {
+      const result = requestChecklist.every((i) =>
+        fulfilmentChecklistEnum[0].includes(i)
+      );
+      if (result === false) {
+        throw new ValidationError({
+          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
+        });
+      }
+    }
+
+    if (request.fulfilmentType === 'PARTNER_REFERRAL') {
+      const result = requestChecklist.every((i) =>
+        fulfilmentChecklistEnum[1].includes(i)
+      );
+      if (result === false) {
+        throw new ValidationError({
+          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
+        });
+      }
+    }
+
+    if (
+      request.fulfilmentType === 'THIRD_PARTY_PAYMENT' ||
+      request.fulfilmentType === 'CASH_TRANSFER'
+    ) {
+      const result = requestChecklist.every((i) =>
+        fulfilmentChecklistEnum[2].includes(i)
+      );
+      if (result === false) {
+        throw new ValidationError({
+          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
+        });
+      }
+    }
   }
 }
 
