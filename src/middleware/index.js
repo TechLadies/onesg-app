@@ -3,6 +3,7 @@
  * Copyright(c) 2020 TechLadies
  * MIT Licensed
  */
+const isLoggedIn = require('./isLoggedIn');
 
 const errorHandler = require('./errorHandler');
 const routers = require('./routers');
@@ -10,4 +11,5 @@ const routers = require('./routers');
 module.exports = {
   errorHandler,
   routers,
+  isLoggedIn,
 };
