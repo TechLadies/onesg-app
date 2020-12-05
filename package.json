@@ -16,6 +16,7 @@
     "prettier": "prettier --write src/**/*.{js,css}",
     "db-migrate": "knex migrate:latest",
     "db-make-table": "knex migrate:make ",
+    "generate-keys": "npm run generate-keys",
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referees": "knex seed:run --specific=referees.js",
     "seed-cases": "knex seed:run --specific=case.js"

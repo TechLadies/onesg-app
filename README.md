@@ -12,6 +12,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Database Setup](#database-setup)
 - [Setup Keys for Passport](#setup-keys-for-passport)
 - [Project Structure](#project-structure)
+- [Deployment](#deployment)
 <br/>
 <br/>
 
@@ -59,9 +60,9 @@ npm run db-migrate
 
 4. Populate the tables with the seed data with,
 ```
-heroku run knex seed:run --specific=beneficiaries.js
-heroku run knex seed:run --specific=referees.js
-heroku run knex seed:run --specific=case.js
+knex seed:run --specific=beneficiaries.js
+knex seed:run --specific=referees.js
+knex seed:run --specific=case.js
 ```
 
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
@@ -79,27 +80,6 @@ npm run generate-keys
 You should now have the generated public & private keys in a `keys` folder in root.
 
 <br/>
-
-## Setup Postgres for Heroku
-
-After setting up Heroku, add Postgres( Hobby Dev) on Heroku.
-
-![Heroku Postgres](./images/heroku_postgres.png)
-
-Add NODE_TLS_REJECT_UNAUTHORIZED = 0 to Heroku's Config Var
-
-![Config Var](./images/configvar.png)
-
-Deploy the app on Travis and run the build on Heroku by committing the project to github.
-
-After the build succeeds, run seeds in terminal.
-
-```
-heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
-heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
-heroku run knex seed:run --specific=case.js -a onesg-backend-staging
-```
-
 
 
 
@@ -136,4 +116,46 @@ onesg-app
 <br/>
 <br/>
 
+## Build and Deployment
+
+Run the build 
+
+```
+develop branch = staging (link)
+master branch = production (link)
+
+```
+
+
+
+## Setting up Heroku App
+
+add config vars / tls node =0
+Add the following config vars to Heroku's Config Var.
+
+![Config Var](./images/configvar.png)
+
+## Setting up Heroku postgres
+
+We use Heroku: Postgres as our plugin [heroku plugin](https://elements.heroku.com/addons/heroku-postgresql)
+
+![Heroku Postgres](./images/heroku_postgres.png)
+
+### Seeding the database.
+
+Run seeds in terminal.
+
+```
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=case.js -a onesg-backend-staging
+
+```
+
+### Add TRGM extension
+
+https://devcenter.heroku.com/articles/heroku-postgres-extensions-postgis-full-text-search
+
+heroku pg:psql
+create extension pg_trgm
 
