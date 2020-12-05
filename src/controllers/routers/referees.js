@@ -41,15 +41,7 @@ function sanitize(json) {
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const results = await Referee.query().select(
-    'name',
-    'email',
-    'phone',
-    'organisation',
-    'refereeId',
-    'created_at',
-    'updated_at'
-  );
+  const results = await Referee.query();
   return res.status(200).json({ results });
 };
 
@@ -61,18 +53,8 @@ const getAll = async (req, res) => {
 const getReferee = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const referee = await Referee.query()
-      .select(
-        'name',
-        'email',
-        'phone',
-        'organisation',
-        'refereeId',
-        'created_at',
-        'updated_at'
-      )
-      .where('refereeId', id);
-    if (referee.length === 0) {
+    const referee = await Referee.query().findById(id);
+    if (!referee) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
     return res.status(200).json({ referee });
@@ -88,11 +70,9 @@ const getReferee = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
+  console.log(newReferee);
   try {
-    const referee = await Referee.query()
-      .select()
-      .insert(newReferee)
-      .returning('refereeId');
+    const referee = await Referee.query().insert(newReferee).returning('id');
     return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -121,15 +101,15 @@ const update = async (req, res, next) => {
     const referee = await Referee.query()
       .select()
       .patch(updateInfo)
-      .where('refereeId', id)
+      .where('id', id)
       .returning(
         'name',
         'email',
         'phone',
         'organisation',
-        'refereeId',
-        'created_at',
-        'updated_at'
+        'refereeNumber',
+        'createdAt',
+        'updatedAt'
       );
     if (referee.length === 0) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));

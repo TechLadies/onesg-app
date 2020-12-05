@@ -54,13 +54,13 @@ class Referee extends Model {
       properties: {
         refereeNumber: { type: 'string', $comment: 'Format: RYYYY-MM999' },
         name: { type: 'string', minLength: 1, maxLength: 100 },
-        email: { type: 'string', maxLength: 50 },
+        email: { type: ['string', 'null'], maxLength: 50 },
         phone: {
           type: 'string',
           minLength: 8,
           maxLength: 8,
         },
-        organisation: { type: 'string', maxLength: 100 },
+        organisation: { type: ['string', 'null'], maxLength: 100 },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
       },
