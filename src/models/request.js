@@ -11,15 +11,25 @@ const fulfilmentTypeEnum = [
   'CASH_TRANSFER',
 ];
 
+// checklist items associated with fulfilment type
 const fulfilmentChecklistEnum = [
-  [
-    'ITEMS_PURCHASED',
-    'PURCHASE_AND_REIMBURSEMENT',
-    'REIMBURSEMENT_PAID',
-    'DELIVERED_TO_BENEFICIARY',
-  ],
-  ['REFERRED_TO_PARTNER', 'REFERRAL_APPROVED', 'DELIVERED_TO_BENEFICIARY'],
-  ['PURCHASE_VOUCHER', 'PAYMENT_PROCESSED'],
+  {
+    IN_KIND_DONATION: [
+      'ITEMS_PURCHASED',
+      'PURCHASE_AND_REIMBURSEMENT',
+      'REIMBURSEMENT_PAID',
+      'DELIVERED_TO_BENEFICIARY',
+    ],
+  },
+  {
+    PARTNER_REFERRAL: [
+      'REFERRED_TO_PARTNER',
+      'REFERRAL_APPROVED',
+      'DELIVERED_TO_BENEFICIARY',
+    ],
+  },
+  { THIRD_PARTY_PAYMENT: ['PURCHASE_VOUCHER', 'PAYMENT_PROCESSED'] },
+  { CASH_TRANSFER: ['PURCHASE_VOUCHER', 'PAYMENT_PROCESSED'] },
 ];
 
 const requestStatusEnum = ['ACCEPTED', 'REJECTED', 'UNDER_REVIEW'];
@@ -50,19 +60,6 @@ class Request extends Model {
         reviewedOn: { type: 'date' },
         fulfilledOn: { type: 'date' },
         caseId: { type: 'integer' },
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      requests: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Request,
-        join: {
-          from: 'request.caseId',
-          to: 'case.id',
-        },
       },
     };
   }
