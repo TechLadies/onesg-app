@@ -3,7 +3,6 @@
 'use strict';
 
 const { Model } = require('objection');
-const { Case } = require('./case');
 
 const paymentTypeEnum = ['PAYNOW', 'BANK_TRANSFER'];
 
@@ -71,9 +70,6 @@ class Beneficiary extends Model {
         occupation: { type: 'string', maxLength: 50 },
         householdIncome: {
           type: 'number',
-          minLength: 1,
-          maxLength: 8,
-          multipleOf: '0.01', // Represents number with 2 decimal places
         },
         householdSize: { type: 'integer' },
         paymentType: {
@@ -84,19 +80,6 @@ class Beneficiary extends Model {
         notes: { type: 'string' },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      case: {
-        relation: Model.HasManyRelation,
-        modelClass: Case,
-        join: {
-          from: 'beneficiary.id',
-          to: 'request.beneficiaryId',
-        },
       },
     };
   }

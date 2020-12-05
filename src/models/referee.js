@@ -4,8 +4,6 @@
 
 const { Model, ValidationError } = require('objection');
 
-const { Case } = require('./case');
-
 // helper functions
 function getRefereeNumber(previousNumber) {
   const [
@@ -41,7 +39,7 @@ class Referee extends Model {
 
   async $beforeInsert() {
     const lastInsertedReferee = await Referee.query()
-      .select('refereeId')
+      .select('refereeNumber')
       .orderBy('createdAt', 'desc')
       .orderBy('refereeNumber', 'desc')
       .limit(1);
@@ -54,30 +52,17 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-        refereeId: { type: 'string', $comment: 'Format: RYYYY-MM999' },
+        refereeNumber: { type: 'string', $comment: 'Format: RYYYY-MM999' },
         name: { type: 'string', minLength: 1, maxLength: 100 },
-        email: { type: 'string', maxLength: 50 },
+        email: { type: ['string', 'null'], maxLength: 50 },
         phone: {
           type: 'string',
           minLength: 8,
           maxLength: 8,
         },
-        organisation: { type: 'string', maxLength: 100 },
+        organisation: { type: ['string', 'null'], maxLength: 100 },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      case: {
-        relation: Model.HasManyRelation,
-        modelClass: Case,
-        join: {
-          from: 'beneficiary.id',
-          to: 'request.beneficiaryId',
-        },
       },
     };
   }
