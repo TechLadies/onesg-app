@@ -3,7 +3,6 @@
 'use strict';
 
 const { Model } = require('objection');
-const { RequestType } = require('./requestType');
 
 const fulfilmentTypeEnum = [
   'IN_KIND_DONATION',
@@ -11,12 +10,6 @@ const fulfilmentTypeEnum = [
   'THIRD_PARTY_PAYMENT',
   'CASH_TRANSFER',
 ];
-
-// // const x = ['ITEMS_PURCHASED', 'REFERRED_TO_PARTNER'];
-
-// // const result = x.every((i) =>
-// //   fulfilmentChecklistEnum.inKindDonation.includes(i)
-// // );
 
 const fulfilmentChecklistEnum = [
   [
@@ -63,14 +56,6 @@ class Request extends Model {
 
   static get relationMappings() {
     return {
-      requestType: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: RequestType,
-        join: {
-          from: 'request.requestTypeId',
-          to: 'requestType.id',
-        },
-      },
       requests: {
         relation: Model.BelongsToOneRelation,
         modelClass: Request,

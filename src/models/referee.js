@@ -4,8 +4,6 @@
 
 const { Model, ValidationError } = require('objection');
 
-const { Case } = require('./case');
-
 // helper functions
 function getRefereeNumber(previousNumber) {
   const [
@@ -65,19 +63,6 @@ class Referee extends Model {
         organisation: { type: 'string', maxLength: 100 },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      case: {
-        relation: Model.HasManyRelation,
-        modelClass: Case,
-        join: {
-          from: 'beneficiary.id',
-          to: 'request.beneficiaryId',
-        },
       },
     };
   }

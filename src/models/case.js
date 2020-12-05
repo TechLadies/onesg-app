@@ -1,8 +1,5 @@
 const { ValidationError, Model } = require('objection');
-const { Beneficiary } = require('./beneficiary');
-const { Referee } = require('./referee');
 const { Request } = require('./request');
-const { Staff } = require('./staff');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -77,44 +74,12 @@ class Case extends Model {
 
   static get relationMappings() {
     return {
-      beneficiary: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Beneficiary,
-        join: {
-          from: 'case.beneficiaryId',
-          to: 'beneficiary.id',
-        },
-      },
-      referee: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Referee,
-        join: {
-          from: 'case.referee',
-          to: 'referee.id',
-        },
-      },
       requests: {
         relation: Model.HasManyRelation,
         modelClass: Request,
         join: {
           from: 'case.id',
           to: 'request.caseId',
-        },
-      },
-      createdByStaff: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Staff,
-        join: {
-          from: 'case.createdBy',
-          to: 'staff.id',
-        },
-      },
-      updatedByStaff: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Staff,
-        join: {
-          from: 'case.updatedBy',
-          to: 'staff.id',
         },
       },
     };

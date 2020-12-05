@@ -9,7 +9,7 @@ exports.up = function makeStaffTable(knex) {
       .notNullable()
       .comment('OneSG staff account username');
     table
-      .text('password', 20)
+      .text('password')
       .notNullable()
       .comment('Password hash; text type is used to future-proof');
     table
