@@ -70,7 +70,6 @@ const getReferee = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
-  console.log(newReferee);
   try {
     const referee = await Referee.query().insert(newReferee).returning('id');
     return res.status(201).json({ referee });

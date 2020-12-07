@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -12,8 +13,10 @@
 
 const express = require('express');
 
+const isLoggedIn = require('../isLoggedIn');
+
 const router = express.Router();
-const passport = require('passport');
+
 const {
   router: { beneficiaries },
 } = require('../../controllers');
@@ -21,13 +24,9 @@ const {
 /**
  * Routing for beneficiaries endpoints (/v1/beneficiaries)
  */
-// GET /v1/beneficiaries
 
-router.get(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  beneficiaries.getAll
-);
+// GET /v1/beneficiaries
+router.get('/', isLoggedIn, beneficiaries.getAll);
 
 // POST /v1/beneficiaries
 // router.post('/', beneficiaries.create);

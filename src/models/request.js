@@ -92,41 +92,35 @@ class Request extends Model {
 
     const requestChecklist = request.completedFulfilmentItems;
 
-    if (request.fulfilmentType === 'IN_KIND_DONATION') {
-      const result = requestChecklist.every((i) =>
-        fulfilmentChecklistEnum[0].includes(i)
-      );
-      if (result === false) {
-        throw new ValidationError({
-          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
-        });
+    Object.keys(fulfilmentChecklistEnum).some((i) => {
+      if (
+        // checks if fulfilmentType is present
+        Object.keys(fulfilmentChecklistEnum[i]).includes(request.fulfilmentType)
+      ) {
+        // checks if all items in completedFulfilmentItems is part of fulfilmentType
+        const result = requestChecklist.every((j) =>
+          Object.values(fulfilmentChecklistEnum[i])[0].includes(j)
+        );
+        if (result === false) {
+          const errorInput = [];
+          // filter out inputs that are not part of the fulfilmentType
+          // eslint-disable-next-line no-plusplus
+          for (let x = 0; x < requestChecklist.length; x++) {
+            if (
+              Object.values(fulfilmentChecklistEnum[i])[0].includes(
+                requestChecklist[x]
+              ) === false
+            ) {
+              errorInput.push(requestChecklist[x]);
+            }
+          }
+          throw new ValidationError({
+            message: `${errorInput} is/are not part of ${request.fulfilmentType}`,
+          });
+        }
       }
-    }
-
-    if (request.fulfilmentType === 'PARTNER_REFERRAL') {
-      const result = requestChecklist.every((i) =>
-        fulfilmentChecklistEnum[1].includes(i)
-      );
-      if (result === false) {
-        throw new ValidationError({
-          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
-        });
-      }
-    }
-
-    if (
-      request.fulfilmentType === 'THIRD_PARTY_PAYMENT' ||
-      request.fulfilmentType === 'CASH_TRANSFER'
-    ) {
-      const result = requestChecklist.every((i) =>
-        fulfilmentChecklistEnum[2].includes(i)
-      );
-      if (result === false) {
-        throw new ValidationError({
-          message: `${requestChecklist} is not part of ${request.fulfilmentType}`,
-        });
-      }
-    }
+      return false;
+    });
   }
 }
 

@@ -23,11 +23,17 @@ const isValidateAdminUser = (email, password) => {
 };
 
 const getAdminUser = (userEmail) => {
-  const { email, role } = ADMIN_USERS.find((user) => {
-    return user.email === userEmail;
+  const user = ADMIN_USERS.find((users) => {
+    return users.email === userEmail;
   });
-
-  return { email, role };
+  if (user) {
+    const userdetails = {
+      email: user.email,
+      role: user.role,
+    };
+    return userdetails;
+  }
+  return null;
 };
 
 module.exports = {
