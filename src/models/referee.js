@@ -12,7 +12,7 @@ function getRefereeNumber(previousNumber) {
     year,
     month,
     index,
-  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
+  ] = previousNumber.match(/R(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -24,7 +24,6 @@ function getRefereeNumber(previousNumber) {
   if (year === currentYear && month === currentMonth) {
     refereeIndex = parseInt(index, 10) + 1;
   }
-
   // add leading 0s
   const paddedIndex = String(refereeIndex).padStart(3, '0');
 

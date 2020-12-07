@@ -85,7 +85,7 @@ const create = async (req, res, next) => {
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(new BadRequest(err.nativeError.detail));
+    return next(new BadRequest(err.nativerError.detail));
   }
 };
 
