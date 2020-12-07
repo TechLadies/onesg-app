@@ -12,6 +12,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Database Setup](#database-setup)
 - [Setup Keys for Passport](#setup-keys-for-passport)
 - [Project Structure](#project-structure)
+- [Deployment](#deployment)
 <br/>
 <br/>
 
@@ -57,9 +58,9 @@ createdb onesg
 npm run db-migrate
 ```
 
-4. Populate the tables with the seed data with,
+4. Populate the tables with the seed data with
 ```
-knex seed:run --specific=beneficiaries.jS
+knex seed:run --specific=beneficiaries.js
 knex seed:run --specific=referees.js
 knex seed:run --specific=case.js
 ```
@@ -79,6 +80,9 @@ npm run generate-keys
 You should now have the generated public & private keys in a `keys` folder in root.
 
 <br/>
+
+
+
 
 ## Project Structure
 ```
@@ -112,4 +116,75 @@ onesg-app
 <br/>
 <br/>
 
+## Build and Deployment
 
+We use Heroku and Travis to run the build and deploy the app. The following are the corresponding branches and the app names and links
+
+- **Branch:** develop
+    - **App name:** onesg-backend-staging 
+    - **Link:** https://onesg-backend-staging.herokuapp.com/
+- **Branch:** master
+    - **App name:** one-sg-backend
+    - **Link:** https://one-sg-backend.herokuapp.com/
+
+
+
+### Setting up Heroku App
+Create apps with the aforementioned app names. 
+Add the following config vars to respective apps' config var under Settings.
+
+![Config Var](./images/configvar.png)
+
+### Setting up Heroku postgres
+
+We use Heroku: Postgres as our plugin. [More info on Heroku plugin here.](https://elements.heroku.com/addons/heroku-postgresql)
+
+![Heroku Postgres](./images/heroku_postgres.png)
+
+### Setting up Travis
+
+Go to https://travis-ci.com/ and login with your Github account. Give Travis access to your repository.
+
+If you already have Travis installed, you can also add Travis to the repository on from page https://github.com/settings/installations.
+
+Create a `.travis.yml` file. Add the following block code to the file
+
+![travis block](./images/travisyml.png)
+
+Generate your `api_key` with this code below: 
+```
+travis encrypt \$(heroku auth:token) --add deploy.api_key --pro
+```
+
+
+#### **Seeding the database**
+
+Run seeds in terminal. Change the app names after -a accordingly.
+
+```
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
+heroku run knex seed:run --specific=case.js -a onesg-backend-staging
+
+```
+
+#### **Add TRGM extension**
+
+Add the `pg_trgm` extension to the database.
+(https://devcenter.heroku.com/articles/heroku-postgres-extensions-postgis-full-text-search)
+
+```
+heroku pg:psql
+create extension pg_trgm
+\q
+```
+Save the file and commit your changes to GitHub.
+
+You should be able to see the build on Travis and the app on Heroku deployed. 
+
+Travis Build
+![travisdeploy](./images/travisbuild.png)
+
+Deployed on Heroku
+
+![travisdeploy](./images/herokudeployed.png)
