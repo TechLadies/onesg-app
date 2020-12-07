@@ -14,7 +14,7 @@ function getBeneficiaryNumber(previousNumber) {
     year,
     month,
     index,
-  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
+  ] = previousNumber.match(/B(\d{4})-(\d{2})(\d{3})/);
 
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
