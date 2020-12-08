@@ -89,9 +89,7 @@ class Beneficiary extends Model {
     const beneficiary = json;
     const paymentList = beneficiary.paymentTypeList;
 
-    const result = paymentList.every((i) => paymentTypeEnum.includes(i));
-
-    console.log(result);
+    paymentList.every((i) => paymentTypeEnum.includes(i));
   }
 }
 
