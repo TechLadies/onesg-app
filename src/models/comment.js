@@ -12,18 +12,6 @@ class Comment extends Model {
     return tableComments;
   }
 
-  // async $beforeInsert() {
-  //   const sanitize = (req) => {
-  //     if (/<.*?script.*\/?>/.test(req.body.message) === true) {
-  //       throw new InvalidInput({
-  //         message: `Message is invalid.`,
-  //       });
-  //     }
-  //     console.log(req.body.message);
-  //   };
-  //   this.message = sanitize(comments.create);
-  // }
-
   static get jsonSchema() {
     return {
       type: 'object',
