@@ -6,7 +6,11 @@
 
 'use strict';
 
-const { ValidationError, UniqueViolationError } = require('objection');
+const {
+  DataError,
+  ValidationError,
+  UniqueViolationError,
+} = require('objection');
 
 const { Referee } = require('../../models');
 
@@ -70,7 +74,6 @@ const getReferee = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
-  console.log(newReferee);
   try {
     const referee = await Referee.query().insert(newReferee).returning('id');
     return res.status(201).json({ referee });
@@ -101,23 +104,16 @@ const update = async (req, res, next) => {
     const referee = await Referee.query()
       .select()
       .patch(updateInfo)
-      .where('id', id)
-      .returning(
-        'name',
-        'email',
-        'phone',
-        'organisation',
-        'refereeNumber',
-        'createdAt',
-        'updatedAt'
-      );
-    if (referee.length === 0) {
-      return next(new ResourceNotFound(`Referee ${id} does not exist`));
-    }
+      .findById(id)
+      .return('*');
     return res.status(200).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
+    }
+    // if input id is not an int
+    if (err instanceof DataError) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
