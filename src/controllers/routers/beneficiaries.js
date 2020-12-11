@@ -1,11 +1,9 @@
-const {
-  ValidationError,
-  UniqueViolationError,
-  NotNullViolationError,
-} = require('objection');
+/* eslint-disable no-console */
+const { ValidationError, UniqueViolationError } = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
+
 const { Beneficiary } = require('../../models');
 
 // const removeResourceId = require('../../helpers/cleandata/removeResourceId');
@@ -44,6 +42,10 @@ function sanitize(json) {
   if (json.notes) {
     beneficiary.notes = json.notes.trim();
   }
+  if (json.organisation) {
+    beneficiary.organisation = json.organisation.trim();
+  }
+
 
   return beneficiary;
 }
@@ -55,19 +57,56 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select(
-    'beneficiaryNumber',
     'name',
+    'beneficiaryNumber',
     'email',
     'phone',
     'occupation',
-    'notes',
     'householdIncome',
     'householdSize',
     'paymentType',
-    'createdBy',
-    'updatedBy'
+    'createdAt',
+    'updatedAt',
+    'updatedBy',
+    'createdBy'
   );
   res.status(200).json({ beneficiaries });
+};
+
+/**
+ * Retrieve specific referee by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getBeneficiary = async (req, res, next) => {
+  const { id } = req.params;
+  console.log({ id });
+  try {
+    const beneficiary = await Beneficiary.query()
+      .select(
+        'name',
+        'email',
+        'phone',
+        'occupation',
+        'householdIncome',
+        'householdSize',
+        'paymentType',
+        'notes'
+      )
+      .withGraphFetched('cases (caseNumber)')
+      .modifiers({
+        caseNumber(builder) {
+          builder.select('caseNumber');
+        },
+      })
+      .where('beneficiaryNumber', id);
+    if (beneficiary.length === 0) {
+      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+    }
+    return res.status(200).json({ beneficiary: beneficiary[0] });
+  } catch (err) {
+    return next();
+  }
 };
 
 /**
