@@ -14,15 +14,15 @@
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
     "prettier": "prettier --write src/**/*.{js,css}",
-    "db-migrate": "knex migrate:latest",
-    "db-make-table": "knex migrate:make ",
+    "db-migrate": "npx knex migrate:latest",
+    "db-make-table": "npx knex migrate:make ",
     "generate-keys": "node scripts/generateKeypair.js",
-    "seed-staff": "knex seed:run --specific=staff.js",
-    "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
-    "seed-referee": "knex seed:run --specific=referees.js",
-    "seed-case": "knex seed:run --specific=case.js",
-    "seed-requestType": "knex seed:run --specific=requestType.js",
-    "seed-request": "knex seed:run --specific=request.js"
+    "seed-staff": "npx knex seed:run --specific=staff.js",
+    "seed-beneficiary": "npx knex seed:run --specific=beneficiaries.js",
+    "seed-referee": "npx knex seed:run --specific=referees.js",
+    "seed-case": "npx knex seed:run --specific=case.js",
+    "seed-requestType": "npx knex seed:run --specific=requestType.js",
+    "seed-request": "npx knex seed:run --specific=request.js"
   },
   "repository": {
     "type": "git",
