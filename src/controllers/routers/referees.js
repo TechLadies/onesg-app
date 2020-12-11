@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies

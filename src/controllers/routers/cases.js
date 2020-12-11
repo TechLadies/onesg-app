@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -72,19 +73,30 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const cases = await Case.query()
-    .select('caseNumber', 'appliedOn', 'pointOfContact', 'createdBy')
+    .select(
+      'caseNumber',
+      'caseStatus',
+      'appliedOn',
+      'pointOfContact',
+      'referenceStatus',
+      'casePendingReason',
+      'amountRequested',
+      'amountGranted',
+      'documents',
+      'createdBy',
+      'updatedBy',
+      'createdAt',
+      'updatedAt'
+    )
     .withGraphFetched(
-      '[beneficiary(beneficiaryName), referees(refereeName,refereeOrganisation)]'
+      '[beneficiary(beneficiaryNumber), referees(refereeNumber)]'
     )
     .modifiers({
-      beneficiaryName(builder) {
-        builder.select('name');
+      beneficiaryNumber(builder) {
+        builder.select('beneficiaryNumber');
       },
-      refereeName(builder) {
-        builder.select('name');
-      },
-      refereeOrganisation(builder) {
-        builder.select('organisation');
+      refereeNumber(builder) {
+        builder.select('refereeNumber');
       },
     });
   return res.status(200).json({ cases });

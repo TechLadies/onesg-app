@@ -1,6 +1,5 @@
-/* eslint-disable no-useless-concat */
-/* eslint-disable no-console */
 /* eslint-disable object-shorthand */
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -9,14 +8,12 @@
 
 'use strict';
 
-const xss = require('xss');
-
-const { ForeignKeyViolationError } = require('objection');
 const { Comment, Case } = require('../../models');
 
 const {
-  errors: { BadRequest, ResourceNotFound },
+  errors: { ResourceNotFound },
 } = require('../../utils');
+// const { InvalidInput } = require('../../utils/errors');
 
 /**
  * Retrieve specific case by id
@@ -46,34 +43,6 @@ const getCommentsbyCaseNumber = async (req, res, next) => {
  * @param {Response} res
  */
 
-const create = async (req, res, next) => {
-  const { id } = req.params;
-  const author = req.user.email;
-  const newComments = {
-    message: xss(req.body.message),
-    caseNumber: req.params.id,
-    author: author,
-  };
-  try {
-    const comments = await Comment.query()
-      .insertGraphAndFetch(newComments)
-      .where('caseNumber', id);
-    return res.status(201).json({ comments });
-  } catch (err) {
-    console.log(err);
-    // ForeignKeyViolationError for caseNumber that is not present
-    if (err instanceof ForeignKeyViolationError) {
-      if (err.constraint === 'comment_casenumber_foreign') {
-        return next(
-          new BadRequest(`Case ${newComments.caseNumber} is not present`)
-        );
-      }
-    }
-    return next(err);
-  }
-};
-
 module.exports = {
   getCommentsbyCaseNumber,
-  create,
 };
