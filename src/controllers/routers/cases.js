@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -15,7 +16,7 @@ const {
 const { Case } = require('../../models');
 
 const {
-  errors: { BadRequest, InvalidInput },
+  errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 
 /**
@@ -68,8 +69,76 @@ function sanitize(json) {
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const cases = await Case.query().select();
+  const cases = await Case.query()
+    .select(
+      'caseNumber',
+      'caseStatus',
+      'appliedOn',
+      'pointOfContact',
+      'referenceStatus',
+      'casePendingReason',
+      'amountRequested',
+      'amountGranted',
+      'documents',
+      'createdBy',
+      'updatedBy',
+      'createdAt',
+      'updatedAt'
+    )
+    .withGraphFetched(
+      '[beneficiary(beneficiaryNumber), referees(refereeNumber)]'
+    )
+    .modifiers({
+      beneficiaryNumber(builder) {
+        builder.select('beneficiaryNumber');
+      },
+      refereeNumber(builder) {
+        builder.select('refereeNumber');
+      },
+    });
   return res.status(200).json({ cases });
+};
+
+/**
+ * Retrieve specific case by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getCase = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const casebyNumber = await Case.query()
+      .select(
+        'caseNumber',
+        'appliedOn',
+        'pointOfContact',
+        'referenceStatus',
+        'casePendingReason',
+        'amountRequested',
+        'amountGranted',
+        'documents',
+        'updatedBy',
+        'updatedAt'
+      )
+      .withGraphFetched(
+        '[beneficiary(beneficiaryNumber), referees(refereeNumber)]'
+      )
+      .modifiers({
+        beneficiaryNumber(builder) {
+          builder.select('beneficiaryNumber');
+        },
+        refereeNumber(builder) {
+          builder.select('refereeNumber');
+        },
+      })
+      .where('caseNumber', id);
+    if (casebyNumber.length === 0) {
+      return next(new ResourceNotFound(`Case ${id} does not exist`));
+    }
+    return res.status(200).json({ case: casebyNumber[0] });
+  } catch (err) {
+    return next();
+  }
 };
 
 /**
@@ -126,5 +195,6 @@ const create = async (req, res, next) => {
 
 module.exports = {
   getAll,
+  getCase,
   create,
 };

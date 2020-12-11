@@ -17,6 +17,7 @@
     "db-migrate": "knex migrate:latest",
     "db-make-table": "knex migrate:make ",
     "generate-keys": "node scripts/generateKeypair.js",
+    "seed-comments": "knex seed:run --specific=comments.js",
     "seed-staff": "knex seed:run --specific=staff.js",
     "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
     "seed-referee": "knex seed:run --specific=referees.js",

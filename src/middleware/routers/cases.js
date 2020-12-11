@@ -13,7 +13,7 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  router: { cases },
+  router: { cases, comments },
 } = require('../../controllers');
 
 /**
@@ -22,7 +22,16 @@ const {
 // GET /v1/cases
 router.get('/', cases.getAll);
 
+// GET /v1/cases/:id
+router.get('/:id', cases.getCase);
+
+// GET /v1/cases/:id/comments
+router.get('/:id/comments', comments.getCommentsbyCaseNumber);
+
 // POST /v1/cases
 router.post('/', cases.create);
+
+// POST /v1/cases/:id/comments
+router.post('/:id/comments', comments.create);
 
 module.exports = router;

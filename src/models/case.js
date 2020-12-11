@@ -82,6 +82,30 @@ class Case extends Model {
           to: 'request.caseId',
         },
       },
+      beneficiary: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: `${__dirname}/Beneficiary`,
+        join: {
+          from: 'case.beneficiaryId',
+          to: 'beneficiary.id',
+        },
+      },
+      referees: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: `${__dirname}/Referee`,
+        join: {
+          from: 'case.refereeId',
+          to: 'referee.id',
+        },
+      },
+      comments: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/Comment`,
+        join: {
+          from: 'case.id',
+          to: 'comment.caseId',
+        },
+      },
     };
   }
 
@@ -148,7 +172,6 @@ class Case extends Model {
 }
 
 module.exports = {
-  Case,
   model: Case,
   tableCase,
   caseStatusEnum,
