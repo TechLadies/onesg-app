@@ -13,6 +13,8 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Setup Keys for Passport](#setup-keys-for-passport)
 - [Project Structure](#project-structure)
 - [Deployment](#deployment)
+- [Login](#login)
+
 <br/>
 <br/>
 
@@ -188,3 +190,16 @@ Travis Build
 Deployed on Heroku
 
 ![travisdeploy](./images/herokudeployed.png)
+
+## Login
+
+### Log in with email and password. 
+For this project, the email and password for admin is hard-coded in POST request
+![login](./images/login.png)
+
+### Remain authenticated with Bearer Token
+Once bearer token is generated upon login. Put the bearer token under Headers with 'Authorisation' key to access pages. 
+![auth](./images/auth.png)
+
+
+
