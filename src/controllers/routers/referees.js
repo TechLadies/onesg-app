@@ -54,7 +54,7 @@ const getAll = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const getReferee = async (req, res, next) => {
+const getById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const referee = await Referee.query().findById(id);
@@ -63,6 +63,10 @@ const getReferee = async (req, res, next) => {
     }
     return res.status(200).json({ referee });
   } catch (err) {
+    // if input id is not an int
+    if (err instanceof DataError) {
+      return next(new ResourceNotFound(`Referee ${id} does not exist`));
+    }
     return next();
   }
 };
@@ -124,7 +128,7 @@ const update = async (req, res, next) => {
 
 module.exports = {
   getAll,
-  getReferee,
+  getById,
   create,
   update,
 };
