@@ -41,6 +41,10 @@ class Request extends Model {
     return tableRequest;
   }
 
+  static get jsonAttributes() {
+    return [];
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
@@ -56,6 +60,7 @@ class Request extends Model {
           $comment:
             'Lists items that have been checked off from the fulfilment type checklist',
         },
+        completedFulfilmentItems: { type: 'array' },
         description: { type: 'string', maxLength: 255 },
         requestStatus: { type: 'enum', enum: requestStatusEnum },
         reviewedOn: { type: 'date' },
