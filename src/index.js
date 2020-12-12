@@ -11,10 +11,9 @@
 const http = require('http');
 const https = require('https');
 
-const passport = require('passport');
-
 // Third-party modules
 const express = require('express');
+const passport = require('passport');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const morgan = require('morgan');
@@ -81,7 +80,7 @@ app.use(routers);
 /**
  * Error handler setup
  */
-errorHandler(app);
+app.use(errorHandler);
 
 /**
  * Start listening to connection requests made on specified PORT

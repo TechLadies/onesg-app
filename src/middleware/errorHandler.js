@@ -11,12 +11,8 @@
 'use strict';
 
 const express = require('express');
-const {
-  ValidationError,
-  UniqueViolationError,
-  InvalidInput,
-} = require('objection');
-const { BadRequest } = require('../utils/errors');
+const { ValidationError, UniqueViolationError } = require('objection');
+const { BadRequest, InvalidInput } = require('../utils/errors');
 
 const app = express();
 

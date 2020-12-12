@@ -93,25 +93,6 @@ class Referee extends Model {
     };
   }
 
-  $afterValidate(referee) {
-    super.$afterValidate(referee);
-
-    // validate email
-    if (referee.email !== undefined && referee.email !== null) {
-      if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
-        throw new ValidationError({
-          message: `Email format "${referee.email}" is invalid`,
-        });
-      }
-    }
-    // validate phone
-    if (referee.phone !== undefined && referee.phone !== null) {
-      if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
-        throw new ValidationError({
-          message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
-        });
-      }
-    }
   static get relationMappings() {
     return {
       cases: {
@@ -136,6 +117,27 @@ class Referee extends Model {
         },
       },
     };
+  }
+
+  $afterValidate(referee) {
+    super.$afterValidate(referee);
+
+    // validate email
+    if (referee.email !== undefined && referee.email !== null) {
+      if (/^[\w-.]+@([\w-]+\.)+[A-Za-z]{2,}$/.test(referee.email) === false) {
+        throw new ValidationError({
+          message: `Email format "${referee.email}" is invalid`,
+        });
+      }
+    }
+    // validate phone
+    if (referee.phone !== undefined && referee.phone !== null) {
+      if (/^(6|8|9)\d{7}$/.test(referee.phone) === false) {
+        throw new ValidationError({
+          message: `Phone format "${referee.phone}" is invalid. Must be numeric and start with 6, 8 or 9`,
+        });
+      }
+    }
   }
 }
 module.exports = {
