@@ -8,6 +8,7 @@
 
 const {
   DataError,
+  NotNullViolationError,
   ValidationError,
   UniqueViolationError,
 } = require('objection');
@@ -39,6 +40,13 @@ function sanitize(json) {
   return referee;
 }
 
+function isValidId(id) {
+  if (!Number.isInteger(id)) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * Retrieve all referees
  * @param {Request} req
@@ -56,6 +64,9 @@ const getAll = async (req, res) => {
  */
 const getById = async (req, res, next) => {
   const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Referee ${id} does not exist`));
+  }
   try {
     const referee = await Referee.query().findById(id);
     if (!referee) {
@@ -88,6 +99,10 @@ const create = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
+    // if required fields are null
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
+    }
 
     // handles rest of the error
     // from objection's documentation, the structure below should hold
@@ -103,24 +118,26 @@ const create = async (req, res, next) => {
  */
 const update = async (req, res, next) => {
   const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Referee ${id} does not exist`));
+  }
   const updateInfo = sanitize(req.body);
   try {
     const referee = await Referee.query()
       .select()
       .patch(updateInfo)
       .findById(id)
-      .return('*');
+      .returning('*');
     return res.status(200).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
     }
-    // if input id is not an int
-    if (err instanceof DataError) {
-      return next(new ResourceNotFound(`Referee ${id} does not exist`));
-    }
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
+    }
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
     }
     return next();
   }
