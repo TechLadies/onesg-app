@@ -1,6 +1,4 @@
 const { Model } = require('objection');
-const { Beneficiary } = require('./beneficiary');
-const { Referee } = require('./referee');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -71,7 +69,7 @@ class Case extends Model {
     return {
       beneficiary: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Beneficiary,
+        modelClass: `${__dirname}/Beneficiary`,
         join: {
           from: 'cases.beneficiaryId',
           to: 'beneficiary.beneficiaryId',
@@ -79,7 +77,7 @@ class Case extends Model {
       },
       referees: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Referee,
+        modelClass: `${__dirname}/Referee`,
         join: {
           from: 'cases.refereeId',
           to: 'referees.refereeId',

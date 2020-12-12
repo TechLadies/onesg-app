@@ -1,8 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* eslint-disable no-console */
 >>>>>>> added removeid
+=======
+>>>>>>> add graphfetch
 /* eslint-disable camelcase */
 const { raw } = require('objection');
 const { safeResource } = require('../../helpers/cleandata/removeid');
@@ -74,12 +77,16 @@ const search = async (req, res) => {
       .query()
       .select(raw(`*`))
 <<<<<<< HEAD
+<<<<<<< HEAD
       .withGraphFetched(fetchWith)
 =======
       .from(joinFrom)
       .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
       .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
 >>>>>>> correct removeid
+=======
+      .withGraphFetched(fetchWith)
+>>>>>>> add graphfetch
       .where(raw(sqlQuery, { searchBody: q }))
       .orderByRaw(order)
       .limit(limit)

@@ -28,9 +28,6 @@ router.post('/', referees.create);
 // GET /v1/referees/:id
 router.get('/:id', referees.getById);
 
-// GET /v1/referees/bycase
-router.get('/bycase', referees.getRefereebyCase);
-
 // PATCH /v1/referees/:id
 router.patch('/:id', referees.update);
 

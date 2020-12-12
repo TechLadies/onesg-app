@@ -64,6 +64,7 @@ const getAll = async (req, res) => {
   const results = await Referee.query();
   return res.status(200).json({ results });
 };
+<<<<<<< HEAD
 /**
  * Retrieve specific referees with cases
  * @param {Request} req
@@ -74,6 +75,8 @@ const getRefereebyCase = async (req, res) => {
   res.status(200).json({ byCase });
 };
 
+=======
+>>>>>>> add graphfetch
 /**
  * Retrieve specific referee by id
  * @param {Request} req
@@ -161,5 +164,4 @@ module.exports = {
   getById,
   create,
   update,
-  getRefereebyCase,
 };

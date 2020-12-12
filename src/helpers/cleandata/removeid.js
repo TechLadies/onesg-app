@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* eslint-disable no-console */
 >>>>>>> correct removeid
+=======
+>>>>>>> add graphfetch
 const safeResource = ({ id, ...rest }) => {
   const restDuplicate = { ...rest };
   Object.keys(rest).forEach((property) => {
