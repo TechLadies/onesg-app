@@ -7,10 +7,11 @@
 
 'use strict';
 
+const { ForeignKeyViolationError } = require('objection');
 const { Comment, Case } = require('../../models');
 
 const {
-  errors: { ResourceNotFound },
+  errors: { BadRequest, ResourceNotFound },
 } = require('../../utils');
 
 /**
@@ -41,6 +42,33 @@ const getCommentsbyCaseNumber = async (req, res, next) => {
  * @param {Response} res
  */
 
+const create = async (req, res, next) => {
+  const { id } = req.params;
+  const author = Case.query().select('pointOfContact').where('caseNumber', id);
+  const newComments = {
+    message: req.body.message,
+    caseNumber: req.params.id,
+    author: author,
+  };
+  try {
+    const comments = await Comment.query()
+      .insertGraphAndFetch(newComments)
+      .where('caseNumber', id);
+    return res.status(201).json({ comments });
+  } catch (err) {
+    // ForeignKeyViolationError for caseNumber that is not present
+    if (err instanceof ForeignKeyViolationError) {
+      if (err.constraint === 'comment_casenumber_foreign') {
+        return next(
+          new BadRequest(`Case ${newComments.caseNumber} is not present`)
+        );
+      }
+    }
+    return next(err);
+  }
+};
+
 module.exports = {
   getCommentsbyCaseNumber,
+  create,
 };

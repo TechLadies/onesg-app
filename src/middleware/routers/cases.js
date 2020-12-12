@@ -31,4 +31,7 @@ router.get('/:id/comments', comments.getCommentsbyCaseNumber);
 // POST /v1/cases
 router.post('/', cases.create);
 
+// POST /v1/cases/:id/comments
+router.post('/:id/comments', comments.create);
+
 module.exports = router;

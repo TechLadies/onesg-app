@@ -6,11 +6,6 @@ exports.up = function makeCommentstable(knex) {
     table.increments('id').primary().index();
     table.text('message');
     table.string('author');
-    // table
-    //   .integer('caseId')
-    //   .references('id')
-    //   .inTable(tableCase)
-    //   .comment('Case this comment belongs to');
     table
       .string('caseNumber')
       .references('caseNumber')
