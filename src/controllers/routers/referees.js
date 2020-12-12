@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -53,12 +52,10 @@ const getAll = async (req, res) => {
  */
 const getReferee = async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.params);
   try {
     const referee = await Referee.query()
       .select('name', 'email', 'phone', 'organisation')
       .where('refereeNumber', id);
-    console.log('refereeNumber');
     if (referee.length === 0) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }

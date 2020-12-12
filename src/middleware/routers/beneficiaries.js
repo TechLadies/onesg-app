@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -30,7 +29,8 @@ router.get('/', isLoggedIn, beneficiaries.getAll);
 
 // GET /v1/beneficiaries/:id
 router.get('/:id', beneficiaries.getBeneficiary);
+
 // POST /v1/beneficiaries
-// router.post('/', beneficiaries.create);
+router.post('/', beneficiaries.create);
 
 module.exports = router;
