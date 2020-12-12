@@ -38,9 +38,7 @@ const getAll = async (req, res) => {
     'notes',
     'householdIncome',
     'householdSize',
-    'paymentType',
-    'created_at',
-    'updated_at'
+    'paymentType'
   );
   res.status(200).json({ beneficiaries });
 };
@@ -51,6 +49,7 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 
+<<<<<<< HEAD
 const getBeneficiarybyId = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -78,6 +77,8 @@ const getBeneficiarybyId = async (req, res, next) => {
   }
 };
 
+=======
+>>>>>>> add graphfetch
 /**
  * Create new Beneficiaries
  * @param {Request} req
@@ -169,8 +170,15 @@ const del = async (req, res) => {
 
 module.exports = {
   getAll,
+<<<<<<< HEAD
   getBeneficiarybyId,
   create,
   update,
   del,
 };
+=======
+  create,
+  update,
+  del,
+};
+>>>>>>> add graphfetch

@@ -85,7 +85,7 @@ static get relationMappings() {
     return {
       cases: {
         relation: Model.HasManyRelation,
-        modelClass: Case,
+        modelClass: `${__dirname}/Case`,
         join: {
           from: 'beneficiary.beneficiaryId',
           to: 'cases.beneficiaryId',
@@ -93,7 +93,7 @@ static get relationMappings() {
       },
       referees: {
         relation: Model.ManyToManyRelation,
-        modelClass: Referee,
+        modelClass: `${__dirname}/Referee`,
         join: {
           from: 'beneficiary.beneficiaryId',
           through: {

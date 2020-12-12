@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable strict */
 
 'use strict';
@@ -123,7 +122,6 @@ class Referee extends Model {
 }
 }
 module.exports = {
-  Referee,
   model: Referee,
   tableReferee,
 };

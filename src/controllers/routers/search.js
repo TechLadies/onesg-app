@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-console */
 /* eslint-disable camelcase */
 const { raw } = require('objection');
 const { safeResource } = require('../../helpers/cleandata/removeid');
@@ -36,54 +35,26 @@ const search = async (req, res) => {
   const searchBody = searchFields.join(`||`);
   const entities = include_entities ? include_entities.split('&') : [];
   const sqlQuery = `similarity (':searchBody:', ${searchBody}) > 0.08`;
-  let joinFrom;
-  let joinTable1;
-  let joinOn1;
-  let joinWith1;
-  let joinTable2;
-  let joinOn2;
-  let joinWith2;
+  let fetchWith;
   let order;
   if (type === 'beneficiary' && entities.includes('cases')) {
-    joinFrom = 'beneficiary';
-    joinTable1 = 'cases';
-    joinOn1 = 'beneficiary.beneficiaryId';
-    joinWith1 = 'cases.beneficiaryId';
-    joinTable2 = 'referees';
-    joinOn2 = 'referees.refereeId';
-    joinWith2 = 'cases.refereeId';
+    fetchWith = '[cases, referees]';
     order = `similarity(beneficiary."name", '${q}') DESC`;
   }
 
   if (type === 'referee' && entities.includes('cases')) {
-    joinFrom = 'referees';
-    joinTable1 = 'cases';
-    joinOn1 = 'referees.id';
-    joinWith1 = 'cases.id';
-    joinTable2 = 'beneficiary';
-    joinOn2 = 'beneficiary.beneficiaryId';
-    joinWith2 = 'cases.beneficiaryId';
+    fetchWith = '[cases, beneficiary]';
     order = `similarity(referees."name", '${q}') DESC`;
   }
   if (type === 'case' && entities.includes('beneficiary')) {
-    joinFrom = 'cases';
-    joinTable1 = 'beneficiary';
-    joinOn1 = 'beneficiary.beneficiaryId';
-    joinWith1 = 'cases.beneficiaryId';
-    joinTable2 = 'referees';
-    joinOn2 = 'referees.id';
-    joinWith2 = 'cases.id';
+    fetchWith = await Beneficiary.query().withGraphFetched(
+      '[beneficiary, referees]'
+    );
     order = `similarity("caseId", '${q}') DESC`;
   }
 
   if (type === 'case' && entities.includes('referees')) {
-    joinFrom = 'cases';
-    joinTable1 = 'referees';
-    joinOn1 = 'referees.id';
-    joinWith1 = 'cases.id';
-    joinTable2 = 'beneficiary';
-    joinOn2 = 'beneficiary.beneficiaryId';
-    joinWith2 = 'cases.beneficiaryId';
+    fetchWith = '[referees, beneficiary]';
     order = `similarity("caseId", '${q}') DESC`;
   }
 
@@ -98,9 +69,7 @@ const search = async (req, res) => {
     results = await model
       .query()
       .select(raw(`*`))
-      .from(joinFrom)
-      .innerJoin(joinTable1, joinOn1, `=`, joinWith1)
-      .leftJoin(joinTable2, joinOn2, `=`, joinWith2)
+      .withGraphFetched(fetchWith)
       .where(raw(sqlQuery, { searchBody: q }))
       .orderByRaw(order)
       .limit(limit)

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const safeResource = ({ id, ...rest }) => {
   const restDuplicate = { ...rest };
   Object.keys(rest).forEach((property) => {
