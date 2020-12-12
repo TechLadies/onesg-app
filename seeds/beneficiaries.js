@@ -1,4 +1,3 @@
-
 const { tableBeneficiary } = require('../src/models/beneficiary');
 
 exports.seed = function seedBeneficiaryTable(knex) {

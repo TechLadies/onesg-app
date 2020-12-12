@@ -4,7 +4,6 @@
  * MIT Licensed
  */
 const isLoggedIn = require('./isLoggedIn');
-
 const errorHandler = require('./errorHandler');
 const routers = require('./routers');
 

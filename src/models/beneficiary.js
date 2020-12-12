@@ -55,13 +55,6 @@ class Beneficiary extends Model {
 
       console.log(`look here`, lastInsertedBeneficiary)
     );
-    const increobj = increDB.rows[0].last_value;
-    const i = `000${increobj}`.substring(increobj.length);
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const id = `B${yyyy}${mm}-${i}`;
-    this.beneficiaryId = id;
   }
 
   static get jsonSchema() {
