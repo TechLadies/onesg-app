@@ -33,7 +33,8 @@ router.post('/', isLoggedIn, beneficiaries.create);
 router.patch('/:id', isLoggedIn, beneficiaries.update);
 // GET /v1/beneficiaries/:id
 router.get('/:id', beneficiaries.getBeneficiary);
+
 // POST /v1/beneficiaries
-// router.post('/', beneficiaries.create);
+router.post('/', beneficiaries.create);
 
 module.exports = router;

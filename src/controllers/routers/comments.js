@@ -1,5 +1,4 @@
 /* eslint-disable object-shorthand */
-/* eslint-disable no-console */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -13,7 +12,6 @@ const { Comment, Case } = require('../../models');
 const {
   errors: { ResourceNotFound },
 } = require('../../utils');
-// const { InvalidInput } = require('../../utils/errors');
 
 /**
  * Retrieve specific case by id

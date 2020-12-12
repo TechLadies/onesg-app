@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { ValidationError, UniqueViolationError } = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
@@ -80,7 +79,6 @@ const getAll = async (req, res) => {
  */
 const getBeneficiary = async (req, res, next) => {
   const { id } = req.params;
-  console.log({ id });
   try {
     const beneficiary = await Beneficiary.query()
       .select(
