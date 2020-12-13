@@ -40,6 +40,9 @@ function sanitize(json) {
   return referee;
 }
 
+/**
+ * Check if id is an int
+ */
 function isValidId(id) {
   if (Number.isNaN(parseInt(id, 10))) {
     return false;
