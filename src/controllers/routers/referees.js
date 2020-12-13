@@ -41,7 +41,7 @@ function sanitize(json) {
 }
 
 function isValidId(id) {
-  if (!Number.isInteger(id)) {
+  if (Number.isNaN(parseInt(id, 10))) {
     return false;
   }
   return true;
