@@ -7,7 +7,6 @@
 'use strict';
 
 const {
-  DataError,
   NotNullViolationError,
   ValidationError,
   UniqueViolationError,
@@ -35,6 +34,12 @@ function sanitize(json) {
   }
   if (json.organisation) {
     referee.organisation = json.organisation.trim();
+  }
+  if (json.createdBy) {
+    referee.createdBy = parseInt(json.createdBy, 10);
+  }
+  if (json.updatedBy) {
+    referee.updatedBy = parseInt(json.updatedBy, 10);
   }
 
   return referee;
@@ -77,10 +82,6 @@ const getById = async (req, res, next) => {
     }
     return res.status(200).json({ referee });
   } catch (err) {
-    // if input id is not an int
-    if (err instanceof DataError) {
-      return next(new ResourceNotFound(`Referee ${id} does not exist`));
-    }
     return next();
   }
 };
