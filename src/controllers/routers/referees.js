@@ -88,8 +88,24 @@ const getById = async (req, res, next) => {
     return next(new ResourceNotFound(`Referee ${id} does not exist`));
   }
   try {
+<<<<<<< HEAD
     const referee = await Referee.query().findById(id);
     if (!referee) {
+=======
+    const referee = await Referee.query()
+      .select(
+        'name',
+        'email',
+        'phone',
+        'organisation',
+        'refereeId',
+        'created_at',
+        'updated_at'
+      )
+      .where('refereeId', id)
+      .withGraphFetched('[cases, beneficiary]');
+    if (referee.length === 0) {
+>>>>>>> fixed graphfetched after rebase
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
     return res.status(200).json({ referee });

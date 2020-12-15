@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable camelcase */
 const { raw } = require('objection');
 const { safeResource } = require('../../helpers/cleandata/removeid');
@@ -56,6 +55,11 @@ const search = async (req, res) => {
   if (type === 'case' && entities.includes('referees')) {
     fetchWith = '[referees, beneficiary]';
     order = `similarity("caseId", '${q}') DESC`;
+  }
+
+  if (type === 'beneficiary' && entities.includes('referees')) {
+    fetchWith = '[cases, referees]';
+    order = `similarity(beneficiary."name", '${q}') DESC`;
   }
 
   // Setting up params for limit, offset and per_page

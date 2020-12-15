@@ -28,6 +28,9 @@ const {
 // GET /v1/beneficiaries
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
+// GET /v1/beneficiaries/:id
+router.get('/:id', isLoggedIn, beneficiaries.getBeneficiarybyId);
+
 // POST /v1/beneficiaries:id
 router.post('/', isNull, beneficiaries.create);
 

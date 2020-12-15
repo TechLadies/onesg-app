@@ -1,10 +1,8 @@
-/* eslint-disable no-console */
 const passport = require('passport');
 const { Forbidden } = require('../utils/errors');
 
 const isLoggedIn = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
-    console.log(user);
     // err === 'user not found' || user === false || user === undefined
     if (err || !user) {
       return next(new Forbidden(' You are forbidden to enter.'));

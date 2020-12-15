@@ -50,6 +50,9 @@ const getAll = async (req, res) => {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fixed graphfetched after rebase
 const getBeneficiarybyId = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -62,9 +65,13 @@ const getBeneficiarybyId = async (req, res, next) => {
         'notes',
         'householdIncome',
         'householdSize',
+<<<<<<< HEAD
         'paymentType',
         'created_at',
         'updated_at'
+=======
+        'paymentType'
+>>>>>>> fixed graphfetched after rebase
       )
       .where('beneficiaryId', id)
       .withGraphFetched('[cases, referees]');
@@ -77,8 +84,11 @@ const getBeneficiarybyId = async (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 =======
 >>>>>>> add graphfetch
+=======
+>>>>>>> fixed graphfetched after rebase
 /**
  * Create new Beneficiaries
  * @param {Request} req
@@ -171,9 +181,13 @@ const del = async (req, res) => {
 module.exports = {
   getAll,
 <<<<<<< HEAD
+<<<<<<< HEAD
   getBeneficiarybyId,
 =======
 >>>>>>> add graphfetch
+=======
+  getBeneficiarybyId,
+>>>>>>> fixed graphfetched after rebase
   create,
   update,
   del,

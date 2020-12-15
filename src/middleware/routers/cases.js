@@ -19,7 +19,10 @@ const {
 /**
  * Routing for references endpoints (/v1/referees)
  */
-// GET /v1/referees
+// GET /v1/cases
 router.get('/', cases.getAll);
+
+// GET /v1/cases/:id
+router.get('/:id', cases.getCasebyId);
 
 module.exports = router;
