@@ -92,6 +92,7 @@ const search = async (req, res) => {
     cleanedResults,
     include_entities: entities,
   };
+
   return res.status(200).json(response);
 };
 

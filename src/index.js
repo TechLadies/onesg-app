@@ -80,7 +80,7 @@ app.use(routers);
 /**
  * Error handler setup
  */
-app.use(errorHandler);
+errorHandler(app);
 
 /**
  * Start listening to connection requests made on specified PORT
