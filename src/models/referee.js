@@ -4,27 +4,47 @@
 
 const { Model, ValidationError } = require('objection');
 
-const tableReferee = 'referees';
+// helper functions
+function getRefereeNumber(previousNumber) {
+  const [
+    // eslint-disable-next-line no-unused-vars
+    _,
+    year,
+    month,
+    index,
+  ] = previousNumber.match(/R(\d{4})-(\d{2})(\d{3})/);
+
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+  const currentYear = today.getFullYear().toString();
+
+  let refereeIndex = 1;
+  // If last inserted beneficiary is from the current month,
+  // use counter from previous insert
+  if (year === currentYear && month === currentMonth) {
+    refereeIndex = parseInt(index, 10) + 1;
+  }
+
+  // add leading 0s
+  const paddedIndex = String(refereeIndex).padStart(3, '0');
+
+  return `R${currentYear}-${currentMonth}${paddedIndex}`;
+}
+
+const tableReferee = 'referee';
 class Referee extends Model {
   static get tableName() {
     return tableReferee;
   }
 
   async $beforeInsert() {
-    const knex = Referee.knex();
-    const increDB = await knex.raw(
-      `SELECT CASE WHEN is_called THEN last_value + 1
-      ELSE last_value
-      END FROM "referees_refId_seq";
-      `
-    );
-    const increobj = increDB.rows[0].last_value;
-    const i = `0000${increobj}`.substring(increobj.length);
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const id = `R${yyyy}${mm}-${i}`;
-    this.refereeId = id;
+    const lastInsertedReferee = await Referee.query()
+      .select('refereeNumber')
+      .orderBy('createdAt', 'desc')
+      .orderBy('refereeNumber', 'desc')
+      .limit(1);
+
+    this.refereeNumber = getRefereeNumber(lastInsertedReferee[0].refereeNumber);
   }
 
   static get jsonSchema() {
@@ -32,15 +52,17 @@ class Referee extends Model {
       type: 'object',
       required: ['name', 'phone'],
       properties: {
-        refereeId: { type: 'string' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { maxLength: 255 },
+        refereeNumber: { type: 'string', $comment: 'Format: RYYYY-MM999' },
+        name: { type: 'string', minLength: 1, maxLength: 100 },
+        email: { type: ['string', 'null'], maxLength: 50 },
         phone: {
-          type: 'varchar',
+          type: 'string',
           minLength: 8,
           maxLength: 8,
         },
-        organisation: { type: 'varchar', maxLength: 255 },
+        organisation: { type: ['string', 'null'], maxLength: 100 },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }

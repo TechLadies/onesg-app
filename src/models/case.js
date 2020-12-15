@@ -1,44 +1,10 @@
 const { Model } = require('objection');
 
-const RequestTypeEnum = {
-  CookedFood: 'cookedFood',
-  Diapers: 'diapers',
-  FinancialAssistance: 'financialAssistance',
-  MedicalBill: 'medicalBill',
-  MilkFormula: 'milkFormula',
-  SchoolFees: 'schoolFees',
-  TransportationFees: 'transportationFees',
-  UtilityBill: 'utilityBill',
-};
+const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
-const FulfilmentTypeEnum = {
-  InKindDonation: 'inKindDonation',
-  CashTransfer: 'cashTransfer',
-  ThirdpartyPayment: 'third-partyPayment',
-  PartnerReferral: 'partnerReferral',
-};
+const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 
-const CaseStatusTypeEnum = {
-  New: 'new',
-  OnHold: 'onHold',
-  ReferredtoEFC: 'referredtoEFC',
-  Processing: 'processing',
-  Closed: 'closed',
-};
-
-const ReferenceStatusTypeEnum = {
-  Unverified: 'unverified',
-  Pending: 'pending',
-  Verified: 'verified',
-};
-const ApprovalTypeEnum = {
-  NIL: '-',
-  full: 'full',
-  partial: 'partial',
-  rejected: 'rejected',
-};
-
-const tableCase = 'cases';
+const tableCase = 'case';
 
 class Case extends Model {
   static get tableName() {
@@ -48,19 +14,32 @@ class Case extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['amountRequested', 'beneficiaryId', 'createdBy', 'updatedBy'],
       properties: {
-        beneficiaryId: { type: 'integer' },
+        caseNumber: { type: 'string', minLength: 12, maxLength: 12 },
+        caseStatus: { type: 'string', enum: caseStatusEnum, default: 'NEW' },
+        appliedOn: { type: 'date', $comment: 'YYYY-MM-DD' },
+        pointOfContact: { type: 'string', maxLength: 100 },
+        referenceStatus: {
+          type: 'string',
+          enum: referenceStatusEnum,
+          default: 'UNVERIFIED',
+        },
+        casePendingReason: {
+          type: 'string',
+          maxLength: 255,
+          $comment: 'Required if referenceStatus is PENDING',
+        },
+        amountRequested: { type: 'decimal', maxLength: 8 },
+        amountGranted: {
+          type: 'decimal',
+          maxLength: 8,
+          default: 0.0,
+        },
         refereeId: { type: 'integer' },
-        caseId: { type: 'integer' },
-        requestType: { type: 'enum' },
-        fulfilment: { type: 'enum' },
-        POC: { type: 'varchar', maxLength: 255 },
-        amountRequested: { type: 'decimal' },
-        description: { type: 'varchar', maxLength: 255 },
-        caseStatus: { type: 'enum' },
-        referenceStatus: { type: 'enum' },
-        approval: { type: 'enum' },
-        amountGranted: { type: 'decimal' },
+        beneficiaryId: { type: 'integer' },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }
@@ -70,9 +49,6 @@ module.exports = {
   Case,
   model: Case,
   tableCase,
-  RequestTypeEnum,
-  FulfilmentTypeEnum,
-  ReferenceStatusTypeEnum,
-  ApprovalTypeEnum,
-  CaseStatusTypeEnum,
+  caseStatusEnum,
+  referenceStatusEnum,
 };

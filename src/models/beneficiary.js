@@ -1,9 +1,8 @@
-const { Model } = require('objection');
+/* eslint-disable strict */
 
-const PaymentTypeEnum = {
-  PayNow: 'payNow',
-  BankTransfer: 'bankTransfer',
-};
+'use strict';
+
+const { Model } = require('objection');
 
 const tableBeneficiary = 'beneficiary';
 
@@ -15,17 +14,31 @@ class Beneficiary extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['email', 'name', 'phone'],
+      required: ['name', 'email', 'phone', 'createdBy', 'updatedBy'],
       properties: {
-        beneficiaryId: { type: 'varchar' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { type: 'string', minLength: 1, maxLength: 255 },
-        phone: { type: 'varchar', maxLength: 12 },
-        address: { type: 'varchar', maxLength: 255 },
-        occupation: { type: 'string', maxLength: 255 },
-        householdIncome: { type: 'decimal', minLength: 1 },
+        beneficiaryNumber: {
+          type: 'string',
+          minLength: 11,
+          maxLength: 11,
+          $comment: 'Format: BYYYY-MM999',
+        },
+        name: { type: 'string', maxLength: 100 },
+        email: { type: 'string', maxLength: 50 },
+        phone: { type: 'string', minLength: 8, maxLength: 8 },
+        address: { type: 'string', maxLength: 255 },
+        occupation: { type: 'string', maxLength: 50 },
+        householdIncome: {
+          type: 'number',
+        },
         householdSize: { type: 'integer' },
-        paymentType: { type: 'enum' },
+        paymentType: {
+          type: 'array',
+          $comment:
+            'Expected value of the array element is from paymentTypeEnum',
+        },
+        notes: { type: 'string' },
+        createdBy: { type: 'integer' },
+        updatedBy: { type: 'integer' },
       },
     };
   }
@@ -35,5 +48,4 @@ module.exports = {
   Beneficiary,
   model: Beneficiary,
   tableBeneficiary,
-  PaymentTypeEnum,
 };
