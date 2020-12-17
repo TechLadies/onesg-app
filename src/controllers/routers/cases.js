@@ -48,16 +48,16 @@ function sanitize(json) {
     }
   }
   if (json.refereeId) {
-    cases.refereeId = Number(json.refereeId);
+    cases.refereeId = parseInt(json.refereeId, 10);
   }
   if (json.beneficiaryId) {
-    cases.beneficiaryId = Number(json.beneficiaryId);
+    cases.beneficiaryId = parseInt(json.beneficiaryId, 10);
   }
   if (json.createdBy) {
-    cases.createdBy = Number(json.createdBy);
+    cases.createdBy = parseInt(json.createdBy, 10);
   }
   if (json.updatedBy) {
-    cases.updatedBy = Number(json.updatedBy);
+    cases.updatedBy = parseInt(json.updatedBy, 10);
   }
   return cases;
 }
@@ -80,11 +80,11 @@ const getAll = async (req, res) => {
 const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
   try {
-    const cases = await Case.query().insertGraph(newCase).returning('caseId');
+    const cases = await Case.query().insertGraph(newCase).returning('*');
     return res.status(201).json({ cases });
   } catch (err) {
-    // ValidationError based on jsonSchema (eg beneficiaryId or refereeId > 11 characters, createdBy or updatedBy not in int format,
-    // amountRequested > amountGranted or casePendingReason is empty/null when caseStatus is pending)
+    // ValidationError based on jsonSchema (eg refereeUdm benId, createdBy or updatedBy not in int format,
+    // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
     }
@@ -101,7 +101,7 @@ const create = async (req, res, next) => {
       return next(new InvalidInput(err.message));
     }
 
-    // ForeignKeyViolationError for beneficiaryId or refereeId that are not present
+    // ForeignKeyViolationError for beneficiaryId, refereeId, createdBy and updatedBy that are not present
     if (err instanceof ForeignKeyViolationError) {
       if (err.constraint === 'case_beneficiaryid_foreign') {
         return next(
@@ -113,6 +113,16 @@ const create = async (req, res, next) => {
       if (err.constraint === 'case_refereeid_foreign') {
         return next(
           new BadRequest(`Referee id ${newCase.refereeId} is not present`)
+        );
+      }
+      if (err.constraint === 'case_createdby_foreign') {
+        return next(
+          new BadRequest(`Created by id ${newCase.createdBy} is not present`)
+        );
+      }
+      if (err.constraint === 'case_updatedby_foreign') {
+        return next(
+          new BadRequest(`Updated by id ${newCase.updatedBy} is not present`)
         );
       }
     }

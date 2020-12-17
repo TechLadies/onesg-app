@@ -83,16 +83,6 @@ class Beneficiary extends Model {
       },
     };
   }
-
-  $afterValidate(json) {
-    super.$afterValidate(json);
-    const beneficiary = json;
-    const paymentList = beneficiary.paymentTypeList;
-
-    const result = paymentList.every((i) => paymentTypeEnum.includes(i));
-
-    console.log(result);
-  }
 }
 
 module.exports = {

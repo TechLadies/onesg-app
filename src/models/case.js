@@ -101,7 +101,11 @@ class Case extends Model {
 
     // if referenceStatus is pending, casePendingReason cannot be empty
     if (cases.referenceStatus === 'PENDING') {
-      if (cases.casePendingReason === '' || cases.casePendingReason === null) {
+      if (
+        cases.casePendingReason === '' ||
+        cases.casePendingReason === null ||
+        cases.casePendingReason === undefined
+      ) {
         throw new ValidationError({
           message: 'Case pending reason required',
         });
@@ -120,12 +124,12 @@ class Case extends Model {
       });
     }
 
-    // validate amountGranted must be <= amountRequested
-    if (cases.amountGranted > cases.amountRequested) {
-      throw new ValidationError({
-        message: 'Amount granted cannot be more than amount requested',
-      });
-    }
+    // // validate amountGranted must be <= amountRequested
+    // if (cases.amountGranted > cases.amountRequested) {
+    //   throw new ValidationError({
+    //     message: 'Amount granted cannot be more than amount requested',
+    //   });
+    // }
 
     // validate documents to be in the format [{title: , url: }]
     if (cases.documents !== {}) {
