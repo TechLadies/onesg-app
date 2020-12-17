@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-concat */
+/* eslint-disable no-console */
 /* eslint-disable object-shorthand */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
@@ -6,6 +8,8 @@
  */
 
 'use strict';
+
+const xss = require('xss');
 
 const { ForeignKeyViolationError } = require('objection');
 const { Comment, Case } = require('../../models');
@@ -46,7 +50,7 @@ const create = async (req, res, next) => {
   const { id } = req.params;
   const author = Case.query().select('pointOfContact').where('caseNumber', id);
   const newComments = {
-    message: req.body.message,
+    message: xss(req.body.message),
     caseNumber: req.params.id,
     author: author,
   };
