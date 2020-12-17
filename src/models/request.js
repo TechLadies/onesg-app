@@ -41,6 +41,9 @@ class Request extends Model {
     return tableRequest;
   }
 
+  /**
+   * Tell objection.js not to convert any array into json object
+   */
   static get jsonAttributes() {
     return [];
   }

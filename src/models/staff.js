@@ -20,11 +20,14 @@ class Staff extends Model {
         username: { type: 'string', maxLength: 100 },
         password: { type: 'string' },
         email: { type: 'string', maxLength: 50 },
-        isAdmin: { type: 'boolean' },
+        isAdmin: {
+          type: 'boolean',
+          $comment: 'Indicates if staff has admin access to OneSG app',
+        },
         status: {
           type: 'enum',
           enum: staffStatusEnum,
-          $comment: 'Indicates if staff has admin access to OneSG app',
+          $comment: 'Indicates if staff has access to OneSG app',
         },
       },
     };

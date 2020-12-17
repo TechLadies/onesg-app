@@ -11,7 +11,7 @@ exports.seed = function seedRefereeTable(knex) {
           refereeNumber: 'R2020-11001',
           name: 'Atu',
           email: 'ahl@aok.com',
-          phone: '64673662',
+          phone: '67346628',
           organisation: 'Techladies',
           createdBy: 1,
           updatedBy: 1,

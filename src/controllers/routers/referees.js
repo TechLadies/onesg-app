@@ -6,7 +6,11 @@
 
 'use strict';
 
-const { ValidationError, UniqueViolationError } = require('objection');
+const {
+  NotNullViolationError,
+  ValidationError,
+  UniqueViolationError,
+} = require('objection');
 
 const { Referee } = require('../../models');
 
@@ -31,8 +35,24 @@ function sanitize(json) {
   if (json.organisation) {
     referee.organisation = json.organisation.trim();
   }
+  if (json.createdBy) {
+    referee.createdBy = parseInt(json.createdBy, 10);
+  }
+  if (json.updatedBy) {
+    referee.updatedBy = parseInt(json.updatedBy, 10);
+  }
 
   return referee;
+}
+
+/**
+ * Check if id is an int
+ */
+function isValidId(id) {
+  if (Number.isNaN(parseInt(id, 10))) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -50,8 +70,11 @@ const getAll = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const getReferee = async (req, res, next) => {
+const getById = async (req, res, next) => {
   const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Referee ${id} does not exist`));
+  }
   try {
     const referee = await Referee.query().findById(id);
     if (!referee) {
@@ -80,6 +103,10 @@ const create = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
+    // if required fields are null
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
+    }
 
     // handles rest of the error
     // from objection's documentation, the structure below should hold
@@ -95,24 +122,16 @@ const create = async (req, res, next) => {
  */
 const update = async (req, res, next) => {
   const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Referee ${id} does not exist`));
+  }
   const updateInfo = sanitize(req.body);
   try {
     const referee = await Referee.query()
       .select()
       .patch(updateInfo)
-      .where('id', id)
-      .returning(
-        'name',
-        'email',
-        'phone',
-        'organisation',
-        'refereeNumber',
-        'createdAt',
-        'updatedAt'
-      );
-    if (referee.length === 0) {
-      return next(new ResourceNotFound(`Referee ${id} does not exist`));
-    }
+      .findById(id)
+      .returning('*');
     return res.status(200).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -121,13 +140,16 @@ const update = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
+    }
     return next();
   }
 };
 
 module.exports = {
   getAll,
-  getReferee,
+  getById,
   create,
   update,
 };

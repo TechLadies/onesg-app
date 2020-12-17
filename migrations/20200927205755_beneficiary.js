@@ -20,7 +20,7 @@ exports.up = function makeBeneficiarytable(knex) {
     table.string('occupation', 50);
     table.decimal('householdIncome');
     table.specificType('householdSize', 'smallint').unsigned();
-    table.specificType('paymentType', 'text[]'); // TO DO: cast enum to paymentTypeEnum
+    table.specificType('paymentType', 'text[]');
     table
       .text('notes')
       .comment('Additional information related to this beneficiary');

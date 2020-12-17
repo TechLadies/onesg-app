@@ -26,7 +26,7 @@ router.get('/', referees.getAll);
 router.post('/', referees.create);
 
 // GET /v1/referees/:id
-router.get('/:id', referees.getReferee);
+router.get('/:id', referees.getById);
 
 // PATCH /v1/referees/:id
 router.patch('/:id', referees.update);

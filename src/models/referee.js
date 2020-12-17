@@ -24,6 +24,7 @@ function getRefereeNumber(previousNumber) {
   if (year === currentYear && month === currentMonth) {
     refereeIndex = parseInt(index, 10) + 1;
   }
+
   // add leading 0s
   const paddedIndex = String(refereeIndex).padStart(3, '0');
 
