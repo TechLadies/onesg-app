@@ -33,6 +33,7 @@ exports.up = function makeRequestTable(knex) {
       );
     table
       .integer('caseId')
+      .unsigned()
       .references('id')
       .inTable(tableCase)
       .comment('Case this request belongs to');
