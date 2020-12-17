@@ -1,4 +1,4 @@
-const safeResource = ({ id, ...rest }) => {
+const safeResource = ({ id, beneficiaryId, refereeId, caseId, ...rest }) => {
   const restDuplicate = { ...rest };
   Object.keys(rest).forEach((property) => {
     const propertyValue = rest[property];
@@ -10,7 +10,7 @@ const safeResource = ({ id, ...rest }) => {
       restDuplicate[property] = safeResource(propertyValue);
     }
   });
-  return rest;
+  return restDuplicate;
 };
 
 module.exports = {

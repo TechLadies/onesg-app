@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 const { Model, ValidationError } = require('objection');
 
 const tableBeneficiary = 'beneficiary';
@@ -12,12 +10,10 @@ function getBeneficiaryId(previousId) {
     year,
     month,
     index,
-  ] = previousId.match(/B(\d{4})(\d{2})-(\d{4})/);
-
+  ] = previousId.match(/B(\d{4})-(\d{5})/);
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString();
   const currentYear = today.getFullYear().toString();
-
   let beneficiaryIndex = 1;
   // If last inserted beneficiary is from the current month,
   // use counter from previous insert
@@ -26,9 +22,8 @@ function getBeneficiaryId(previousId) {
   }
 
   // add leading 0s
-  const paddedIndex = String(beneficiaryIndex).padStart(4, '0');
-
-  return `B${currentYear}${currentMonth}-${paddedIndex}`;
+  const paddedIndex = String(beneficiaryIndex).padStart(3, '0');
+  return `B${currentYear}-${currentMonth}${paddedIndex}`;
 }
 
 class Beneficiary extends Model {
@@ -38,12 +33,11 @@ class Beneficiary extends Model {
 
   async $beforeInsert() {
     const lastInsertedBeneficiary = await Beneficiary.query()
-      .select('beneficiaryId')
+      .select('beneficiaryNumber')
       .orderBy('id', 'desc')
       .limit(1);
-
-    this.beneficiaryId = getBeneficiaryId(
-      lastInsertedBeneficiary[0].beneficiaryId
+    this.beneficiaryNumber = getBeneficiaryId(
+      lastInsertedBeneficiary[0].beneficiaryNumber
     );
   }
 
@@ -77,21 +71,21 @@ class Beneficiary extends Model {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Case`,
         join: {
-          from: 'beneficiary.beneficiaryId',
-          to: 'cases.beneficiaryId',
+          from: 'beneficiary.id',
+          to: 'case.beneficiaryId',
         },
       },
       referees: {
         relation: Model.ManyToManyRelation,
         modelClass: `${__dirname}/Referee`,
         join: {
-          from: 'beneficiary.beneficiaryId',
+          from: 'beneficiary.id',
           through: {
             // persons_movies is the join table.
-            from: 'cases.beneficiaryId',
-            to: 'cases.refereeId',
+            from: 'case.beneficiaryId',
+            to: 'case.refereeId',
           },
-          to: 'referees.refereeId',
+          to: 'referee.id',
         },
       },
     };

@@ -18,13 +18,13 @@ const search = async (req, res) => {
     searchFields = ['beneficiary."name"', 'beneficiary."email"'];
   } else if (type === 'case') {
     model = Case;
-    searchFields = ['"caseId"'];
+    searchFields = ['"caseNumber"'];
   } else if (type === 'referee') {
     model = Referee;
     searchFields = [
-      'referees."name"',
-      'referees."email"',
-      'referees."organisation"',
+      'referee."name"',
+      'referee."email"',
+      'referee."organisation"',
     ];
   } else {
     return res.json(new BadRequest(`Type is missing.`));
@@ -43,18 +43,16 @@ const search = async (req, res) => {
 
   if (type === 'referee' && entities.includes('cases')) {
     fetchWith = '[cases, beneficiary]';
-    order = `similarity(referees."name", '${q}') DESC`;
+    order = `similarity(referee."name", '${q}') DESC`;
   }
   if (type === 'case' && entities.includes('beneficiary')) {
-    fetchWith = await Beneficiary.query().withGraphFetched(
-      '[beneficiary, referees]'
-    );
-    order = `similarity("caseId", '${q}') DESC`;
+    fetchWith = '[referees, beneficiary]';
+    order = `similarity("caseNumber", '${q}') DESC`;
   }
 
   if (type === 'case' && entities.includes('referees')) {
     fetchWith = '[referees, beneficiary]';
-    order = `similarity("caseId", '${q}') DESC`;
+    order = `similarity("caseNumber", '${q}') DESC`;
   }
 
   if (type === 'beneficiary' && entities.includes('referees')) {

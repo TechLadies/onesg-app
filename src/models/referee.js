@@ -73,47 +73,20 @@ class Referee extends Model {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Case`,
         join: {
-          from: 'referees.refereeId',
-          to: 'cases.refereeId',
+          from: 'referee.id',
+          to: 'case.refereeId',
         },
       },
       beneficiary: {
         relation: Model.ManyToManyRelation,
         modelClass: `${__dirname}/Beneficiary`,
         join: {
-          from: 'referees.refereeId',
+          from: 'referee.id',
           through: {
-            from: 'cases.refereeId',
-            to: 'cases.beneficiaryId',
+            from: 'case.refereeId',
+            to: 'case.beneficiaryId',
           },
-          to: 'beneficiary.beneficiaryId',
-        },
-        to: 'beneficiary.beneficiaryId',
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      cases: {
-        relation: Model.HasManyRelation,
-        modelClass: `${__dirname}/Case`,
-        join: {
-          from: 'referees.refereeId',
-          to: 'cases.refereeId',
-        },
-      },
-
-      beneficiary: {
-        relation: Model.ManyToManyRelation,
-        modelClass: `${__dirname}/Beneficiary`,
-        join: {
-          from: 'referees.refereeId',
-          through: {
-            from: 'cases.refereeId',
-            to: 'cases.beneficiaryId',
-          },
-          to: 'beneficiary.beneficiaryId',
+          to: 'beneficiary.id',
         },
       },
     };

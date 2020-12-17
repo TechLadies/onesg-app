@@ -1,4 +1,8 @@
-const { ValidationError, UniqueViolationError } = require('objection');
+const {
+  ValidationError,
+  UniqueViolationError,
+  NotNullViolationError,
+} = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
@@ -17,8 +21,23 @@ function sanitize(json) {
   if (json.email) {
     beneficiary.email = json.email.toLowerCase().trim();
   }
-  if (json.organisation) {
-    beneficiary.organisation = json.organisation.trim();
+  if (json.occupation) {
+    beneficiary.occupation = json.occupation.trim();
+  }
+  if (json.householdIncome) {
+    beneficiary.householdIncome = parseFloat(json.householdIncome, 10);
+  }
+  if (json.householdSize) {
+    beneficiary.householdSize = parseInt(json.householdSize, 2);
+  }
+  if (json.notes) {
+    beneficiary.notes = json.notes.trim();
+  }
+  if (json.createdBy) {
+    beneficiary.createdBy = parseInt(json.createdBy, 10);
+  }
+  if (json.updatedBy) {
+    beneficiary.updatedBy = parseInt(json.updatedBy, 10);
   }
 
   return beneficiary;
@@ -31,6 +50,7 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select(
+    'beneficiaryNumber',
     'name',
     'email',
     'phone',
@@ -38,7 +58,9 @@ const getAll = async (req, res) => {
     'notes',
     'householdIncome',
     'householdSize',
-    'paymentType'
+    'paymentType',
+    'createdBy',
+    'updatedBy'
   );
   res.status(200).json({ beneficiaries });
 };
@@ -49,15 +71,12 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> fixed graphfetched after rebase
 const getBeneficiarybyId = async (req, res, next) => {
   const { id } = req.params;
   try {
     const beneficiary = await Beneficiary.query()
       .select(
+        'beneficiaryNumber',
         'name',
         'email',
         'phone',
@@ -65,16 +84,13 @@ const getBeneficiarybyId = async (req, res, next) => {
         'notes',
         'householdIncome',
         'householdSize',
-<<<<<<< HEAD
         'paymentType',
-        'created_at',
-        'updated_at'
-=======
-        'paymentType'
->>>>>>> fixed graphfetched after rebase
+        'createdBy',
+        'updatedBy'
       )
-      .where('beneficiaryId', id)
+      .where('beneficiaryNumber', id)
       .withGraphFetched('[cases, referees]');
+
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }
@@ -84,11 +100,6 @@ const getBeneficiarybyId = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-=======
->>>>>>> add graphfetch
-=======
->>>>>>> fixed graphfetched after rebase
 /**
  * Create new Beneficiaries
  * @param {Request} req
@@ -96,11 +107,12 @@ const getBeneficiarybyId = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   const newBeneficiary = sanitize(req.body);
+
   try {
     const ben = await Beneficiary.query()
       .select()
       .insert(newBeneficiary)
-      .returning('beneficiaryId');
+      .returning('beneficiaryNumber');
 
     return res.status(201).json({ ben });
   } catch (err) {
@@ -109,6 +121,10 @@ const create = async (req, res, next) => {
     }
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
+    }
+    // if required fields are null
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
     }
     // handles rest of the error
     // from objection's documentation, the structure below should hold
@@ -129,9 +145,9 @@ const update = async (req, res, next) => {
     const beneficiary = await Beneficiary.query()
       .select()
       .patch(updateInfo)
-      .where('beneficiaryId', id)
+      .where('beneficiaryNumber', id)
       .returning(
-        'beneficiaryId',
+        'beneficiaryNumber',
         'name',
         'email',
         'phone',
@@ -140,8 +156,7 @@ const update = async (req, res, next) => {
         'householdIncome',
         'householdSize',
         'paymentType',
-        'created_at',
-        'updated_at'
+        'updatedBy'
       );
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
@@ -167,10 +182,10 @@ const del = async (req, res) => {
   try {
     await Beneficiary.query()
       .delete()
-      .where({ BeneficiaryId: req.body.beneficiaryId });
+      .where({ beneficiaryNumber: req.body.beneficiaryNumber });
     return res
       .status(201)
-      .json({ message: `${req.body.Name} successfully deleted` });
+      .json({ message: `${req.body.name} successfully deleted` });
   } catch (err) {
     return res
       .status(500)
@@ -180,14 +195,7 @@ const del = async (req, res) => {
 
 module.exports = {
   getAll,
-<<<<<<< HEAD
-<<<<<<< HEAD
   getBeneficiarybyId,
-=======
->>>>>>> add graphfetch
-=======
-  getBeneficiarybyId,
->>>>>>> fixed graphfetched after rebase
   create,
   update,
   del,

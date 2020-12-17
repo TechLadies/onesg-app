@@ -64,19 +64,6 @@ const getAll = async (req, res) => {
   const results = await Referee.query();
   return res.status(200).json({ results });
 };
-<<<<<<< HEAD
-/**
- * Retrieve specific referees with cases
- * @param {Request} req
- * @param {Response} res
- */
-const getRefereebyCase = async (req, res) => {
-  const byCase = await Referee.query().withGraphFetched('[cases, beneficiary]');
-  res.status(200).json({ byCase });
-};
-
-=======
->>>>>>> add graphfetch
 /**
  * Retrieve specific referee by id
  * @param {Request} req
@@ -88,24 +75,8 @@ const getById = async (req, res, next) => {
     return next(new ResourceNotFound(`Referee ${id} does not exist`));
   }
   try {
-<<<<<<< HEAD
     const referee = await Referee.query().findById(id);
     if (!referee) {
-=======
-    const referee = await Referee.query()
-      .select(
-        'name',
-        'email',
-        'phone',
-        'organisation',
-        'refereeId',
-        'created_at',
-        'updated_at'
-      )
-      .where('refereeId', id)
-      .withGraphFetched('[cases, beneficiary]');
-    if (referee.length === 0) {
->>>>>>> fixed graphfetched after rebase
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
     return res.status(200).json({ referee });

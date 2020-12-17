@@ -50,37 +50,16 @@ class Case extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Beneficiary`,
         join: {
-          from: 'cases.beneficiaryId',
-          to: 'beneficiary.beneficiaryId',
+          from: 'case.beneficiaryId',
+          to: 'beneficiary.id',
         },
       },
       referees: {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Referee`,
         join: {
-          from: 'cases.refereeId',
-          to: 'referees.refereeId',
-        },
-      },
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      beneficiary: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Beneficiary`,
-        join: {
-          from: 'cases.beneficiaryId',
-          to: 'beneficiary.beneficiaryId',
-        },
-      },
-      referees: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Referee`,
-        join: {
-          from: 'cases.refereeId',
-          to: 'referees.refereeId',
+          from: 'case.refereeId',
+          to: 'referee.id',
         },
       },
     };
