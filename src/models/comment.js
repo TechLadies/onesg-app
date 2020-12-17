@@ -8,7 +8,7 @@ const { InvalidInput } = require('../utils/errors');
 const tableComments = 'comment';
 class Comment extends Model {
   $beforeValidate() {
-    if (/<.*?script.*\/?>/.test(this.message) === true) {
+    if (this.message.includes('&gt;') || this.message.includes('&lt;')) {
       throw new InvalidInput({
         message: `Message is invalid.`,
       });
