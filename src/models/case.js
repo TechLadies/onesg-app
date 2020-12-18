@@ -124,13 +124,6 @@ class Case extends Model {
       });
     }
 
-    // // validate amountGranted must be <= amountRequested
-    // if (cases.amountGranted > cases.amountRequested) {
-    //   throw new ValidationError({
-    //     message: 'Amount granted cannot be more than amount requested',
-    //   });
-    // }
-
     // validate documents to be in the format [{title: , url: }]
     if (cases.documents !== {}) {
       // eslint-disable-next-line no-plusplus
