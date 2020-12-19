@@ -48,7 +48,7 @@ const getCommentsbyCaseNumber = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { id } = req.params;
-  const author = Case.query().select('pointOfContact').where('caseNumber', id);
+  const author = req.user.email;
   const newComments = {
     message: xss(req.body.message),
     caseNumber: req.params.id,
@@ -60,6 +60,7 @@ const create = async (req, res, next) => {
       .where('caseNumber', id);
     return res.status(201).json({ comments });
   } catch (err) {
+    console.log(err);
     // ForeignKeyViolationError for caseNumber that is not present
     if (err instanceof ForeignKeyViolationError) {
       if (err.constraint === 'comment_casenumber_foreign') {
