@@ -56,25 +56,44 @@ const getAll = async (req, res) => {
  */
 const getBeneficiary = async (req, res, next) => {
   const { id } = req.params;
+  const { includes } = req.query;
+
+  // Execute the transaction
+  let beneficiary;
   try {
-    const beneficiary = await Beneficiary.query()
-      .select(
-        'name',
-        'email',
-        'phone',
-        'occupation',
-        'householdIncome',
-        'householdSize',
-        'paymentType',
-        'notes'
-      )
-      .withGraphFetched('cases (caseNumber)')
-      .modifiers({
-        caseNumber(builder) {
-          builder.select('caseNumber');
-        },
-      })
-      .where('beneficiaryNumber', id);
+    if (includes === `cases`) {
+      beneficiary = await Beneficiary.query()
+        .select(
+          'name',
+          'email',
+          'phone',
+          'occupation',
+          'householdIncome',
+          'householdSize',
+          'paymentType',
+          'notes'
+        )
+        .withGraphFetched('cases (caseNumber)')
+        .modifiers({
+          caseNumber(builder) {
+            builder.select('caseNumber');
+          },
+        })
+        .where('beneficiaryNumber', id);
+    } else {
+      beneficiary = await Beneficiary.query()
+        .select(
+          'name',
+          'email',
+          'phone',
+          'occupation',
+          'householdIncome',
+          'householdSize',
+          'paymentType',
+          'notes'
+        )
+        .where('beneficiaryNumber', id);
+    }
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }

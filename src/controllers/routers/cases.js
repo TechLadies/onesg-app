@@ -69,30 +69,19 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const cases = await Case.query()
-    .select(
-      'caseNumber',
-      'caseStatus',
-      'appliedOn',
-      'pointOfContact',
-      'referenceStatus',
-      'casePendingReason',
-      'amountRequested',
-      'amountGranted',
-      'documents',
-      'createdBy',
-      'updatedBy',
-      'createdAt',
-      'updatedAt'
-    )
+    .select('caseNumber', 'appliedOn', 'pointOfContact', 'createdBy')
     .withGraphFetched(
-      '[beneficiary(beneficiaryNumber), referees(refereeNumber)]'
+      '[beneficiary(beneficiaryName), referees(refereeName,refereeOrganisation)]'
     )
     .modifiers({
-      beneficiaryNumber(builder) {
-        builder.select('beneficiaryNumber');
+      beneficiaryName(builder) {
+        builder.select('name');
       },
-      refereeNumber(builder) {
-        builder.select('refereeNumber');
+      refereeName(builder) {
+        builder.select('name');
+      },
+      refereeOrganisation(builder) {
+        builder.select('organisation');
       },
     });
   return res.status(200).json({ cases });
