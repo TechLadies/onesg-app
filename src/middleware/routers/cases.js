@@ -10,6 +10,7 @@
  * Module dependencies.
  */
 const express = require('express');
+const isLoggedIn = require('../isLoggedIn');
 
 const router = express.Router();
 const {
@@ -32,6 +33,6 @@ router.get('/:id/comments', comments.getCommentsbyCaseNumber);
 router.post('/', cases.create);
 
 // POST /v1/cases/:id/comments
-router.post('/:id/comments', comments.create);
+router.post('/:id/comments', isLoggedIn, comments.create);
 
 module.exports = router;

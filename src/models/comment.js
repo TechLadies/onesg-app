@@ -3,18 +3,10 @@
 'use strict';
 
 const { Model } = require('objection');
-const { InvalidInput } = require('../utils/errors');
+// const { InvalidInput } = require('../utils/errors');
 
 const tableComments = 'comment';
 class Comment extends Model {
-  $beforeValidate() {
-    if (this.message.includes('&gt;') || this.message.includes('&lt;')) {
-      throw new InvalidInput({
-        message: `Message is invalid.`,
-      });
-    }
-  }
-
   static get tableName() {
     return tableComments;
   }
