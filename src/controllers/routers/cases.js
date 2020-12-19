@@ -6,6 +6,9 @@
 
 'use strict';
 
+const url = require('url');
+const querystring = require('querystring');
+
 const { Case } = require('../../models');
 
 /**
@@ -18,32 +21,17 @@ const { Case } = require('../../models');
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const cases = await Case.query().select();
-  return res.status(200).json({ cases });
-};
-
-/**
- * Retrieve all cases with joins to beneficiary, referee, staff and request
- * @param {Request} req
- * @param {Response} res
- */
-const getJoinedCases = async (req, res) => {
-  const cases = await Case.query().select();
-  return res.status(200).json({ cases });
-};
-
-/**
- * Retrieve cases with combination of selected filters (eg status, ben name, applied on etc)
- * @param {Request} req
- * @param {Response} res
- */
-const getFilteredCases = async (req, res) => {
+  // to obtain the full url
+  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+  // to parse the full url to retrieve all query params
+  const parsedUrl = url.parse(fullUrl);
+  // to break down into individual query params
+  const parsedQueries = querystring.parse(parsedUrl.query);
+  console.log(parsedQueries.include_entities);
   const cases = await Case.query().select();
   return res.status(200).json({ cases });
 };
 
 module.exports = {
   getAll,
-  getJoinedCases,
-  getFilteredCases,
 };

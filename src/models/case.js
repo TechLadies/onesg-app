@@ -1,4 +1,6 @@
 const { Model } = require('objection');
+const { Beneficiary } = require('./beneficiary');
+const { Request } = require('./request');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -40,6 +42,28 @@ class Case extends Model {
         beneficiaryId: { type: 'integer' },
         createdBy: { type: 'integer' },
         updatedBy: { type: 'integer' },
+      },
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      requests: {
+        relation: Model.HasManyRelation,
+        modelClass: Request,
+        join: {
+          from: 'case.id',
+          to: 'request.caseId',
+        },
+      },
+
+      beneficiaries: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Beneficiary,
+        join: {
+          from: 'case.beneficiaryId',
+          to: 'beneficiary.id',
+        },
       },
     };
   }
