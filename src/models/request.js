@@ -100,34 +100,29 @@ class Request extends Model {
 
     const requestChecklist = request.completedFulfilmentItems;
 
-    Object.keys(fulfilmentChecklistEnum).some((i) => {
+    Object.keys(fulfilmentChecklistEnum).forEach((i) => {
       if (
         // checks if fulfilmentType is present
         Object.keys(fulfilmentChecklistEnum[i]).includes(request.fulfilmentType)
       ) {
-        // checks if all items in completedFulfilmentItems is part of fulfilmentType
-        const result = requestChecklist.every((j) =>
-          Object.values(fulfilmentChecklistEnum[i])[0].includes(j)
-        );
-        if (result === false) {
-          const errorInput = [];
-          // filter out inputs that are not part of the fulfilmentType
-          // eslint-disable-next-line no-plusplus
-          for (let x = 0; x < requestChecklist.length; x++) {
-            if (
-              Object.values(fulfilmentChecklistEnum[i])[0].includes(
-                requestChecklist[x]
-              ) === false
-            ) {
-              errorInput.push(requestChecklist[x]);
-            }
+        const errorInput = [];
+        // filter out inputs that are not part of the fulfilmentType
+        // eslint-disable-next-line no-plusplus
+        for (let x = 0; x < requestChecklist.length; x++) {
+          if (
+            Object.values(fulfilmentChecklistEnum[i])[0].includes(
+              requestChecklist[x]
+            ) === false
+          ) {
+            errorInput.push(requestChecklist[x]);
           }
+        }
+        if (errorInput.length > 0) {
           throw new ValidationError({
-            message: `${errorInput} is/are not part of ${request.fulfilmentType}`,
+            message: `${errorInput} is/are not a checklist item for fulfilment type ${request.fulfilmentType}`,
           });
         }
       }
-      return false;
     });
   }
 }

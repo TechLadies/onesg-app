@@ -19,7 +19,10 @@ const {
 } = require('../../utils');
 
 /**
- * Sanitize data from client. Call before an insert or an update.
+ * Sanitize data from client.
+ * Call before an insert or an update.
+ * @param {Object} json - Unsanitised case
+ * @param {Object} cases - Sanitised case
  */
 
 function sanitize(json) {
@@ -83,7 +86,7 @@ const create = async (req, res, next) => {
     const cases = await Case.query().insertGraph(newCase).returning('*');
     return res.status(201).json({ cases });
   } catch (err) {
-    // ValidationError based on jsonSchema (eg refereeUdm benId, createdBy or updatedBy not in int format,
+    // ValidationError based on jsonSchema (eg refereeId, beneficiaryId, createdBy or updatedBy not in int format,
     // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {
       return next(new InvalidInput(err.message));
@@ -117,12 +120,12 @@ const create = async (req, res, next) => {
       }
       if (err.constraint === 'case_createdby_foreign') {
         return next(
-          new BadRequest(`Created by id ${newCase.createdBy} is not present`)
+          new BadRequest(`Staff account id ${newCase.createdBy} is not present`)
         );
       }
       if (err.constraint === 'case_updatedby_foreign') {
         return next(
-          new BadRequest(`Updated by id ${newCase.updatedBy} is not present`)
+          new BadRequest(`Staff account id ${newCase.updatedBy} is not present`)
         );
       }
     }

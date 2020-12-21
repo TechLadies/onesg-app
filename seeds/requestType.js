@@ -14,7 +14,7 @@ exports.seed = function seedRequestTypeTable(knex) {
           type: 'Diapers',
         },
         {
-          type: 'Finanacial Assistance',
+          type: 'Financial Assistance',
         },
         {
           type: 'Medical Bill',

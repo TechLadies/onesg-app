@@ -19,10 +19,10 @@ const {
 /**
  * Routing for cases endpoints (/v1/cases)
  */
-// GET /v1/requesttype
+// GET /v1/request-types
 router.get('/', requestTypes.getAll);
 
-// POST /v1/requesttype
+// POST /v1/request-types
 router.post('/', requestTypes.create);
 
 module.exports = router;

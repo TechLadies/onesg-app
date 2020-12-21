@@ -19,7 +19,10 @@ const {
 } = require('../../utils');
 
 /**
- * Sanitize data from client. Call before an insert or an update.
+ * Sanitize data from client.
+ * Call before an insert or an update.
+ * @param {Object} json - Unsanitised referee
+ * @param {Object} referee - Sanitised referee
  */
 function sanitize(json) {
   const referee = json;
@@ -94,7 +97,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
-    const referee = await Referee.query().insert(newReferee).returning('id');
+    const referee = await Referee.query().insert(newReferee).returning('*');
     return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -111,7 +114,7 @@ const create = async (req, res, next) => {
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(new BadRequest(err.nativerError.detail));
+    return next(new BadRequest(err.nativeError.detail));
   }
 };
 

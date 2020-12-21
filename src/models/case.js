@@ -102,9 +102,9 @@ class Case extends Model {
     // if referenceStatus is pending, casePendingReason cannot be empty
     if (cases.referenceStatus === 'PENDING') {
       if (
+        cases.casePendingReason === undefined ||
         cases.casePendingReason === '' ||
-        cases.casePendingReason === null ||
-        cases.casePendingReason === undefined
+        cases.casePendingReason === null
       ) {
         throw new ValidationError({
           message: 'Case pending reason required',
@@ -135,7 +135,7 @@ class Case extends Model {
         // if the object does not contain both title and url, will return false
         if (result === false) {
           throw new ValidationError({
-            message: 'Title and url are required',
+            message: 'Document title and a link to the document are required',
           });
         }
       }

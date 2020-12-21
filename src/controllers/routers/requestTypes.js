@@ -6,16 +6,20 @@
 
 'use strict';
 
-const { UniqueViolationError } = require('objection');
+const { UniqueViolationError, ValidationError } = require('objection');
 
 const { RequestType } = require('../../models');
 
 const {
   errors: { BadRequest },
 } = require('../../utils');
+const { InvalidInput } = require('../../utils/errors');
 
 /**
- * Sanitize data from client. Call before an insert or an update.
+ * Sanitize data from client by capitalizing the first char of each word.
+ * Call before an insert or an update.
+ * @param {Object} json - Unsanitised request type
+ * @param {Object} requestType - Sanitised request type
  */
 function sanitize(json) {
   const requestType = json;
@@ -25,42 +29,47 @@ function sanitize(json) {
       .toLowerCase()
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-      .join(' ');
+      .join(' ')
+      .trim();
   }
   return requestType;
 }
 
 /**
- * Retrieve all referees
- * @param {Request} req
- * @param {Response} res
+ * Retrieve all request types
+ * @param {Request} req - request object which contains request type
+ * @param {Response} res - response object which returns all request types
  */
 const getAll = async (req, res) => {
-  const results = await RequestType.query().select('type');
+  const results = await RequestType.query().select('*');
   return res.status(200).json({ results });
 };
 
 /**
- * Create new referee
- * @param {Request} req
- * @param {Response} res
+ * Create new request type
+ * @param {Request} req - request object which contains request type
+ * @param {Response} res - response object which returns corresponding status code, and id and request type if it is successfully created
  */
 const create = async (req, res, next) => {
   const newRequestType = sanitize(req.body);
   try {
     const requestType = await RequestType.query()
-      .select()
       .insert(newRequestType)
-      .returning('id');
+      .returning('*');
     return res.status(201).json({ requestType });
   } catch (err) {
+    // if there are already existing request types
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
+    }
+    // if the input type is invalid (eg null)
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
     }
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(err.message);
+    return next(new BadRequest(err.message));
   }
 };
 
