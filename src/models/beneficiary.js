@@ -4,52 +4,11 @@
 
 const { Model } = require('objection');
 
-const paymentTypeEnum = ['PAYNOW', 'BANK_TRANSFER'];
-
-// helper functions
-function getBeneficiaryNumber(previousNumber) {
-  const [
-    // eslint-disable-next-line no-unused-vars
-    _,
-    year,
-    month,
-    index,
-  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
-
-  const today = new Date();
-  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
-  const currentYear = today.getFullYear().toString();
-
-  let beneficiaryIndex = 1;
-  // If last inserted beneficiary is from the current month,
-  // use counter from previous insert
-  if (year === currentYear && month === currentMonth) {
-    beneficiaryIndex = parseInt(index, 10) + 1;
-  }
-
-  // add leading 0s
-  const paddedIndex = String(beneficiaryIndex).padStart(3, '0');
-
-  return `B${currentYear}-${currentMonth}${paddedIndex}`;
-}
-
 const tableBeneficiary = 'beneficiary';
 
 class Beneficiary extends Model {
   static get tableName() {
     return tableBeneficiary;
-  }
-
-  async $beforeInsert() {
-    const lastInsertedBeneficiary = await Beneficiary.query()
-      .select('beneficiaryNumber')
-      .orderBy('createdAt', 'desc')
-      .orderBy('beneficiaryNumber', 'desc')
-      .limit(1);
-
-    this.beneficiaryNumber = getBeneficiaryNumber(
-      lastInsertedBeneficiary[0].beneficiaryNumber
-    );
   }
 
   static get jsonSchema() {
@@ -89,5 +48,4 @@ module.exports = {
   Beneficiary,
   model: Beneficiary,
   tableBeneficiary,
-  paymentTypeEnum,
 };
