@@ -83,7 +83,7 @@ const getAll = async (req, res) => {
 const create = async (req, res, next) => {
   const newCase = sanitize(req.body);
   try {
-    await Case.transaction(async (trx) => {
+    return await Case.transaction(async (trx) => {
       const cases = await Case.query(trx).insertGraph(newCase).returning('*');
       return res.status(201).json({ cases });
     });
@@ -137,7 +137,6 @@ const create = async (req, res, next) => {
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
     return next(err);
   }
-  return null;
 };
 
 module.exports = {
