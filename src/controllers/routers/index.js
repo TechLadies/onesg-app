@@ -8,10 +8,12 @@
 
 const beneficiaries = require('./beneficiaries');
 const referees = require('./referees');
+const staffs = require('./staffs');
 // const cases = require('./cases');
 
 module.exports = {
   beneficiaries,
   referees,
+  staffs,
   // cases,
 };
