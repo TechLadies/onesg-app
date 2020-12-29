@@ -35,6 +35,6 @@ router.patch('/:id', isLoggedIn, beneficiaries.update);
 router.get('/:id', beneficiaries.getBeneficiary);
 
 // POST /v1/beneficiaries
-router.post('/', beneficiaries.create);
+// router.post('/', beneficiaries.create);
 
 module.exports = router;

@@ -76,10 +76,8 @@ const getById = async (req, res, next) => {
     return next(new ResourceNotFound(`Referee ${id} does not exist`));
   }
   try {
-    const referee = await Referee.query()
-      .select('name', 'email', 'phone', 'organisation')
-      .where('refereeNumber', id);
-    if (referee.length === 0) {
+    const referee = await Referee.query().findById(id);
+    if (!referee) {
       return next(new ResourceNotFound(`Referee ${id} does not exist`));
     }
     return res.status(200).json({ referee });

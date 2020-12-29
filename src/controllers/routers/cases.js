@@ -71,22 +71,7 @@ function sanitize(json) {
  * @param {Response} res
  */
 const getAll = async (req, res) => {
-  const cases = await Case.query()
-    .select('caseNumber', 'appliedOn', 'pointOfContact', 'createdBy')
-    .withGraphFetched(
-      '[beneficiary(beneficiaryName), referees(refereeName,refereeOrganisation)]'
-    )
-    .modifiers({
-      beneficiaryName(builder) {
-        builder.select('name');
-      },
-      refereeName(builder) {
-        builder.select('name');
-      },
-      refereeOrganisation(builder) {
-        builder.select('organisation');
-      },
-    });
+  const cases = await Case.query().select();
   return res.status(200).json({ cases });
 };
 

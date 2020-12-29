@@ -1,6 +1,3 @@
-/* eslint-disable no-useless-concat */
-/* eslint-disable no-console */
-/* eslint-disable object-shorthand */
 /*!
  * OneSG API Server by TL Bootcamp#6 OneSG Team
  * Copyright(c) 2020 TechLadies
@@ -52,7 +49,7 @@ const create = async (req, res, next) => {
   const newComments = {
     message: xss(req.body.message),
     caseNumber: req.params.id,
-    author: author,
+    author,
   };
   try {
     const comments = await Comment.query()
