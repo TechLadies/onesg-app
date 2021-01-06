@@ -1,7 +1,7 @@
 const { tableComments } = require('../src/models/comment.js');
 const { tableCase } = require('../src/models/case.js');
 
-exports.up = function makeCommentstable(knex) {
+exports.up = function makeCommentsTable(knex) {
   return knex.schema.createTable(tableComments, (table) => {
     table.increments('id').primary().index();
     table.text('message');
@@ -18,6 +18,6 @@ exports.up = function makeCommentstable(knex) {
   });
 };
 
-exports.down = function exportCommentstable(knex) {
+exports.down = function exportCommentsTable(knex) {
   return knex.schema.dropTable(tableComments);
 };
