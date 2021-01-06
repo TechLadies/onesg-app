@@ -7,6 +7,14 @@ const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 const tableCase = 'case';
 
 class Case extends Model {
+  static get modifiers() {
+    return {
+      caseNumber(builder) {
+        builder.select('caseNumber');
+      },
+    };
+  }
+
   static get tableName() {
     return tableCase;
   }
@@ -43,10 +51,29 @@ class Case extends Model {
       },
     };
   }
-}
 
+  static get relationMappings() {
+    return {
+      beneficiary: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: `${__dirname}/Beneficiary`,
+        join: {
+          from: 'case.beneficiaryId',
+          to: 'beneficiary.id',
+        },
+      },
+      referees: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: `${__dirname}/Referee`,
+        join: {
+          from: 'case.refereeId',
+          to: 'referee.id',
+        },
+      },
+    };
+  }
+}
 module.exports = {
-  Case,
   model: Case,
   tableCase,
   caseStatusEnum,

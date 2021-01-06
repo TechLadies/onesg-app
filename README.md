@@ -70,6 +70,15 @@ npx knex seed:run --specific=request.js
 
 Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
 
+5. Install psql and pg_trgm
+```
+\c onesg;
+```
+psql;
+```
+CREATE EXTENSION pg_trgm;
+```
+
 <br/>
 
 ## Setup Keys for Passport

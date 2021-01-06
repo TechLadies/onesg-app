@@ -7,7 +7,7 @@ const isLoggedIn = (req, res, next) => {
     if (err || !user) {
       return next(new Forbidden(' You are forbidden to enter.'));
     }
-
+    req.user = user;
     return next();
   })(req, res, next);
 };
