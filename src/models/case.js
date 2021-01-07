@@ -77,11 +77,20 @@ class Case extends Model {
         },
       },
 
-      staff: {
+      createdby: {
         relation: Model.BelongsToOneRelation,
         modelClass: Staff,
         join: {
           from: 'case.createdBy',
+          to: 'staff.id',
+        },
+      },
+
+      updatedby: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'case.updatedBy',
           to: 'staff.id',
         },
       },

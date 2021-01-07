@@ -13,8 +13,16 @@ const { Case } = require('../../models');
 
 function sanitize(json) {
   const query = json;
+
+  if (json.page !== undefined || json.page !== null) {
+    query.page = parseInt(json.page, 10);
+  }
+  if (json.per_page !== undefined || json.per_page !== null) {
+    query.per_page = parseInt(json.per_page, 10);
+  }
   if (json.include_entities) {
-    query.include_entities = `[${json.include_entities.split(',')}]`;
+    // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
+    query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
   }
   return query;
 }
@@ -34,6 +42,13 @@ const getAll = async (req, res) => {
   const parsedQueries = sanitize(
     JSON.parse(JSON.stringify(querystring.parse(parsedUrl.query)))
   );
+
+  if (parsedQueries.with_paging === 'true') {
+    const limit = parsedQueries.per_page || 10;
+    const currentPage = parsedQueries.page || 1;
+    const offset = limit * currentPage - limit;
+    console.log(offset);
+  }
 
   const cases = await Case.query().withGraphFetched(
     parsedQueries.include_entities
