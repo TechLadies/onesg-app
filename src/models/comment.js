@@ -3,7 +3,6 @@
 'use strict';
 
 const { Model } = require('objection');
-// const { InvalidInput } = require('../utils/errors');
 
 const tableComments = 'comment';
 class Comment extends Model {
