@@ -10,10 +10,12 @@ const beneficiaries = require('./beneficiaries');
 const cases = require('./cases');
 const referees = require('./referees');
 const requestTypes = require('./requestTypes');
+const search = require('./search');
 
 module.exports = {
   beneficiaries,
   cases,
   referees,
   requestTypes,
+  search,
 };
