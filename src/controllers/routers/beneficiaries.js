@@ -45,9 +45,6 @@ function sanitize(json) {
   if (json.notes) {
     beneficiary.notes = json.notes.trim();
   }
-  if (json.organisation) {
-    beneficiary.organisation = json.organisation.trim();
-  }
 
   return beneficiary;
 }
