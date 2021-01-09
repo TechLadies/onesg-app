@@ -11,6 +11,14 @@ const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 const tableCase = 'case';
 
 class Case extends Model {
+  static get modifiers() {
+    return {
+      caseNumber(builder) {
+        builder.select('caseNumber');
+      },
+    };
+  }
+
   static get tableName() {
     return tableCase;
   }
@@ -99,7 +107,6 @@ class Case extends Model {
 }
 
 module.exports = {
-  Case,
   model: Case,
   tableCase,
   caseStatusEnum,

@@ -1,35 +1,14 @@
-// Admin  are hard-coded
-const ADMIN_USERS = [
-  {
-    id: 1,
-    email: 'john',
-    password: 'password',
-    role: 'admin',
-  },
-  {
-    id: 2,
-    email: 'anna',
-    password: 'password123member',
-    role: 'admin',
-  },
-];
+const { Staff } = require('../../models');
 
-const isValidateAdminUser = (email, password) => {
-  const users = ADMIN_USERS.find((user) => {
-    return user.email === email && user.password === password;
-  });
-  // this returns true or false depending on login credentials
-  return users !== undefined;
-};
-
-const getAdminUser = (userEmail) => {
-  const user = ADMIN_USERS.find((users) => {
-    return users.email === userEmail;
-  });
-  if (user) {
+const getAdminUser = async (email) => {
+  const users = await Staff.query()
+    .select('*')
+    .where('email', email)
+    .where('isAdmin', 'true');
+  if (users.length) {
     const userdetails = {
-      email: user.email,
-      role: user.role,
+      email: users[0].email,
+      id: users[0].id,
     };
     return userdetails;
   }
@@ -38,5 +17,4 @@ const getAdminUser = (userEmail) => {
 
 module.exports = {
   getAdminUser,
-  isValidateAdminUser,
 };

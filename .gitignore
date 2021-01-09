@@ -9,5 +9,5 @@
 /dev.sqlite3/
 
 
-# key files
-keys/*
+# keys
+keys/
