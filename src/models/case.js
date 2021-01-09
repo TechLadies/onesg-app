@@ -70,22 +70,6 @@ class Case extends Model {
           to: 'referee.id',
         },
       },
-      beneficiary: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Beneficiary`,
-        join: {
-          from: 'case.beneficiaryId',
-          to: 'beneficiary.id',
-        },
-      },
-      referees: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Referee`,
-        join: {
-          from: 'case.refereeId',
-          to: 'referee.id',
-        },
-      },
       comments: {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Comment`,

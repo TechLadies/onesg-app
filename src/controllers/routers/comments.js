@@ -57,7 +57,6 @@ const create = async (req, res, next) => {
       .where('caseNumber', id);
     return res.status(201).json({ comments });
   } catch (err) {
-    console.log(err);
     // ForeignKeyViolationError for caseNumber that is not present
     if (err instanceof ForeignKeyViolationError) {
       if (err.constraint === 'comment_casenumber_foreign') {

@@ -1,4 +1,8 @@
-const { ValidationError, UniqueViolationError } = require('objection');
+const {
+  ValidationError,
+  UniqueViolationError,
+  NotNullViolationError,
+} = require('objection');
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
@@ -44,7 +48,6 @@ function sanitize(json) {
   if (json.organisation) {
     beneficiary.organisation = json.organisation.trim();
   }
-
 
   return beneficiary;
 }
@@ -219,6 +222,7 @@ const remove = async (req, res) => {
 
 module.exports = {
   getAll,
+  getBeneficiary,
   create,
   update,
   remove,
