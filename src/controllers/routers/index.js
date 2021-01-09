@@ -11,9 +11,12 @@ const referees = require('./referees');
 const staffs = require('./staffs');
 // const cases = require('./cases');
 
+const search = require('./search');
+
 module.exports = {
   beneficiaries,
   referees,
   staffs,
   // cases,
+  search,
 };

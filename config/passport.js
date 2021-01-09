@@ -15,14 +15,13 @@ const options = {
 };
 
 module.exports = (passport) => {
-  const passportCallbackFn = (jwtPayload, done) => {
-    const user = getAdminUser(jwtPayload.sub);
+  const passportCallbackFn = async (jwtPayload, done) => {
+    const user = await getAdminUser(jwtPayload.sub);
     if (user) {
       return done(null, user);
     }
 
     return done('user not found', false);
   };
-
   passport.use(new JwtStrategy(options, passportCallbackFn));
 };
