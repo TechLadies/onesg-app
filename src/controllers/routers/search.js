@@ -88,7 +88,7 @@ const search = async (req, res) => {
     if (with_paging === 'true') {
       results = await model
         .query()
-        .select(raw(`${type}.${fields.split(`,`)}`))
+        .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
         .withGraphFetched(fetchWith)
         .where(raw(sqlQuery, { searchBody: q }))
         .orderByRaw(order)
@@ -97,7 +97,7 @@ const search = async (req, res) => {
     } else {
       results = await model
         .query()
-        .select(raw(`${type}.${fields.split(`,`)}`))
+        .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
         .withGraphFetched(fetchWith)
         .where(raw(sqlQuery, { searchBody: q }))
         .orderByRaw(order);
@@ -106,14 +106,14 @@ const search = async (req, res) => {
   } else if (with_paging === 'true') {
     results = await model
       .query()
-      .select(raw(`${type}.${fields.split(`,`)}`))
+      .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
       .where(raw(sqlQuery, { searchBody: q }))
       .limit(limit)
       .offset(offset);
   } else {
     results = await model
       .query()
-      .select(raw(`${type}.${fields.split(`,`)}`))
+      .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
       .where(raw(sqlQuery, { searchBody: q }));
   }
   const cleanedResults = results.map(removeResourceId);
