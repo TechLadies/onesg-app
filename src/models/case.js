@@ -70,6 +70,14 @@ class Case extends Model {
           to: 'referee.id',
         },
       },
+      comments: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/Comment`,
+        join: {
+          from: 'case.caseNumber',
+          to: 'comment.caseNumber',
+        },
+      },
     };
   }
 }

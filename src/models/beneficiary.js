@@ -1,4 +1,4 @@
-const { ValidationError, Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 
 const tableBeneficiary = 'beneficiary';
 

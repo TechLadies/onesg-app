@@ -16,7 +16,7 @@ const beneficiaries = require('./beneficiaries');
 const referees = require('./referees');
 const staffs = require('./staffs');
 const search = require('./search');
-// const cases = require('./cases');
+const cases = require('./cases');
 
 const router = express.Router();
 
@@ -34,6 +34,6 @@ router.use('/v1/beneficiaries', beneficiaries);
 router.use('/v1/search', search);
 router.use('/v1/referees', referees);
 router.use('/v1/staffs', staffs);
-// router.use('/v1/cases', cases);
+router.use('/v1/cases', cases);
 
 module.exports = router;
