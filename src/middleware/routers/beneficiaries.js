@@ -40,3 +40,4 @@ router.post('/', isLoggedIn, beneficiaries.create);
 router.patch('/:id', isLoggedIn, beneficiaries.update);
 
 module.exports = router;
+
