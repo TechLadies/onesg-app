@@ -13,16 +13,34 @@ const { Case } = require('../../models');
 
 function sanitize(json) {
   const query = json;
-
-  if (json.page !== undefined || json.page !== null) {
-    query.page = parseInt(json.page, 10);
-  }
-  if (json.per_page !== undefined || json.per_page !== null) {
-    query.per_page = parseInt(json.per_page, 10);
-  }
   if (json.include_entities) {
     // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
     query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
+  }
+  return query;
+}
+
+function setDefault(json) {
+  const query = json;
+  // if with_paging is not available or false, set page and per_page to null
+  if (!json.with_paging || json.with_paging !== 'true') {
+    query.page = null;
+    query.per_page = null;
+  }
+  // if with_paging is true
+  else {
+    // if page is defined in query param, otherwise default to 1
+    if (json.page !== undefined || json.page !== null) {
+      query.page = parseInt(json.page, 10);
+    } else {
+      query.page = 1;
+    }
+    // if per_page is defined in query param, otherwise default to 10
+    if (json.per_page !== undefined || json.per_page !== null) {
+      query.per_page = parseInt(json.per_page, 10);
+    } else {
+      query.per_page = 10;
+    }
   }
   return query;
 }
@@ -43,16 +61,23 @@ const getAll = async (req, res) => {
     JSON.parse(JSON.stringify(querystring.parse(parsedUrl.query)))
   );
 
-  if (parsedQueries.with_paging === 'true') {
-    const limit = parsedQueries.per_page || 10;
-    const currentPage = parsedQueries.page || 1;
-    const offset = limit * currentPage - limit;
-    console.log(offset);
-  }
+  // to set the default values for with_paging, page and per_page
+  setDefault(parsedQueries);
 
-  const cases = await Case.query().withGraphFetched(
-    parsedQueries.include_entities
-  );
+  const currentPage = parsedQueries.page;
+  const limit = parsedQueries.per_page;
+  // if offset is undefined, set it to 0
+  const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
+  console.log('page:', currentPage);
+  console.log('limit:', limit);
+  console.log('offset:', offset);
+
+  const cases = await Case.query()
+    .withGraphFetched(parsedQueries.include_entities)
+    .limit(limit)
+    .offset(offset);
+
+  // return cases + pages
   return res.status(200).json({ cases });
 };
 
