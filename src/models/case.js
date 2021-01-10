@@ -108,6 +108,15 @@ class Case extends Model {
           to: 'request.caseId',
         },
       },
+
+      comments: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/Comment`,
+        join: {
+          from: 'case.caseNumber',
+          to: 'comment.caseNumber',
+        },
+      },
     };
   }
 
@@ -171,6 +180,7 @@ class Case extends Model {
 }
 
 module.exports = {
+  Case,
   model: Case,
   tableCase,
   caseStatusEnum,

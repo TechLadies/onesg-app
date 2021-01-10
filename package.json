@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "first",
   "main": "src/index.js",
-    "engines": {
+  "engines": {
     "node": "12.18.4"
   },
   "scripts": {
@@ -17,12 +17,13 @@
     "db-migrate": "npx knex migrate:latest",
     "db-make-table": "npx knex migrate:make ",
     "generate-keys": "node scripts/generateKeypair.js",
-    "seed-staff": "knex seed:run --specific=staff.js",
-    "seed-beneficiary": "knex seed:run --specific=beneficiaries.js",
-    "seed-referee": "knex seed:run --specific=referees.js",
-    "seed-case": "knex seed:run --specific=case.js",
-    "seed-requestType": "knex seed:run --specific=requestType.js",
-    "seed-request": "knex seed:run --specific=request.js"
+    "seed-staff": "npx knex seed:run --specific=staff.js",
+    "seed-beneficiary": "npx knex seed:run --specific=beneficiaries.js",
+    "seed-referee": "npx knex seed:run --specific=referees.js",
+    "seed-case": "npx knex seed:run --specific=case.js",
+    "seed-requestType": "npx knex seed:run --specific=requestType.js",
+    "seed-request": "npx knex seed:run --specific=request.js",
+    "seed-comments": "knex seed:run --specific=comments.js"
   },
   "repository": {
     "type": "git",
@@ -48,7 +49,8 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "pg": "^8.4.2",
-    "supertest": "^6.0.1"
+    "supertest": "^6.0.1",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

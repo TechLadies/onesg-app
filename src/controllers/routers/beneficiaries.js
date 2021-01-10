@@ -6,6 +6,7 @@ const {
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
+
 const { Beneficiary } = require('../../models');
 
 // const removeResourceId = require('../../helpers/cleandata/removeResourceId');
@@ -55,19 +56,74 @@ function sanitize(json) {
  */
 const getAll = async (req, res) => {
   const beneficiaries = await Beneficiary.query().select(
-    'beneficiaryNumber',
     'name',
+    'beneficiaryNumber',
     'email',
     'phone',
     'occupation',
-    'notes',
     'householdIncome',
     'householdSize',
     'paymentType',
-    'createdBy',
-    'updatedBy'
+    'createdAt',
+    'updatedAt',
+    'updatedBy',
+    'createdBy'
   );
   res.status(200).json({ beneficiaries });
+};
+
+/**
+ * Retrieve specific referee by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getBeneficiary = async (req, res, next) => {
+  const { id } = req.params;
+  const { includes } = req.query;
+
+  // Execute the transaction
+  let beneficiary;
+  try {
+    if (includes === `cases`) {
+      beneficiary = await Beneficiary.query()
+        .select(
+          'name',
+          'email',
+          'phone',
+          'occupation',
+          'householdIncome',
+          'householdSize',
+          'paymentType',
+          'notes'
+        )
+        .withGraphFetched('cases (caseNumber)')
+        .modifiers({
+          caseNumber(builder) {
+            builder.select('caseNumber');
+          },
+        })
+        .where('beneficiaryNumber', id);
+    } else {
+      beneficiary = await Beneficiary.query()
+        .select(
+          'name',
+          'email',
+          'phone',
+          'occupation',
+          'householdIncome',
+          'householdSize',
+          'paymentType',
+          'notes'
+        )
+        .where('beneficiaryNumber', id);
+    }
+    if (beneficiary.length === 0) {
+      return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
+    }
+    return res.status(200).json({ beneficiary: beneficiary[0] });
+  } catch (err) {
+    return next();
+  }
 };
 
 /**
@@ -163,6 +219,7 @@ const remove = async (req, res) => {
 
 module.exports = {
   getAll,
+  getBeneficiary,
   create,
   update,
   remove,
