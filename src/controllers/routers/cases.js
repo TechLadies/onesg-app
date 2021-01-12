@@ -82,7 +82,6 @@ const getAll = async (req, res) => {
 
   // to retrieve case status
   const caseStatus = parsedQueries.status;
-  console.log(caseStatus);
 
   // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
