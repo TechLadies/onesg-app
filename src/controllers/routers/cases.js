@@ -22,10 +22,10 @@ const {
  * Sanitize data from client.
  * Call before an insert or an update.
  * @param {Object} json - Unsanitised case
- * @param {Object} cases - Sanitised case
+ * @return {Object} cases - Sanitised case
  */
 
-function sanitize(json) {
+function sanitizedCase(json) {
   const cases = json;
   if (json.caseStatus) {
     cases.caseStatus = json.caseStatus.toUpperCase().trim();
@@ -81,7 +81,7 @@ const getAll = async (req, res) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  const newCase = sanitize(req.body);
+  const newCase = sanitizedCase(req.body);
   try {
     return await Case.transaction(async (trx) => {
       const cases = await Case.query(trx).insertGraph(newCase).returning('*');
