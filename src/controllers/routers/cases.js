@@ -76,7 +76,7 @@ const getAll = async (req, res) => {
     .offset(offset);
 
   let response;
-  // eslint-disable-next-line camelcase
+  // if with_paging is true or false, provide a response after results
   if (
     parsedQueries.with_paging === 'true' ||
     parsedQueries.with_paging === 'false'
