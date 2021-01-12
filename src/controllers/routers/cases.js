@@ -17,6 +17,9 @@ function sanitize(json) {
     // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
     query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
   }
+  if (json.status) {
+    query.status = json.status.toUpperCase();
+  }
   return query;
 }
 
@@ -42,6 +45,10 @@ function setDefault(json) {
       query.per_page = 10;
     }
   }
+  // if status is not present, set default to 'ALL'
+  if (!json.status) {
+    query.status = 'ALL';
+  }
   return query;
 }
 
@@ -61,24 +68,40 @@ const getAll = async (req, res) => {
     JSON.parse(JSON.stringify(querystring.parse(parsedUrl.query)))
   );
 
-  // to set the default values for with_paging, page and per_page
+  // to set the default values for with_paging, page, per_page and status
   setDefault(parsedQueries);
-
-  // to retrieve sort field and sort order
-  const sortField = parsedQueries.sort.split(':')[0];
-  const sortOrder = parsedQueries.sort.split(':')[1];
 
   const currentPage = parsedQueries.page;
   const limit = parsedQueries.per_page;
   // if offset is undefined, set it to 0
   const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
 
+  // to retrieve sort field and sort order
+  const sortField = parsedQueries.sort.split(':')[0];
+  const sortOrder = parsedQueries.sort.split(':')[1];
+
+  // to retrieve case status
+  const caseStatus = parsedQueries.status;
+  console.log(caseStatus);
+
+  // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
-  const results = await Case.query()
-    .withGraphFetched(parsedQueries.include_entities)
-    .orderBy(sortField, sortOrder)
-    .limit(limit)
-    .offset(offset);
+
+  let results;
+  if (caseStatus === 'ALL') {
+    results = await Case.query()
+      .withGraphFetched(parsedQueries.include_entities)
+      .orderBy(sortField, sortOrder)
+      .limit(limit)
+      .offset(offset);
+  } else {
+    results = await Case.query()
+      .withGraphFetched(parsedQueries.include_entities)
+      .where('caseStatus', caseStatus)
+      .orderBy(sortField, sortOrder)
+      .limit(limit)
+      .offset(offset);
+  }
 
   let response;
   // if with_paging is true or false, provide a response after results
