@@ -64,6 +64,10 @@ const getAll = async (req, res) => {
   // to set the default values for with_paging, page and per_page
   setDefault(parsedQueries);
 
+  // to retrieve sort field and sort order
+  const sortField = parsedQueries.sort.split(':')[0];
+  const sortOrder = parsedQueries.sort.split(':')[1];
+
   const currentPage = parsedQueries.page;
   const limit = parsedQueries.per_page;
   // if offset is undefined, set it to 0
@@ -72,6 +76,7 @@ const getAll = async (req, res) => {
   const allCases = await Case.query();
   const results = await Case.query()
     .withGraphFetched(parsedQueries.include_entities)
+    .orderBy(sortField, sortOrder)
     .limit(limit)
     .offset(offset);
 
