@@ -68,17 +68,29 @@ const getAll = async (req, res) => {
   const limit = parsedQueries.per_page;
   // if offset is undefined, set it to 0
   const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
-  console.log('page:', currentPage);
-  console.log('limit:', limit);
-  console.log('offset:', offset);
 
-  const cases = await Case.query()
+  const allCases = await Case.query();
+  const results = await Case.query()
     .withGraphFetched(parsedQueries.include_entities)
     .limit(limit)
     .offset(offset);
 
+  let response;
+  // eslint-disable-next-line camelcase
+  if (
+    parsedQueries.with_paging === 'true' ||
+    parsedQueries.with_paging === 'false'
+  ) {
+    response = {
+      page: currentPage,
+      per_page: limit,
+      total_records: allCases.length,
+      more: results.length >= limit,
+    };
+  }
+
   // return cases + pages
-  return res.status(200).json({ cases });
+  return res.status(200).json({ results, response });
 };
 
 module.exports = {
