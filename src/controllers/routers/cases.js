@@ -16,6 +16,13 @@ function sanitize(json) {
   if (json.include_entities) {
     // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
     query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
+    if (query.include_entities.includes('beneficiary')) {
+      query.include_entities = query.include_entities.replace(
+        'beneficiary',
+        'beneficiary(filterBeneficiaryName)'
+      );
+    }
+    console.log(query.include_entities);
   }
   if (json.status) {
     query.status = json.status.toUpperCase();
@@ -95,12 +102,35 @@ const getAll = async (req, res) => {
       .offset(offset);
   } else {
     results = await Case.query()
-      .withGraphFetched(parsedQueries.include_entities)
+      .withGraphFetched(
+        // '[beneficiary(filterBeneficiaryName), referee(filterRefereeName, filterRefereeOrg)]'
+        parsedQueries.include_entities
+      )
+      .modifiers({
+        filterBeneficiaryName(builder) {
+          builder.where('name', 'Ziza');
+        },
+      })
       .where('caseStatus', caseStatus)
       .orderBy(sortField, sortOrder)
       .limit(limit)
       .offset(offset);
   }
+
+  // const results = await Case.query()
+  //   .whereRaw('beneficiary.name = ?', 'Ziza')
+  //   .withGraphJoined('[beneficiary, referee]')
+  //   .withGraphJoined(
+  //     '[beneficiary(filterBeneficiaryName), referee(filterRefereeName)]'
+  //   )
+  //   .modifiers({
+  //     filterBeneficiaryName(builder) {
+  //       builder.where('name', 'Ziza');
+  //     },
+  //   })
+  //   .orderBy(sortField, sortOrder)
+  //   .limit(limit)
+  //   .offset(offset);
 
   let response;
   // if with_paging is true or false, provide a response after results
