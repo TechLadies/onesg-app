@@ -22,7 +22,6 @@ function sanitize(json) {
         'beneficiary(filterBeneficiaryName)'
       );
     }
-    console.log(query.include_entities);
   }
   if (json.status) {
     query.status = json.status.toUpperCase();
