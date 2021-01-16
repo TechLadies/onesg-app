@@ -88,48 +88,49 @@ const getAll = async (req, res) => {
 
   // to retrieve case status
   const caseStatus = parsedQueries.status;
+  console.log(caseStatus);
 
   // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
 
-  let results;
-  if (caseStatus === 'ALL') {
-    results = await Case.query()
-      .withGraphFetched(parsedQueries.include_entities)
-      .orderBy(sortField, sortOrder)
-      .limit(limit)
-      .offset(offset);
-  } else {
-    results = await Case.query()
-      .withGraphFetched(
-        // '[beneficiary(filterBeneficiaryName), referee(filterRefereeName, filterRefereeOrg)]'
-        parsedQueries.include_entities
-      )
-      .modifiers({
-        filterBeneficiaryName(builder) {
-          builder.where('name', 'Ziza');
-        },
-      })
-      .where('caseStatus', caseStatus)
-      .orderBy(sortField, sortOrder)
-      .limit(limit)
-      .offset(offset);
-  }
+  // let results;
+  // if (caseStatus === 'ALL') {
+  //   results = await Case.query()
+  //     .withGraphFetched(parsedQueries.include_entities)
+  //     .orderBy(sortField, sortOrder)
+  //     .limit(limit)
+  //     .offset(offset);
+  // } else {
+  //   results = await Case.query()
+  //     .withGraphFetched(
+  //       // '[beneficiary(filterBeneficiaryName), referee(filterRefereeName, filterRefereeOrg)]'
+  //       parsedQueries.include_entities
+  //     )
+  //     .modifiers({
+  //       filterBeneficiaryName(builder) {
+  //         builder.where('name', 'Ziza');
+  //       },
+  //     })
+  //     .where('caseStatus', caseStatus)
+  //     .orderBy(sortField, sortOrder)
+  //     .limit(limit)
+  //     .offset(offset);
+  // }
 
-  // const results = await Case.query()
-  //   .whereRaw('beneficiary.name = ?', 'Ziza')
-  //   .withGraphJoined('[beneficiary, referee]')
-  //   .withGraphJoined(
-  //     '[beneficiary(filterBeneficiaryName), referee(filterRefereeName)]'
-  //   )
-  //   .modifiers({
-  //     filterBeneficiaryName(builder) {
-  //       builder.where('name', 'Ziza');
-  //     },
-  //   })
-  //   .orderBy(sortField, sortOrder)
-  //   .limit(limit)
-  //   .offset(offset);
+  // const whereCondition = " 'beneficiary.name', 'Ziza' ";
+
+  const results = await Case.query()
+    // .whereRaw('beneficiary.name = ?', 'Ziza')
+    .withGraphJoined('[beneficiary, referee]')
+    // .withGraphJoined('[beneficiary(filterBeneficiaryName), referee]')
+    // .modifiers({
+    //   filterBeneficiaryName(builder) {
+    //     builder.where('name', 'Ziza');
+    //   },
+    // })
+    .orderBy(sortField, sortOrder)
+    .limit(limit)
+    .offset(offset);
 
   let response;
   // if with_paging is true or false, provide a response after results
@@ -145,8 +146,13 @@ const getAll = async (req, res) => {
     };
   }
 
+  const returnedObj = {
+    results,
+    response,
+  };
+
   // return cases + pages
-  return res.status(200).json({ results, response });
+  return res.status(200).json(returnedObj);
 };
 
 module.exports = {
