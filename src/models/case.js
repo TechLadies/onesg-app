@@ -104,6 +104,11 @@ class Case extends Model {
       },
     };
   }
+
+  $parseDatabaseJson(json) {
+    super.$parseDatabaseJson(json);
+    console.log('json', json);
+  }
 }
 
 module.exports = {

@@ -26,6 +26,17 @@ function sanitize(json) {
   if (json.status) {
     query.status = json.status.toUpperCase();
   }
+  if (json.applied_on) {
+    if (json.applied_on.length !== 8) {
+      query.applied_on = '';
+    } else {
+      const year = json.applied_on.slice(0, 4);
+      const month = json.applied_on.slice(4, 6);
+      const day = json.applied_on.slice(6, 8);
+      const dateString = new Date(`${year}-${month}-${day}`);
+      console.log(dateString, typeof dateString);
+    }
+  }
   return query;
 }
 
@@ -128,6 +139,26 @@ const getAll = async (req, res) => {
     //     builder.where('name', 'Ziza');
     //   },
     // })
+    .where((builder) => {
+      if (parsedQueries.beneficiary_name) {
+        builder.where('beneficiary.name', parsedQueries.beneficiary_name);
+      }
+      if (parsedQueries.referee_name) {
+        builder.where('referee.name', parsedQueries.referee_name);
+      }
+      if (parsedQueries.referee_org) {
+        builder.where('referee.organisation', parsedQueries.referee_org);
+      }
+      if (parsedQueries.status !== 'ALL') {
+        builder.where('caseStatus', caseStatus);
+      }
+      if (parsedQueries.case_number) {
+        builder.where('caseNumber', parsedQueries.case_number);
+      }
+      if (parsedQueries.applied_on) {
+        builder.where('appliedOn', parsedQueries.applied_on);
+      }
+    })
     .orderBy(sortField, sortOrder)
     .limit(limit)
     .offset(offset);
