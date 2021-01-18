@@ -17,9 +17,11 @@ function sanitize(json) {
     // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
     query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
   }
+  // to make status uppercase
   if (json.status) {
     query.status = json.status.toUpperCase();
   }
+  // to convert applied_on to format YYYY-MM-DD
   if (json.applied_on) {
     if (json.applied_on.length !== 8) {
       query.applied_on = '';
@@ -27,8 +29,7 @@ function sanitize(json) {
       const year = json.applied_on.slice(0, 4);
       const month = json.applied_on.slice(4, 6);
       const day = json.applied_on.slice(6, 8);
-      const dateString = `${year}-${month}-${day}`;
-      console.log(dateString, typeof dateString);
+      query.applied_on = `${year}-${month}-${day}`;
     }
   }
   return query;
@@ -97,41 +98,8 @@ const getAll = async (req, res) => {
   // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
 
-  // let results;
-  // if (caseStatus === 'ALL') {
-  //   results = await Case.query()
-  //     .withGraphFetched(parsedQueries.include_entities)
-  //     .orderBy(sortField, sortOrder)
-  //     .limit(limit)
-  //     .offset(offset);
-  // } else {
-  //   results = await Case.query()
-  //     .withGraphFetched(
-  //       // '[beneficiary(filterBeneficiaryName), referee(filterRefereeName, filterRefereeOrg)]'
-  //       parsedQueries.include_entities
-  //     )
-  //     .modifiers({
-  //       filterBeneficiaryName(builder) {
-  //         builder.where('name', 'Ziza');
-  //       },
-  //     })
-  //     .where('caseStatus', caseStatus)
-  //     .orderBy(sortField, sortOrder)
-  //     .limit(limit)
-  //     .offset(offset);
-  // }
-
-  // const whereCondition = " 'beneficiary.name', 'Ziza' ";
-
   const results = await Case.query()
-    // .whereRaw('beneficiary.name = ?', 'Ziza')
     .withGraphJoined(parsedQueries.include_entities)
-    // .withGraphJoined('[beneficiary(filterBeneficiaryName), referee]')
-    // .modifiers({
-    //   filterBeneficiaryName(builder) {
-    //     builder.where('name', 'Ziza');
-    //   },
-    // })
     .where((builder) => {
       if (parsedQueries.beneficiary_name) {
         builder.where('beneficiary.name', parsedQueries.beneficiary_name);
@@ -156,24 +124,23 @@ const getAll = async (req, res) => {
     .limit(limit)
     .offset(offset);
 
-  let response;
-  // if with_paging is true or false, provide a response after results
+  let returnedObj;
   if (
     parsedQueries.with_paging === 'true' ||
     parsedQueries.with_paging === 'false'
   ) {
-    response = {
+    returnedObj = {
+      results,
       page: currentPage,
       per_page: limit,
       total_records: allCases.length,
       more: results.length >= limit,
     };
+  } else {
+    returnedObj = {
+      results,
+    };
   }
-
-  const returnedObj = {
-    results,
-    response,
-  };
 
   // return cases + pages
   return res.status(200).json(returnedObj);
