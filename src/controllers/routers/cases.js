@@ -16,12 +16,6 @@ function sanitize(json) {
   if (json.include_entities) {
     // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
     query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
-    if (query.include_entities.includes('beneficiary')) {
-      query.include_entities = query.include_entities.replace(
-        'beneficiary',
-        'beneficiary(filterBeneficiaryName)'
-      );
-    }
   }
   if (json.status) {
     query.status = json.status.toUpperCase();
@@ -33,7 +27,7 @@ function sanitize(json) {
       const year = json.applied_on.slice(0, 4);
       const month = json.applied_on.slice(4, 6);
       const day = json.applied_on.slice(6, 8);
-      const dateString = new Date(`${year}-${month}-${day}`);
+      const dateString = `${year}-${month}-${day}`;
       console.log(dateString, typeof dateString);
     }
   }
@@ -99,7 +93,6 @@ const getAll = async (req, res) => {
 
   // to retrieve case status
   const caseStatus = parsedQueries.status;
-  console.log(caseStatus);
 
   // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
@@ -132,7 +125,7 @@ const getAll = async (req, res) => {
 
   const results = await Case.query()
     // .whereRaw('beneficiary.name = ?', 'Ziza')
-    .withGraphJoined('[beneficiary, referee]')
+    .withGraphJoined(parsedQueries.include_entities)
     // .withGraphJoined('[beneficiary(filterBeneficiaryName), referee]')
     // .modifiers({
     //   filterBeneficiaryName(builder) {

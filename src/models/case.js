@@ -56,6 +56,19 @@ class Case extends Model {
     };
   }
 
+  $parseDatabaseJson(json) {
+    super.$parseDatabaseJson(json);
+    if (json.appliedOn !== undefined) {
+      const year = json.appliedOn.getFullYear();
+      const month = `0${json.appliedOn.getMonth() + 1}`.slice(-2);
+      const day = `0${json.appliedOn.getDate()}`.slice(-2);
+      const date = `${year}-${month}-${day}`;
+      // eslint-disable-next-line no-param-reassign
+      json.appliedOn = date;
+    }
+    return json;
+  }
+
   static get relationMappings() {
     return {
       beneficiary: {
@@ -103,11 +116,6 @@ class Case extends Model {
         },
       },
     };
-  }
-
-  $parseDatabaseJson(json) {
-    super.$parseDatabaseJson(json);
-    console.log('json', json);
   }
 }
 
