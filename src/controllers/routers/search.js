@@ -5,6 +5,10 @@ const {
   errors: { BadRequest },
 } = require('../../utils');
 
+function formatFields(type, fields) {
+  return `${fields.split(`,`).map((x) => `${type}."${x}"`)}`;
+}
+
 const search = async (req, res) => {
   // Extract all query params
   const {
@@ -80,6 +84,7 @@ const search = async (req, res) => {
   const limit = parseInt(per_page, 10) || 10;
   const currentPage = parseInt(page, 10) || 1;
   const offset = limit * currentPage - limit;
+  const fieldQueryString = formatFields(type, fields);
 
   // Execute the transaction
   let results;
@@ -88,7 +93,7 @@ const search = async (req, res) => {
     if (with_paging === 'true') {
       results = await model
         .query()
-        .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
+        .select(raw(fieldQueryString))
         .withGraphFetched(fetchWith)
         .where(raw(sqlQuery, { searchBody: q }))
         .orderByRaw(order)
@@ -97,7 +102,7 @@ const search = async (req, res) => {
     } else {
       results = await model
         .query()
-        .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
+        .select(raw(fieldQueryString))
         .withGraphFetched(fetchWith)
         .where(raw(sqlQuery, { searchBody: q }))
         .orderByRaw(order);
@@ -106,14 +111,14 @@ const search = async (req, res) => {
   } else if (with_paging === 'true') {
     results = await model
       .query()
-      .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
+      .select(raw(fieldQueryString))
       .where(raw(sqlQuery, { searchBody: q }))
       .limit(limit)
       .offset(offset);
   } else {
     results = await model
       .query()
-      .select(raw(`${type}.${fields.split(`,`).map((x) => `"${x}"`)}`))
+      .select(raw(fieldQueryString))
       .where(raw(sqlQuery, { searchBody: q }));
   }
   const cleanedResults = results.map(removeResourceId);
