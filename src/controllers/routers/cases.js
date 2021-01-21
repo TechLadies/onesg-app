@@ -100,7 +100,6 @@ const create = async (req, res, next) => {
       return res.status(201).json({ cases });
     });
   } catch (err) {
-    console.log(err);
     // ValidationError based on jsonSchema (eg refereeId, beneficiaryId, createdBy or updatedBy not in int format,
     // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {
