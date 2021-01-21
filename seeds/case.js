@@ -34,16 +34,5 @@ exports.seed = function seedCaseTable(knex) {
           updatedBy: 2,
         },
       ]);
-    })
-    .then(function updateCaseEF202011001() {
-      return knex
-        .table(tableCase)
-        .where({ caseNumber: 'EF2020-11001' })
-        .update({
-          documents: JSON.stringify([
-            { title: 'Application form', url: 'http://www.link.com' },
-            { title: 'Receipt', url: 'http://www.receipt.com' },
-          ]),
-        });
     });
 };

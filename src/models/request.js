@@ -65,7 +65,11 @@ class Request extends Model {
         },
         completedFulfilmentItems: { type: 'array' },
         description: { type: 'string', maxLength: 255 },
-        requestStatus: { type: 'enum', enum: requestStatusEnum },
+        requestStatus: {
+          type: 'enum',
+          enum: requestStatusEnum,
+          default: 'UNDER_REVIEW',
+        },
         reviewedOn: { type: 'date' },
         fulfilledOn: { type: 'date' },
         caseId: { type: 'integer' },
@@ -97,6 +101,11 @@ class Request extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const request = json;
+
+    // if completedFulfilmentItems is not provided, set it to []
+    if (!request.completedFulfilmentItems) {
+      request.completedFulfilmentItems = [];
+    }
 
     const requestChecklist = request.completedFulfilmentItems;
 

@@ -39,15 +39,24 @@ function sanitizedCase(json) {
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
   }
-  if (typeof json.amountRequested === 'string') {
-    cases.amountRequested = parseFloat(json.amountRequested);
+  if (json.amountRequested) {
+    if (typeof json.amountRequested === 'string') {
+      // if amountRequested is an empty string, set to 0
+      if (Number.isNaN(cases.amountRequested)) {
+        cases.amountRequested = 0;
+      } else {
+        cases.amountRequested = parseFloat(json.amountRequested);
+      }
+    }
   }
-  if (typeof json.amountGranted === 'string') {
-    cases.amountGranted = parseFloat(json.amountGranted);
-  }
-  if (json.documents) {
-    if (json.documents === null || json.documents === '') {
-      cases.documents = {};
+  if (json.amountGranted) {
+    if (typeof json.amountGranted === 'string') {
+      // if amountGranted is an empty string, set to 0
+      if (Number.isNaN(cases.amountGranted)) {
+        cases.amountGranted = 0;
+      } else {
+        cases.amountGranted = parseFloat(json.amountGranted);
+      }
     }
   }
   if (json.refereeId) {
@@ -82,12 +91,16 @@ const getAll = async (req, res) => {
  */
 const create = async (req, res, next) => {
   const newCase = sanitizedCase(req.body);
+  if (newCase.referenceStatus === '') {
+    newCase.referenceStatus = 'UNVERIFIED';
+  }
   try {
     return await Case.transaction(async (trx) => {
       const cases = await Case.query(trx).insertGraph(newCase).returning('*');
       return res.status(201).json({ cases });
     });
   } catch (err) {
+    console.log(err);
     // ValidationError based on jsonSchema (eg refereeId, beneficiaryId, createdBy or updatedBy not in int format,
     // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {
@@ -130,12 +143,15 @@ const create = async (req, res, next) => {
           new BadRequest(`Staff account id ${newCase.updatedBy} is not present`)
         );
       }
+      if (err.constraint === 'request_requesttypeid_foreign') {
+        return next(new BadRequest(`Request type id is/are invalid`));
+      }
     }
 
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(err);
+    return next(new BadRequest(err.nativeError.detail));
   }
 };
 
