@@ -22,7 +22,7 @@ exports.up = function makeRequestTable(knex) {
         'Lists items that have been checked off from the fulfilment type checklist; each type has its own checklist'
       );
     table.string('description', 255).comment('Description of the request');
-    table.enum('requestStatus', requestStatusEnum);
+    table.enum('requestStatus', requestStatusEnum).defaultTo('UNDER_REVIEW');
     table
       .date('reviewedOn')
       .comment('Date the request has been accepted or rejected');

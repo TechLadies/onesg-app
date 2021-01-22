@@ -1,10 +1,38 @@
-const { Model } = require('objection');
+const { ValidationError, Model } = require('objection');
+const { Request } = require('./request');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
 const referenceStatusEnum = ['UNVERIFIED', 'PENDING', 'VERIFIED'];
 
 const tableCase = 'case';
+
+// helper functions
+function getCaseNumber(previousNumber) {
+  const [
+    // eslint-disable-next-line no-unused-vars
+    _,
+    year,
+    month,
+    index,
+  ] = previousNumber.match(/EF(\d{4})-(\d{2})(\d{3})/);
+
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+  const currentYear = today.getFullYear().toString();
+
+  let caseIndex = 1;
+  // If last inserted beneficiary is from the current month,
+  // use counter from previous insert
+  if (year === currentYear && month === currentMonth) {
+    caseIndex = parseInt(index, 10) + 1;
+  }
+
+  // add leading 0s
+  const paddedIndex = String(caseIndex).padStart(3, '0');
+
+  return `EF${currentYear}-${currentMonth}${paddedIndex}`;
+}
 
 class Case extends Model {
   static get modifiers() {
@@ -62,6 +90,7 @@ class Case extends Model {
           to: 'beneficiary.id',
         },
       },
+
       referees: {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Referee`,
@@ -70,6 +99,16 @@ class Case extends Model {
           to: 'referee.id',
         },
       },
+
+      requests: {
+        relation: Model.HasManyRelation,
+        modelClass: Request,
+        join: {
+          from: 'case.id',
+          to: 'request.caseId',
+        },
+      },
+
       comments: {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Comment`,
@@ -80,8 +119,50 @@ class Case extends Model {
       },
     };
   }
+
+  async $beforeInsert() {
+    const lastInsertedCase = await Case.query()
+      .select('caseNumber')
+      .orderBy('caseNumber', 'desc')
+      .orderBy('createdAt', 'desc')
+      .limit(1);
+
+    this.caseNumber = getCaseNumber(lastInsertedCase[0].caseNumber);
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    const cases = json;
+
+    // if referenceStatus is pending, casePendingReason cannot be empty
+    if (cases.referenceStatus === 'PENDING') {
+      if (
+        cases.casePendingReason === undefined ||
+        cases.casePendingReason === '' ||
+        cases.casePendingReason === null
+      ) {
+        throw new ValidationError({
+          message: 'Case pending reason required',
+        });
+      }
+    }
+
+    // validate amountRequested > 0 and amountGranted > 0 if there is input
+    if (cases.amountRequested < 0) {
+      throw new ValidationError({
+        message: 'Amount requested must be a number greater than 0',
+      });
+    }
+    if (cases.amountGranted < 0) {
+      throw new ValidationError({
+        message: 'Amount granted must be a number greater than 0',
+      });
+    }
+  }
 }
+
 module.exports = {
+  Case,
   model: Case,
   tableCase,
   caseStatusEnum,
