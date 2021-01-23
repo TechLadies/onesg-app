@@ -15,6 +15,7 @@ const auth = require('./auth');
 const beneficiaries = require('./beneficiaries');
 const cases = require('./cases');
 const referees = require('./referees');
+const staffs = require('./staffs');
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 
@@ -34,6 +35,7 @@ router.use('/v1/beneficiaries', beneficiaries);
 router.use('/v1/cases', cases);
 router.use('/v1/search', search);
 router.use('/v1/referees', referees);
+router.use('/v1/staffs', staffs);
 router.use('/v1/request-types', requestTypes);
 
 module.exports = router;

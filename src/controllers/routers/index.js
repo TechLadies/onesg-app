@@ -9,6 +9,7 @@
 const beneficiaries = require('./beneficiaries');
 const cases = require('./cases');
 const referees = require('./referees');
+const staffs = require('./staffs');
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 const comments = require('./comments');
@@ -17,6 +18,7 @@ module.exports = {
   beneficiaries,
   cases,
   referees,
+  staffs,
   requestTypes,
   search,
   comments,
