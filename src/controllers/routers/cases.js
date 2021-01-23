@@ -179,7 +179,6 @@ function setDefault(json) {
  */
 const getAll = async (req, res, next) => {
   const parsedQueries = sanitizedQuery(req.query);
-  console.log(parsedQueries);
 
   // to set the default values for with_paging, page, per_page and status
   setDefault(parsedQueries);
