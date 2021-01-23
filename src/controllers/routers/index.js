@@ -10,8 +10,6 @@ const beneficiaries = require('./beneficiaries');
 const cases = require('./cases');
 const referees = require('./referees');
 const staffs = require('./staffs');
-// const cases = require('./cases');
-
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 const comments = require('./comments');
