@@ -2,8 +2,9 @@
 
 'use strict';
 
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 const { Case } = require('./case');
+const { RequestType } = require('./requestType');
 
 const fulfilmentTypeEnum = [
   'IN_KIND_DONATION',
@@ -65,7 +66,11 @@ class Request extends Model {
         },
         completedFulfilmentItems: { type: 'array' },
         description: { type: 'string', maxLength: 255 },
-        requestStatus: { type: 'enum', enum: requestStatusEnum },
+        requestStatus: {
+          type: 'enum',
+          enum: requestStatusEnum,
+          default: 'UNDER_REVIEW',
+        },
         reviewedOn: { type: 'date' },
         fulfilledOn: { type: 'date' },
         caseId: { type: 'integer' },
@@ -75,7 +80,7 @@ class Request extends Model {
 
   static get relationMappings() {
     return {
-      cases: {
+      case: {
         relation: Model.BelongsToOneRelation,
         modelClass: Case,
         join: {
@@ -83,7 +88,52 @@ class Request extends Model {
           to: 'case.id',
         },
       },
+      requestType: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RequestType,
+        join: {
+          from: 'request.requestTypeId',
+          to: 'requestType.id',
+        },
+      },
     };
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    const request = json;
+
+    // if completedFulfilmentItems is not provided, set it to []
+    if (!request.completedFulfilmentItems) {
+      request.completedFulfilmentItems = [];
+    }
+
+    const requestChecklist = request.completedFulfilmentItems;
+
+    Object.keys(fulfilmentChecklistEnum).forEach((i) => {
+      if (
+        // checks if fulfilmentType is present
+        Object.keys(fulfilmentChecklistEnum[i]).includes(request.fulfilmentType)
+      ) {
+        const errorInput = [];
+        // filter out inputs that are not part of the fulfilmentType
+        // eslint-disable-next-line no-plusplus
+        for (let x = 0; x < requestChecklist.length; x++) {
+          if (
+            Object.values(fulfilmentChecklistEnum[i])[0].includes(
+              requestChecklist[x]
+            ) === false
+          ) {
+            errorInput.push(requestChecklist[x]);
+          }
+        }
+        if (errorInput.length > 0) {
+          throw new ValidationError({
+            message: `${errorInput} is/are not a checklist item for fulfilment type ${request.fulfilmentType}`,
+          });
+        }
+      }
+    });
   }
 }
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "first",
   "main": "src/index.js",
-    "engines": {
+  "engines": {
     "node": "12.18.4"
   },
   "scripts": {
@@ -22,7 +22,8 @@
     "seed-referee": "npx knex seed:run --specific=referees.js",
     "seed-case": "npx knex seed:run --specific=case.js",
     "seed-requestType": "npx knex seed:run --specific=requestType.js",
-    "seed-request": "npx knex seed:run --specific=request.js"
+    "seed-request": "npx knex seed:run --specific=request.js",
+    "seed-comments": "knex seed:run --specific=comments.js"
   },
   "repository": {
     "type": "git",
@@ -48,7 +49,8 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "pg": "^8.4.2",
-    "supertest": "^6.0.1"
+    "supertest": "^6.0.1",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

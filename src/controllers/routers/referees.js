@@ -19,7 +19,10 @@ const {
 } = require('../../utils');
 
 /**
- * Sanitize data from client. Call before an insert or an update.
+ * Sanitize data from client.
+ * Call before an insert or an update.
+ * @param {Object} json - Unsanitised referee
+ * @param {Object} referee - Sanitised referee
  */
 function sanitize(json) {
   const referee = json;
@@ -94,7 +97,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   const newReferee = sanitize(req.body);
   try {
-    const referee = await Referee.query().insert(newReferee).returning('id');
+    const referee = await Referee.query().insert(newReferee).returning('*');
     return res.status(201).json({ referee });
   } catch (err) {
     if (err instanceof ValidationError) {

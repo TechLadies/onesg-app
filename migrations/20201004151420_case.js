@@ -25,9 +25,8 @@ exports.up = function makeCasetable(knex) {
     table
       .string('casePendingReason', 255)
       .comment('Reason the case is/was pending');
-    table.decimal('amountRequested').notNullable();
-    table.decimal('amountGranted').defaultTo(0.0);
-    table.jsonb('documents').comment('Supporting document(s) for this case');
+    table.decimal('amountRequested').unsigned().notNullable();
+    table.decimal('amountGranted').unsigned().defaultTo(0.0);
     table
       .integer('beneficiaryId')
       .references('id')

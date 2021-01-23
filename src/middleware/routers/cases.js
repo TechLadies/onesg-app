@@ -13,13 +13,23 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  router: { cases },
+  router: { cases, comments },
 } = require('../../controllers');
+const isLoggedIn = require('../isLoggedIn');
 
 /**
  * Routing for cases endpoints (/v1/cases)
  */
 // GET /v1/cases
 router.get('/', cases.getAll);
+
+// POST /v1/cases
+router.post('/', cases.create);
+
+// GET /v1/cases/:id/comments
+router.get('/:id/comments', comments.getCommentsbyCaseNumber);
+
+// POST /v1/cases/:id/comments
+router.post('/:id/comments', isLoggedIn, comments.create);
 
 module.exports = router;
