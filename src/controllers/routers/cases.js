@@ -81,17 +81,31 @@ function sanitizedCase(json) {
  */
 function sanitizedQuery(json) {
   const query = json;
-  if (json.include_entities) {
+  if (json.include_entities && json.include_entities !== '') {
+    const entities = ['beneficiary', 'referee', 'request', 'staff'];
+    const queryInput = json.include_entities.replace(/\s/g, '').split(',');
+    const array = [];
+
+    // eslint-disable-next-line no-plusplus
+    for (let x = 0; x < queryInput.length; x++) {
+      if (entities.includes(queryInput[x]) === true) {
+        array.push(queryInput[x]);
+      }
+    }
+
+    const queryArray = array.toString();
+
     // if staff exists in include_entities
-    if (json.include_entities.search('staff') >= 0) {
+    // if (json.include_entities.search('staff') >= 0) {
+    if (queryArray.includes('staff') === true) {
       // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
       // to remove 'staff' and replace with 'createdby' and 'updatedby'
-      query.include_entities = `[${json.include_entities
+      query.include_entities = `[${queryArray
         .replace(/\s/g, '')
         .replace('staff', '')}createdby,updatedby]`;
     } else {
       // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
+      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
     }
   }
   // to make status uppercase
@@ -243,8 +257,7 @@ const getAll = async (req, res, next) => {
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
-    return next(err.message);
-    // return next(new BadRequest(err.nativeError.detail));
+    return next(new BadRequest(err.nativeError.detail));
   }
 };
 

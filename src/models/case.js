@@ -85,7 +85,7 @@ class Case extends Model {
 
   $parseDatabaseJson(json) {
     super.$parseDatabaseJson(json);
-    // all of the entries except the relation mappings
+    // get date from all existing entries except the relation mappings
     if (json.appliedOn !== undefined) {
       const year = json.appliedOn.getFullYear();
       const month = `0${json.appliedOn.getMonth() + 1}`.slice(-2);
