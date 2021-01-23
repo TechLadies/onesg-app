@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- 10.13.0
+branches:
+  only:
+  - develop
+  - master
+deploy:
+  provider: heroku
+  api_key:
+    secure: U/MqwGNmtrYJIdl7FwhXlV45LlQ6+du355Fy17WGcbQKzGpNlFvUWSF/w2H/Cml6PshDV2wm7UzYbHf9F9gpMakM29QhMMX+7cubm7Jo/JxvUMBo9NuiEWgSgZ0njCvBiV70QCo7nXmFCWNTz+B2/mqrJlvtEa0+H8Np/z1a1KGrrHX3SiG0vCAfo/8ZLtAMJUfwJeiBLD4htvqnz8N6OF9ea6OBu9cXpLFMB+DxqWriVqzHxnrfkVjVqnbg+0rAkaDgF0yOmR2g4NCAkCHCK2RkYkbDN1dlKDK56uILxcimfSgXqP6S8K2hdj3mfX1K7rtbp5c3/OhJdVnliWK3CfwsY9yFVG2EeGHvB7EVt7ekQc9dIj3ZA8kTMxhG3SmhxkVO/klXBHbAVdvVgdbDtS3rUOyhAfDr26isyJG7RVAAEyG9skMxS+KOY2AGeyhD/W3b/aaBn1oE+KLHqNif5AkiVeppW4ayWtNbrMz0OpadvaRzXg1m6s7wANH6/oXEhuJ1OefUtM2btKG51oK5BQceFusQ11juDCYR6ZxKwsS87vCK5Q23g2drjfUF9CIN5TOTTJ+CJoJ9mD55fOx6s608Tah/foGmWXX6XckGu0VmBg5R+dQHIrEHNLtUkmDczcXKJk18mTkbSEy6Yicb7aOEpQrFWf2MJx8Ye6i+vcM=
+  app:
+    develop: onesg-backend-staging
+    master: one-sg-backend
+  skip_cleanup: 'true'

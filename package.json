@@ -1,0 +1,85 @@
+{
+  "name": "onesg-app",
+  "version": "0.0.0",
+  "description": "first",
+  "main": "src/index.js",
+  "engines": {
+    "node": "12.18.4"
+  },
+  "scripts": {
+    "heroku-prebuild": "node scripts/generateKeypair.js",
+    "heroku-postbuild": "knex migrate:latest",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js --exec 'npm run lint && node'",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "prettier": "prettier --write src/**/*.{js,css}",
+    "db-migrate": "npx knex migrate:latest",
+    "db-make-table": "npx knex migrate:make ",
+    "generate-keys": "node scripts/generateKeypair.js",
+    "seed-staff": "npx knex seed:run --specific=staff.js",
+    "seed-beneficiary": "npx knex seed:run --specific=beneficiaries.js",
+    "seed-referee": "npx knex seed:run --specific=referees.js",
+    "seed-case": "npx knex seed:run --specific=case.js",
+    "seed-requestType": "npx knex seed:run --specific=requestType.js",
+    "seed-request": "npx knex seed:run --specific=request.js",
+    "seed-comments": "knex seed:run --specific=comments.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechLadies/onesg-app.git"
+  },
+  "author": "yt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TechLadies/onesg-app/issues"
+  },
+  "homepage": "https://github.com/TechLadies/onesg-app#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "jest": "^26.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.6",
+    "morgan": "^1.10.0",
+    "objection": "^2.2.3",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "pg": "^8.4.2",
+    "supertest": "^6.0.1",
+    "xss": "^1.0.8"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint . --fix"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "keywords": []
+}

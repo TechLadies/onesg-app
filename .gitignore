@@ -1,0 +1,13 @@
+/node_modules/
+.vscode
+# env files
+/config/env/development.js
+/env/
+
+# database files
+/database
+/dev.sqlite3/
+
+
+# keys
+keys/
