@@ -6,9 +6,6 @@
 
 'use strict';
 
-const url = require('url');
-const querystring = require('querystring');
-
 const {
   DataError,
   ForeignKeyViolationError,
@@ -85,23 +82,38 @@ function sanitizedCase(json) {
 function sanitizedQuery(json) {
   const query = json;
   if (json.include_entities) {
-    // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-    query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
+    // if staff exists in include_entities
+    if (json.include_entities.search('staff') >= 0) {
+      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
+      // to remove 'staff' and replace with 'createdby' and 'updatedby'
+      query.include_entities = `[${json.include_entities
+        .replace(/\s/g, '')
+        .replace('staff', '')}createdby,updatedby]`;
+    } else {
+      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
+      query.include_entities = `[${json.include_entities.replace(/\s/g, '')}]`;
+    }
   }
   // to make status uppercase
   if (json.status) {
     query.status = json.status.toUpperCase();
   }
-  // to convert applied_on to format YYYY-MM-DD
-  if (json.applied_on) {
-    if (json.applied_on.length !== 8) {
-      query.applied_on = '';
-    } else {
-      const year = json.applied_on.slice(0, 4);
-      const month = json.applied_on.slice(4, 6);
-      const day = json.applied_on.slice(6, 8);
-      query.applied_on = `${year}-${month}-${day}`;
-    }
+  // to retrieve sort field and sort order
+  if (json.sort) {
+    const array = json.sort.split(':');
+    [query.sort_field, query.sort_order] = [array[0], array[1]];
+  }
+  // to check if applied_on is in YYYY-MM-DD format
+  if (
+    json.applied_on &&
+    /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(
+      json.applied_on
+    ) === true
+  ) {
+    const year = json.applied_on.slice(0, 4);
+    const month = json.applied_on.slice(5, 7);
+    const day = json.applied_on.slice(8, 10);
+    query.applied_on = `${year}-${month}-${day}`;
   }
   return query;
 }
@@ -138,6 +150,11 @@ function setDefault(json) {
   if (!json.status) {
     query.status = 'ALL';
   }
+  // if sort is not present, set default to arrange id in asc
+  if (!json.sort) {
+    query.sort_field = 'id';
+    query.sort_order = 'asc';
+  }
   return query;
 }
 
@@ -146,16 +163,9 @@ function setDefault(json) {
  * @param {Request} req
  * @param {Response} res
  */
-const getAll = async (req, res) => {
-  // to obtain the full url
-  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
-  // to parse the full url to retrieve all query params
-  const parsedUrl = url.parse(fullUrl);
-  // to break down into individual query params
-  // convert from [Object: null prototype] to JSON object
-  const parsedQueries = sanitizedQuery(
-    JSON.parse(JSON.stringify(querystring.parse(parsedUrl.query)))
-  );
+const getAll = async (req, res, next) => {
+  const parsedQueries = sanitizedQuery(req.query);
+  console.log(parsedQueries);
 
   // to set the default values for with_paging, page, per_page and status
   setDefault(parsedQueries);
@@ -165,62 +175,77 @@ const getAll = async (req, res) => {
   // if offset is undefined, set it to 0
   const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
 
-  // to retrieve sort field and sort order
-  const sortField = parsedQueries.sort.split(':')[0];
-  const sortOrder = parsedQueries.sort.split(':')[1];
-
-  // to retrieve case status
-  const caseStatus = parsedQueries.status;
-
   // to retrieve all cases to find the total number of cases for the response object
   const allCases = await Case.query();
+  try {
+    const results = await Case.query()
+      .withGraphJoined(parsedQueries.include_entities)
+      .where((builder) => {
+        if (parsedQueries.beneficiary_name) {
+          builder.where(
+            'beneficiary.name',
+            'like',
+            `%${parsedQueries.beneficiary_name}%`
+          );
+        }
+        if (parsedQueries.referee_name) {
+          builder.where('referee.name', 'like', `%parsedQueries.referee_name%`);
+        }
+        if (parsedQueries.referee_org) {
+          builder.where(
+            'referee.organisation',
+            'like',
+            `%${parsedQueries.referee_org}%`
+          );
+        }
+        if (parsedQueries.status !== 'ALL') {
+          builder.where('caseStatus', parsedQueries.status);
+        }
+        if (parsedQueries.case_number) {
+          builder.where('caseNumber', parsedQueries.case_number);
+        }
+        if (parsedQueries.applied_on) {
+          builder.where('appliedOn', parsedQueries.applied_on);
+        }
+      })
+      .orderBy(parsedQueries.sort_field, parsedQueries.sort_order)
+      .limit(limit)
+      .offset(offset);
 
-  const results = await Case.query()
-    .withGraphJoined(parsedQueries.include_entities)
-    .where((builder) => {
-      if (parsedQueries.beneficiary_name) {
-        builder.where('beneficiary.name', parsedQueries.beneficiary_name);
+    let returnedObj;
+    if (
+      parsedQueries.with_paging === 'true' ||
+      parsedQueries.with_paging === 'false'
+    ) {
+      returnedObj = {
+        results,
+        page: currentPage,
+        per_page: limit,
+        total_records: allCases.length,
+        more: results.length >= limit,
+      };
+    } else {
+      returnedObj = {
+        results,
+      };
+    }
+    return res.status(200).json(returnedObj);
+  } catch (err) {
+    if (err instanceof DataError) {
+      if (err.nativeError.routine === 'DateTimeParseError') {
+        return next(
+          new InvalidInput(
+            `${parsedQueries.applied_on} is not a valid date in YYYY-MM-DD format`
+          )
+        );
       }
-      if (parsedQueries.referee_name) {
-        builder.where('referee.name', parsedQueries.referee_name);
-      }
-      if (parsedQueries.referee_org) {
-        builder.where('referee.organisation', parsedQueries.referee_org);
-      }
-      if (parsedQueries.status !== 'ALL') {
-        builder.where('caseStatus', caseStatus);
-      }
-      if (parsedQueries.case_number) {
-        builder.where('caseNumber', parsedQueries.case_number);
-      }
-      if (parsedQueries.applied_on) {
-        builder.where('appliedOn', parsedQueries.applied_on);
-      }
-    })
-    .orderBy(sortField, sortOrder)
-    .limit(limit)
-    .offset(offset);
-
-  let returnedObj;
-  if (
-    parsedQueries.with_paging === 'true' ||
-    parsedQueries.with_paging === 'false'
-  ) {
-    returnedObj = {
-      results,
-      page: currentPage,
-      per_page: limit,
-      total_records: allCases.length,
-      more: results.length >= limit,
-    };
-  } else {
-    returnedObj = {
-      results,
-    };
+    }
+    // handles rest of the error
+    // from objection's documentation, the structure below should hold
+    // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
+    return next(err.message);
+    // return next(new BadRequest(err.nativeError.detail));
   }
-
-  // return cases + pages
-  return res.status(200).json(returnedObj);
 };
 
 /**
@@ -250,7 +275,7 @@ const create = async (req, res, next) => {
       if (err.nativeError.routine === 'DateTimeParseError') {
         return next(
           new InvalidInput(
-            `${newCase.appliedOn} is not a valid date in YYYY-MM-DD format`
+            `${newCase.applied_on} is not a valid date in YYYY-MM-DD format`
           )
         );
       }
