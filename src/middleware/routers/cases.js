@@ -10,9 +10,13 @@
  * Module dependencies.
  */
 const express = require('express');
-const isLoggedIn = require('../isLoggedIn');
 
 const router = express.Router();
+const {
+  router: { cases },
+} = require('../../controllers');
+const isLoggedIn = require('../isLoggedIn');
+
 const {
   router: { comments },
 } = require('../../controllers');
@@ -20,6 +24,11 @@ const {
 /**
  * Routing for cases endpoints (/v1/cases)
  */
+// GET /v1/cases
+router.get('/', cases.getAll);
+
+// POST /v1/cases
+router.post('/', cases.create);
 
 // GET /v1/cases/:id/comments
 router.get('/:id/comments', comments.getCommentsbyCaseNumber);
