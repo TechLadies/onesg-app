@@ -201,7 +201,11 @@ const getAll = async (req, res, next) => {
           );
         }
         if (parsedQueries.referee_name) {
-          builder.where('referee.name', 'like', `%parsedQueries.referee_name%`);
+          builder.where(
+            'referee.name',
+            'like',
+            `%${parsedQueries.referee_name}%`
+          );
         }
         if (parsedQueries.referee_org) {
           builder.where(
