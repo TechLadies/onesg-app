@@ -96,13 +96,12 @@ function sanitizedQuery(json) {
     const queryArray = array.toString();
 
     // if staff exists in include_entities
-    // if (json.include_entities.search('staff') >= 0) {
     if (queryArray.includes('staff') === true) {
       // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
       // to remove 'staff' and replace with 'createdby' and 'updatedby'
       query.include_entities = `[${queryArray
         .replace(/\s/g, '')
-        .replace('staff', '')}createdby,updatedby]`;
+        .replace(',staff', '')},createdby,updatedby]`;
     } else {
       // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
       query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
@@ -115,7 +114,7 @@ function sanitizedQuery(json) {
   // to retrieve sort field and sort order
   if (json.sort) {
     const array = json.sort.split(':');
-    [query.sort_field, query.sort_order] = [array[0], array[1]];
+    [query.sort_field, query.sort_order] = [array[0].trim(), array[1].trim()];
   }
   // to check if applied_on is in YYYY-MM-DD format
   if (
