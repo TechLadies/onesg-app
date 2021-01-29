@@ -1,5 +1,4 @@
 const { raw } = require('objection');
-const removeResourceId = require('../../helpers/cleandata/removeResourceId');
 const { Beneficiary, Referee, Case } = require('../../models');
 const {
   errors: { BadRequest },
@@ -121,7 +120,6 @@ const search = async (req, res) => {
       .select(raw(fieldQueryString))
       .where(raw(sqlQuery, { searchBody: q }));
   }
-  const cleanedResults = results.map(removeResourceId);
 
   let response;
   // eslint-disable-next-line camelcase
@@ -129,14 +127,14 @@ const search = async (req, res) => {
     response = {
       page: currentPage,
       per_page: limit,
-      more: cleanedResults.length >= limit,
-      results: cleanedResults,
+      more: results.length >= limit,
+      results,
       include_entities: entities,
     };
   } else {
     response = {
       page: currentPage,
-      results: cleanedResults,
+      results,
       include_entities: entities,
     };
   }
