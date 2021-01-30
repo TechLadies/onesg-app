@@ -169,7 +169,9 @@ const create = async (req, res, next) => {
  */
 const update = async (req, res, next) => {
   const { id } = req.params;
+  console.log(`requser`, req.user);
   const authenticatedUser = req.user.id;
+
   const updateInfo = {
     ...sanitize(req.body),
     updatedBy: authenticatedUser,
@@ -179,9 +181,8 @@ const update = async (req, res, next) => {
     const beneficiary = await Beneficiary.query()
       .select()
       .patch(updatedInfo)
-      .where('beneficiaryNumber', id)
-      .returning('beneficiaryNumber');
-
+      .where('id', id)
+      .returning('id');
     if (beneficiary.length === 0) {
       return next(new ResourceNotFound(`Beneficiary ${id} does not exist`));
     }
