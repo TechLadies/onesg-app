@@ -38,17 +38,17 @@ function sanitizedCase(json) {
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
   }
-  if (json.amountRequested) {
+  if (json.amountRequested || json.amountRequested === '') {
     if (typeof json.amountRequested === 'string') {
       // if amountRequested is an empty string, set to 0
-      if (Number.isNaN(cases.amountRequested)) {
+      if (Number.isNaN(parseFloat(json.amountRequested)) === true) {
         cases.amountRequested = 0;
       } else {
         cases.amountRequested = parseFloat(json.amountRequested);
       }
     }
   }
-  if (json.amountGranted) {
+  if (json.amountGranted || json.amountGranted === '') {
     if (typeof json.amountGranted === 'string') {
       // if amountGranted is an empty string, set to 0
       if (Number.isNaN(cases.amountGranted)) {
@@ -107,15 +107,46 @@ function sanitizedQuery(json) {
       query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
     }
   }
+
   // to make status uppercase
   if (json.status) {
     query.status = json.status.toUpperCase();
   }
+
   // to retrieve sort field and sort order
   if (json.sort) {
     const array = json.sort.split(':');
-    [query.sort_field, query.sort_order] = [array[0].trim(), array[1].trim()];
+
+    let sortKey;
+    switch (array[0].trim().toLowerCase()) {
+      case 'beneficiaryname':
+        sortKey = 'beneficiary.name';
+        break;
+      case 'referencestatus':
+        sortKey = 'referenceStatus';
+        break;
+      case 'refereename':
+        sortKey = 'referee.name';
+        break;
+      case 'refereeorganisation':
+        sortKey = 'referee.organisation';
+        break;
+      case 'poc':
+        sortKey = 'poc';
+        break;
+      case 'appliedon':
+        sortKey = 'appliedOn';
+        break;
+      case 'updatedby':
+        sortKey = 'updatedBy';
+        break;
+      default:
+        sortKey = array[0].trim();
+    }
+
+    [query.sort_field, query.sort_order] = [sortKey, array[1].trim()];
   }
+
   // to check if applied_on is in YYYY-MM-DD format
   if (
     json.applied_on &&
@@ -185,12 +216,10 @@ const getAll = async (req, res, next) => {
   const currentPage = parsedQueries.page;
   const limit = parsedQueries.per_page;
   // if offset is undefined, set it to 0
-  const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
+  // const offset = limit * currentPage - limit ? limit * currentPage - limit : 0;
 
-  // to retrieve all cases to find the total number of cases for the response object
-  const allCases = await Case.query();
   try {
-    const results = await Case.query()
+    const requests = await Case.query()
       .withGraphJoined(parsedQueries.include_entities)
       .where((builder) => {
         if (parsedQueries.beneficiary_name) {
@@ -207,11 +236,11 @@ const getAll = async (req, res, next) => {
             `%${parsedQueries.referee_name}%`
           );
         }
-        if (parsedQueries.referee_org) {
+        if (parsedQueries.referee_organisation) {
           builder.where(
             'referee.organisation',
             'like',
-            `%${parsedQueries.referee_org}%`
+            `%${parsedQueries.referee_organisation}%`
           );
         }
         if (parsedQueries.status !== 'ALL') {
@@ -224,9 +253,14 @@ const getAll = async (req, res, next) => {
           builder.where('appliedOn', parsedQueries.applied_on);
         }
       })
-      .orderBy(parsedQueries.sort_field, parsedQueries.sort_order)
-      .limit(limit)
-      .offset(offset);
+      .orderBy(parsedQueries.sort_field, parsedQueries.sort_order);
+
+    const totalRecords = requests.length;
+
+    const results = requests.slice(
+      (currentPage - 1) * limit,
+      (currentPage - 1) * limit + limit
+    );
 
     let returnedObj;
     if (
@@ -237,8 +271,8 @@ const getAll = async (req, res, next) => {
         results,
         page: currentPage,
         per_page: limit,
-        total_records: allCases.length,
-        more: results.length >= limit,
+        total_records: totalRecords,
+        more: totalRecords > (currentPage - 1) * limit + results.length,
       };
     } else {
       returnedObj = {
@@ -256,6 +290,25 @@ const getAll = async (req, res, next) => {
         );
       }
     }
+
+    // if sort field does not exist or empty but with a sort order
+    if (err.nativeError.code === '42601' || err.nativeError.code === '42703') {
+      return next(
+        new InvalidInput(
+          `${parsedQueries.sort_field} is not a valid sort field`
+        )
+      );
+    }
+
+    // if beneficiary/referee is not found in include_entities for beneficiary/referee related filters
+    if (err.nativeError.code === '42P01') {
+      const lastDash = err.message.lastIndexOf('table');
+      const message = `${err.message
+        .substring(lastDash + 5)
+        .trim()} should be included in the include_entities search parameter`;
+      return next(new BadRequest(message));
+    }
+
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
@@ -279,6 +332,7 @@ const create = async (req, res, next) => {
       return res.status(201).json({ cases });
     });
   } catch (err) {
+    console.log(err);
     // ValidationError based on jsonSchema (eg refereeId, beneficiaryId, createdBy or updatedBy not in int format,
     // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {
@@ -324,6 +378,15 @@ const create = async (req, res, next) => {
       if (err.constraint === 'request_requesttypeid_foreign') {
         return next(new BadRequest(`Request type id is/are invalid`));
       }
+    }
+
+    // if DBError (error not from objection js), eg fields that are not present
+    if (err.nativeError.code === '42703') {
+      const lastDash = err.message.lastIndexOf('column');
+      const errorMessage = err.message.substring(lastDash + 8);
+      // to get the field name that is invalid
+      const errorWord = errorMessage.substring(0, errorMessage.indexOf('"'));
+      return next(new BadRequest(`${errorWord} is not a valid field`));
     }
 
     // handles rest of the error

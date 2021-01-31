@@ -169,6 +169,10 @@ class Case extends Model {
     super.$afterValidate(json);
     const cases = json;
 
+    if (!cases.appliedOn || cases.appliedOn === '') {
+      cases.appliedOn = new Date().toISOString().slice(0, 10);
+    }
+
     // if referenceStatus is pending, casePendingReason cannot be empty
     if (cases.referenceStatus === 'PENDING') {
       if (
