@@ -33,7 +33,11 @@ function sanitizedCase(json) {
     cases.pointOfContact = json.pointOfContact.trim();
   }
   if (json.referenceStatus) {
-    cases.referenceStatus = json.referenceStatus.toUpperCase().trim();
+    if (json.referenceStatus === '') {
+      cases.referenceStatus = 'UNVERIFIED';
+    } else {
+      cases.referenceStatus = json.referenceStatus.toUpperCase().trim();
+    }
   }
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
@@ -59,7 +63,11 @@ function sanitizedCase(json) {
     }
   }
   if (json.refereeId) {
-    cases.refereeId = parseInt(json.refereeId, 10);
+    if (json.refereeId === '') {
+      cases.refereeId = null;
+    } else {
+      cases.refereeId = parseInt(json.refereeId, 10);
+    }
   }
   if (json.beneficiaryId) {
     cases.beneficiaryId = parseInt(json.beneficiaryId, 10);
@@ -323,16 +331,13 @@ const getAll = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   const newCase = sanitizedCase(req.body);
-  if (newCase.referenceStatus === '') {
-    newCase.referenceStatus = 'UNVERIFIED';
-  }
+
   try {
     return await Case.transaction(async (trx) => {
       const cases = await Case.query(trx).insertGraph(newCase).returning('*');
       return res.status(201).json({ cases });
     });
   } catch (err) {
-    console.log(err);
     // ValidationError based on jsonSchema (eg refereeId, beneficiaryId, createdBy or updatedBy not in int format,
     // casePendingReason is empty/null when caseStatus is pending)
     if (err instanceof ValidationError) {

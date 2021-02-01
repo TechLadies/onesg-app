@@ -169,8 +169,27 @@ class Case extends Model {
     super.$afterValidate(json);
     const cases = json;
 
-    if (!cases.appliedOn || cases.appliedOn === '') {
+    // if appliedOn is not present, set default to now
+    if (
+      !cases.appliedOn ||
+      cases.appliedOn === '' ||
+      cases.appliedOn === undefined
+    ) {
       cases.appliedOn = new Date().toISOString().slice(0, 10);
+    }
+
+    // if amountRequested is not present, set default to now
+    if (!cases.amountRequested) {
+      cases.amountRequested = 0;
+    }
+
+    // if refereeId is not present, set default to null
+    if (
+      !cases.refereeId ||
+      cases.refereeId === '' ||
+      cases.refereeId === undefined
+    ) {
+      cases.refereeId = null;
     }
 
     // if referenceStatus is pending, casePendingReason cannot be empty
