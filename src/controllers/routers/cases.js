@@ -146,7 +146,7 @@ function sanitizedQuery(json) {
         sortKey = 'appliedOn';
         break;
       case 'updatedby':
-        sortKey = 'updatedBy';
+        sortKey = 'updatedAt';
         break;
       default:
         sortKey = array[0].trim();
