@@ -62,9 +62,19 @@ function sanitizedCase(json) {
       }
     }
   }
-  if (json.refereeId) {
-    if (json.refereeId === '') {
-      cases.refereeId = null;
+  if (
+    json.refereeId ||
+    json.refereeId === '' ||
+    json.refereeId === null ||
+    json.refereeId === undefined
+  ) {
+    // if refereeId is not present, null or undefined, remove from req body to default to null
+    if (
+      json.refereeId === '' ||
+      json.refereeId === null ||
+      json.refereeId === undefined
+    ) {
+      delete cases.refereeId;
     } else {
       cases.refereeId = parseInt(json.refereeId, 10);
     }
@@ -178,24 +188,19 @@ function sanitizedQuery(json) {
  */
 function setDefault(json) {
   const query = json;
-  // if with_paging is not available or false, set page and per_page to null
-  if (!json.with_paging || json.with_paging !== 'true') {
-    query.page = null;
-    query.per_page = null;
-  }
   // if with_paging is true
-  else {
+  if (json.with_paging === 'true') {
     // if page is defined in query param, otherwise default to 1
-    if (json.page !== undefined || json.page !== null) {
-      query.page = parseInt(json.page, 10);
-    } else {
+    if (!json.page || Number.isNaN(parseInt(json.page, 10)) === true) {
       query.page = 1;
+    } else {
+      query.page = parseInt(json.page, 10);
     }
     // if per_page is defined in query param, otherwise default to 10
-    if (json.per_page !== undefined || json.per_page !== null) {
-      query.per_page = parseInt(json.per_page, 10);
-    } else {
+    if (!json.per_page || Number.isNaN(parseInt(json.per_page, 10)) === true) {
       query.per_page = 10;
+    } else {
+      query.per_page = parseInt(json.per_page, 10);
     }
   }
   // if status is not present, set default to 'ALL'
@@ -265,10 +270,13 @@ const getAll = async (req, res, next) => {
 
     const totalRecords = requests.length;
 
-    const results = requests.slice(
-      (currentPage - 1) * limit,
-      (currentPage - 1) * limit + limit
-    );
+    const results =
+      parsedQueries.with_paging === 'true'
+        ? requests.slice(
+            (currentPage - 1) * limit,
+            (currentPage - 1) * limit + limit
+          )
+        : requests;
 
     let returnedObj;
     if (
@@ -277,8 +285,8 @@ const getAll = async (req, res, next) => {
     ) {
       returnedObj = {
         results,
-        page: currentPage,
-        per_page: limit,
+        page: parsedQueries.with_paging === 'true' ? currentPage : 1,
+        per_page: parsedQueries.with_paging === 'true' ? limit : totalRecords,
         total_records: totalRecords,
         more: totalRecords > (currentPage - 1) * limit + results.length,
       };
