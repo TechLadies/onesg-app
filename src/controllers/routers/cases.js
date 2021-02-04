@@ -42,7 +42,7 @@ function sanitizedCase(json) {
   if (json.casePendingReason) {
     cases.casePendingReason = json.casePendingReason.trim();
   }
-  if (json.amountRequested || json.amountRequested === '') {
+  if (json.amountRequested) {
     if (typeof json.amountRequested === 'string') {
       // if amountRequested is an empty string, set to 0
       if (Number.isNaN(parseFloat(json.amountRequested)) === true) {
@@ -52,7 +52,7 @@ function sanitizedCase(json) {
       }
     }
   }
-  if (json.amountGranted || json.amountGranted === '') {
+  if (json.amountGranted) {
     if (typeof json.amountGranted === 'string') {
       // if amountGranted is an empty string, set to 0
       if (Number.isNaN(cases.amountGranted)) {
@@ -69,14 +69,10 @@ function sanitizedCase(json) {
     json.refereeId === undefined
   ) {
     // if refereeId is not present, null or undefined, remove from req body to default to null
-    if (
-      json.refereeId === '' ||
-      json.refereeId === null ||
-      json.refereeId === undefined
-    ) {
-      delete cases.refereeId;
-    } else {
+    if (json.refereeId) {
       cases.refereeId = parseInt(json.refereeId, 10);
+    } else {
+      delete cases.refereeId;
     }
   }
   if (json.beneficiaryId) {
@@ -177,6 +173,19 @@ function sanitizedQuery(json) {
     const day = json.applied_on.slice(8, 10);
     query.applied_on = `${year}-${month}-${day}`;
   }
+
+  if (json.with_paging) {
+    query.with_paging = json.with_paging.toLowerCase();
+  }
+
+  if (!json.with_paging) {
+    query.with_paging = 'false';
+  }
+
+  // to capitalise letters in case_number
+  if (json.case_number) {
+    query.case_number = json.case_number.toUpperCase();
+  }
   return query;
 }
 
@@ -238,21 +247,21 @@ const getAll = async (req, res, next) => {
         if (parsedQueries.beneficiary_name) {
           builder.where(
             'beneficiary.name',
-            'like',
+            'ilike',
             `%${parsedQueries.beneficiary_name}%`
           );
         }
         if (parsedQueries.referee_name) {
           builder.where(
             'referee.name',
-            'like',
+            'ilike',
             `%${parsedQueries.referee_name}%`
           );
         }
         if (parsedQueries.referee_organisation) {
           builder.where(
             'referee.organisation',
-            'like',
+            'ilike',
             `%${parsedQueries.referee_organisation}%`
           );
         }
@@ -278,23 +287,14 @@ const getAll = async (req, res, next) => {
           )
         : requests;
 
-    let returnedObj;
-    if (
-      parsedQueries.with_paging === 'true' ||
-      parsedQueries.with_paging === 'false'
-    ) {
-      returnedObj = {
-        results,
-        page: parsedQueries.with_paging === 'true' ? currentPage : 1,
-        per_page: parsedQueries.with_paging === 'true' ? limit : totalRecords,
-        total_records: totalRecords,
-        more: totalRecords > (currentPage - 1) * limit + results.length,
-      };
-    } else {
-      returnedObj = {
-        results,
-      };
-    }
+    const returnedObj = {
+      results,
+      page: parsedQueries.with_paging === 'true' ? currentPage : 1,
+      per_page: parsedQueries.with_paging === 'true' ? limit : totalRecords,
+      total_records: totalRecords,
+      more: totalRecords > (currentPage - 1) * limit + results.length,
+    };
+
     return res.status(200).json(returnedObj);
   } catch (err) {
     if (err instanceof DataError) {
