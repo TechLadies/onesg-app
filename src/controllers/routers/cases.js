@@ -62,19 +62,19 @@ function sanitizedCase(json) {
       }
     }
   }
+
+  // if refereeId is not present, null or undefined, remove from req body to default to null
   if (
-    json.refereeId ||
     json.refereeId === '' ||
     json.refereeId === null ||
     json.refereeId === undefined
   ) {
-    // if refereeId is not present, null or undefined, remove from req body to default to null
-    if (json.refereeId) {
-      cases.refereeId = parseInt(json.refereeId, 10);
-    } else {
-      delete cases.refereeId;
-    }
+    delete cases.refereeId;
   }
+  if (json.refereeId) {
+    cases.refereeId = parseInt(json.refereeId, 10);
+  }
+
   if (json.beneficiaryId) {
     cases.beneficiaryId = parseInt(json.beneficiaryId, 10);
   }
