@@ -3,6 +3,7 @@
 'use strict';
 
 const { Model, ValidationError } = require('objection');
+const { Case } = require('./case');
 const { RequestType } = require('./requestType');
 
 const fulfilmentTypeEnum = [
@@ -79,20 +80,20 @@ class Request extends Model {
 
   static get relationMappings() {
     return {
+      case: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Case,
+        join: {
+          from: 'request.caseId',
+          to: 'case.id',
+        },
+      },
       requestType: {
         relation: Model.BelongsToOneRelation,
         modelClass: RequestType,
         join: {
           from: 'request.requestTypeId',
           to: 'requestType.id',
-        },
-      },
-      requests: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Request,
-        join: {
-          from: 'request.caseId',
-          to: 'case.id',
         },
       },
     };

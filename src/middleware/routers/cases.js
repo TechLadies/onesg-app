@@ -13,13 +13,9 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  router: { cases },
+  router: { cases, comments },
 } = require('../../controllers');
 const isLoggedIn = require('../isLoggedIn');
-
-const {
-  router: { comments },
-} = require('../../controllers');
 
 /**
  * Routing for cases endpoints (/v1/cases)
