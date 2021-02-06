@@ -288,11 +288,11 @@ const getAll = async (req, res, next) => {
         : requests;
 
     const returnedObj = {
-      results,
       page: parsedQueries.with_paging === 'true' ? currentPage : 1,
       per_page: parsedQueries.with_paging === 'true' ? limit : totalRecords,
       total_records: totalRecords,
       more: totalRecords > (currentPage - 1) * limit + results.length,
+      results,
     };
 
     return res.status(200).json(returnedObj);
