@@ -48,6 +48,18 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(function (req, res, next) {
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://onesg-frontend-heroku-app.staging'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 // Body Parser
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
