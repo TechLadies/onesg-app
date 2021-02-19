@@ -48,6 +48,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use((res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+
+  next();
+});
+
 // Body Parser
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
