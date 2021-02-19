@@ -32,6 +32,15 @@ const server = SERVER_CONFIG.USE_HTTPS
   ? https.createServer(SERVER_CONFIG.HTTPS_OPTIONS, app)
   : http.createServer(app);
 
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 // TODO: add handler to force HTTPS redirects for unsecure connection requests if USE_HTTPS is true
 
 require('../config/passport')(passport);
@@ -47,12 +56,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.use((res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
-  next();
-});
 
 // Body Parser
 app.use(bodyparser.json());
