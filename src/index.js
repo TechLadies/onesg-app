@@ -42,7 +42,7 @@ app.use(passport.initialize());
  */
 // CORS
 const corsOptions = {
-  origin: CORS_CONFIG.ALLOWED_ORIGINS,
+  origin: CORS_CONFIG.ALLOWED_ORIGINS || '*',
   methods: CORS_CONFIG.ALLOWED_METHODS,
 };
 
