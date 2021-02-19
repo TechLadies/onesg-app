@@ -15,7 +15,7 @@ const NODE_ENV = process.env.NODE_ENV;
 
 const CORS_CONFIG = {
   ALLOWED_ORIGINS:
-    'https://onesg-backend-staging.herokuapp.com' /* process.env.ALLOWED_ORIGINS */,
+    'https://onesg-frontend-staging.herokuapp.com' /* process.env.ALLOWED_ORIGINS */,
   ALLOWED_METHODS: process.env.ALLOWED_METHODS,
 };
 

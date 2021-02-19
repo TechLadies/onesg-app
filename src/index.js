@@ -51,7 +51,7 @@ app.use(cors(corsOptions));
 app.use(function (req, res, next) {
   res.header(
     'Access-Control-Allow-Origin',
-    'https://onesg-backend-staging.herokuapp.com'
+    'https://onesg-frontend-staging.herokuapp.com'
   );
   res.header(
     'Access-Control-Allow-Headers',
