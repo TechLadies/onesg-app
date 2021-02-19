@@ -49,7 +49,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use((res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   next();
 });
