@@ -1,5 +1,8 @@
 const { ValidationError, Model } = require('objection');
+const { Beneficiary } = require('./beneficiary');
+const { Referee } = require('./referee');
 const { Request } = require('./request');
+const { Staff } = require('./staff');
 
 const caseStatusEnum = ['NEW', 'PENDING', 'REFERRED', 'PROCESSING', 'CLOSED'];
 
@@ -80,32 +83,64 @@ class Case extends Model {
     };
   }
 
+  $parseDatabaseJson(json) {
+    super.$parseDatabaseJson(json);
+    // get date from all existing entries except the relation mappings
+    if (json.appliedOn !== undefined) {
+      const year = json.appliedOn.getFullYear();
+      const month = `0${json.appliedOn.getMonth() + 1}`.slice(-2);
+      const day = `0${json.appliedOn.getDate()}`.slice(-2);
+      const date = `${year}-${month}-${day}`;
+      // eslint-disable-next-line no-param-reassign
+      json.appliedOn = date;
+    }
+    return json;
+  }
+
   static get relationMappings() {
     return {
       beneficiary: {
         relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Beneficiary`,
+        modelClass: Beneficiary,
         join: {
           from: 'case.beneficiaryId',
           to: 'beneficiary.id',
         },
       },
 
-      referees: {
+      referee: {
         relation: Model.BelongsToOneRelation,
-        modelClass: `${__dirname}/Referee`,
+        modelClass: Referee,
         join: {
           from: 'case.refereeId',
           to: 'referee.id',
         },
       },
 
-      requests: {
+      request: {
         relation: Model.HasManyRelation,
         modelClass: Request,
         join: {
           from: 'case.id',
           to: 'request.caseId',
+        },
+      },
+
+      createdby: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'case.createdBy',
+          to: 'staff.id',
+        },
+      },
+
+      updatedby: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'case.updatedBy',
+          to: 'staff.id',
         },
       },
 
@@ -133,6 +168,29 @@ class Case extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const cases = json;
+
+    // if appliedOn is not present, set default to now
+    if (
+      !cases.appliedOn ||
+      cases.appliedOn === '' ||
+      cases.appliedOn === undefined
+    ) {
+      cases.appliedOn = new Date().toISOString().slice(0, 10);
+    }
+
+    // if amountRequested is not present, set default to now
+    if (!cases.amountRequested) {
+      cases.amountRequested = 0;
+    }
+
+    // if refereeId is not present, set default to null
+    if (
+      !cases.refereeId ||
+      cases.refereeId === '' ||
+      cases.refereeId === undefined
+    ) {
+      cases.refereeId = null;
+    }
 
     // if referenceStatus is pending, casePendingReason cannot be empty
     if (cases.referenceStatus === 'PENDING') {
