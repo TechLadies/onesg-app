@@ -47,6 +47,19 @@ exports.seed = function seedBeneficiaryTable(knex) {
           createdBy: 1,
           updatedBy: 2,
         },
+        {
+          beneficiaryNumber: 'B2020-11004',
+          name: 'Jessy Tan',
+          email: 'jessina@live.com.sg',
+          phone: '67442322',
+          address: '132 Bedok Reservoir View',
+          occupation: 'Nurse',
+          householdIncome: '1900',
+          householdSize: '5',
+          paymentType: ['PAYNOW', 'BANK_TRANSFER'],
+          createdBy: 2,
+          updatedBy: 2,
+        },
       ]);
     });
 };
