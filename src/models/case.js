@@ -117,7 +117,7 @@ class Case extends Model {
         },
       },
 
-      request: {
+      requests: {
         relation: Model.HasManyRelation,
         modelClass: Request,
         join: {
