@@ -120,6 +120,18 @@ function sanitizedQuery(json) {
       // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
       query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
     }
+
+    // if request exists in include_entities
+    if (queryArray.includes('request') === true) {
+      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
+      // to remove 'request' and replace with 'requests'
+      query.include_entities = `[${queryArray
+        .replace(/\s/g, '')
+        .replace(',request', '')},requests]`;
+    } else {
+      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
+      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
+    }
   }
 
   // to make status uppercase
