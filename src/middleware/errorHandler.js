@@ -23,8 +23,8 @@ const {
 const errorHandler = (app) => {
   app.use(function pageNotFoundHandler(req, res) {
     const error = {
-      id: 'PAGE_NOT_FOUND',
-      status: 404,
+      error_type: 'PAGE_NOT_FOUND',
+      statusCode: 404,
       message: 'Unsupported Endpoint',
     };
     res.status(404).json({ error });
@@ -39,8 +39,8 @@ const errorHandler = (app) => {
     }
 
     const error = {
-      id: 'UNIDENTIFIED_ERROR',
-      status: 500,
+      error_type: 'UNIDENTIFIED_ERROR',
+      statusCode: 500,
       message: 'Unidentified server error',
     };
     return res.status(500).json({ error });
