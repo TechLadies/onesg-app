@@ -24,7 +24,7 @@ const {
  * @param {Object} json - Unsanitised case
  * @return {Object} cases - Sanitised case
  */
-function sanitizedCase(json) {
+function sanitizeCase(json) {
   const cases = json;
   if (json.caseStatus) {
     cases.caseStatus = json.caseStatus.toUpperCase().trim();
@@ -93,45 +93,32 @@ function sanitizedCase(json) {
  * @param {Object} json - Unsanitised query params
  * @return {Object} query - Sanitised query params
  */
-function sanitizedQuery(json) {
+function sanitizeQuery(json) {
   const query = json;
   if (json.include_entities && json.include_entities !== '') {
     const entities = ['beneficiary', 'referee', 'request', 'staff'];
     const queryInput = json.include_entities.replace(/\s/g, '').split(',');
-    const array = [];
 
+    let sanitizedEntities = '';
     // eslint-disable-next-line no-plusplus
     for (let x = 0; x < queryInput.length; x++) {
       if (entities.includes(queryInput[x]) === true) {
-        array.push(queryInput[x]);
+        // array.push(queryInput[x]);
+        sanitizedEntities = sanitizedEntities.concat(queryInput[x]);
+        sanitizedEntities = sanitizedEntities.concat(' ');
       }
     }
-
-    const queryArray = array.toString();
-
-    // if staff exists in include_entities
-    if (queryArray.includes('staff') === true) {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      // to remove 'staff' and replace with 'createdby' and 'updatedby'
-      query.include_entities = `[${queryArray
-        .replace(/\s/g, '')
-        .replace(',staff', '')},createdby,updatedby]`;
-    } else {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
-    }
-
-    // if request exists in include_entities
-    if (queryArray.includes('request') === true) {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      // to remove 'request' and replace with 'requests'
-      query.include_entities = `[${queryArray
-        .replace(/\s/g, '')
-        .replace(',request', '')},requests]`;
-    } else {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
-    }
+    // to remove last space
+    sanitizedEntities = sanitizedEntities.trim();
+    // to replace staff and request based on relation name
+    sanitizedEntities = sanitizedEntities.replace(
+      'staff',
+      'createdby updatedby'
+    );
+    sanitizedEntities = sanitizedEntities.replace('request', 'requests');
+    // need to include g, else will only replace the first instance of space
+    sanitizedEntities = sanitizedEntities.replace(/ /g, ',');
+    query.include_entities = `[${sanitizedEntities}]`;
   }
 
   // to make status uppercase
@@ -242,7 +229,7 @@ function setDefault(json) {
  * @param {Response} res
  */
 const getAll = async (req, res, next) => {
-  const parsedQueries = sanitizedQuery(req.query);
+  const parsedQueries = sanitizeQuery(req.query);
 
   // to set the default values for with_paging, page, per_page and status
   setDefault(parsedQueries);
@@ -350,7 +337,7 @@ const getAll = async (req, res, next) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  const newCase = sanitizedCase(req.body);
+  const newCase = sanitizeCase(req.body);
 
   try {
     return await Case.transaction(async (trx) => {
