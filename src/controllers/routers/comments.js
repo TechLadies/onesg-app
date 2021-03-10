@@ -28,7 +28,7 @@ const getCommentsbyCaseNumber = async (req, res, next) => {
       return next(new ResourceNotFound(`Case ${id} does not exist`));
     }
     const commentByCaseNumber = await Comment.query()
-      .select('message', 'author')
+      .select('caseNumber', 'message', 'author', 'createdAt')
       .where('caseNumber', id);
     return res.status(200).json({ comments: commentByCaseNumber });
   } catch (err) {
