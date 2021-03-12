@@ -7,15 +7,17 @@
 'use strict';
 
 const {
+  NotNullViolationError,
+  ValidationError,
+  UniqueViolationError,
   DataError,
   ForeignKeyViolationError,
-  ValidationError,
 } = require('objection');
 
 const { Case } = require('../../models');
 
 const {
-  errors: { BadRequest, InvalidInput },
+  errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 
 /**
@@ -408,7 +410,68 @@ const create = async (req, res, next) => {
   }
 };
 
+/**
+ * Check if id is an int
+ */
+function isValidId(id) {
+  if (Number.isNaN(parseInt(id, 10))) {
+    return false;
+  }
+  return true;
+}
+
+function isBadRequest(json) {
+  if (String.isNaN(json)) {
+    return true;
+  }
+  // const query = json;
+  // if (json.include_entities && json.include_entities !== '') {
+  //   const entities = ['caseNumber', 'beneficiaryId', 'createdAt', 'createdBy'];
+  // }
+  return false;
+}
+
+/**
+ * Update existing case
+ * @param {Request} req
+ * @param {Response} res
+ */
+const update = async (req, res, next) => {
+  const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Case ${id} does not exist`));
+  }
+  if (isBadRequest(req.body)) {
+    return next(new BadRequest(`Bad request ${req.body}`));
+  }
+  // parse json request into Case object
+  const updateInfo = sanitizeCase(req.body);
+  try {
+    // query the database and update info
+    const caseDetail = await Case.query()
+      .select()
+      .patch(updateInfo)
+      .findById(id)
+      .returning('*');
+
+    // return ok -- 200 and return updated case details
+    return res.status(200).json({ caseDetail });
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return next(new BadRequest(err.nativeError.detail));
+    }
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
+    }
+    return next();
+  }
+};
+
 module.exports = {
   getAll,
   create,
+  update,
 };

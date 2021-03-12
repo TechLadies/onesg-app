@@ -26,6 +26,9 @@ router.get('/', cases.getAll);
 // POST /v1/cases
 router.post('/', cases.create);
 
+// PATCH /v1/cases/:id
+router.patch('/:id', cases.update);
+
 // GET /v1/cases/:id/comments
 router.get('/:id/comments', comments.getCommentsbyCaseNumber);
 
