@@ -137,10 +137,12 @@ const getBeneficiary = async (req, res, next) => {
 const getBeneficiaryCases = async (req, res, next) => {
   const { id } = req.params;
   try {
+    // get list of case numbers from Case table based on beneficiaryId
     const caseNumber = await Case.query()
       .select('caseNumber')
       .where('beneficiaryId', id);
 
+    // convert a list of case numbers into an array
     const caseNumbers = [];
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < caseNumber.length; i++) {
@@ -156,6 +158,9 @@ const getBeneficiaryCases = async (req, res, next) => {
 
     return res.status(200).json({ beneficiaryCases });
   } catch (err) {
+    if (err instanceof TypeError) {
+      return next(new BadRequest(`Id ${id} is invalid`));
+    }
     // handles rest of the error
     // from objection's documentation, the structure below should hold
     // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
