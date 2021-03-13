@@ -32,6 +32,19 @@ class Staff extends Model {
       },
     };
   }
+
+  static get relationMappings() {
+    return {
+      comments: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/Comment`,
+        join: {
+          from: 'staff.id',
+          to: 'comment.staffId',
+        },
+      },
+    };
+  }
 }
 
 module.exports = {

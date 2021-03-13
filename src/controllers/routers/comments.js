@@ -20,17 +20,17 @@ const {
  * @param {Request} req
  * @param {Response} res
  */
-const getCommentsbyCaseNumber = async (req, res, next) => {
+const getCommentsbyId = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const cases = await Case.query().where('caseNumber', id);
+    const cases = await Case.query().where('id', id);
     if (cases.length === 0) {
       return next(new ResourceNotFound(`Case ${id} does not exist`));
     }
-    const commentByCaseNumber = await Comment.query()
-      .select('caseNumber', 'message', 'author', 'createdAt')
-      .where('caseNumber', id);
-    return res.status(200).json({ comments: commentByCaseNumber });
+    const commentById = await Comment.query()
+      .select('id', 'message', 'author', 'createdAt')
+      .where('id', id);
+    return res.status(200).json({ comments: commentById });
   } catch (err) {
     //
     return next();
@@ -45,23 +45,31 @@ const getCommentsbyCaseNumber = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { id } = req.params;
-  const author = req.user.email;
+  const staffId = req.user.id;
+  console.log(staffId);
+  const caseId = parseInt(req.params.id, 10);
   const newComments = {
     message: xss(req.body.message),
-    caseNumber: req.params.id,
-    author,
+    caseId,
+    staffId,
   };
   try {
     const comments = await Comment.query()
-      .insertGraphAndFetch(newComments)
-      .where('caseNumber', id);
+      .insertGraph(newComments)
+      .withGraphFetched('staffs(name)')
+      .modifiers({
+        name(builder) {
+          builder.select('username');
+        },
+      })
+      .where('caseId', id);
     return res.status(201).json({ comments });
   } catch (err) {
     // ForeignKeyViolationError for caseNumber that is not present
     if (err instanceof ForeignKeyViolationError) {
-      if (err.constraint === 'comment_casenumber_foreign') {
+      if (err.constraint === 'comment_caseId_foreign') {
         return next(
-          new BadRequest(`Case ${newComments.caseNumber} is not present`)
+          new BadRequest(`Case ${newComments.caseId} is not present`)
         );
       }
     }
@@ -70,6 +78,6 @@ const create = async (req, res, next) => {
 };
 
 module.exports = {
-  getCommentsbyCaseNumber,
+  getCommentsbyId,
   create,
 };

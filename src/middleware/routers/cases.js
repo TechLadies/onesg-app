@@ -27,7 +27,7 @@ router.get('/', cases.getAll);
 router.post('/', cases.create);
 
 // GET /v1/cases/:id/comments
-router.get('/:id/comments', comments.getCommentsbyCaseNumber);
+router.get('/:id/comments', comments.getCommentsbyId);
 
 // POST /v1/cases/:id/comments
 router.post('/:id/comments', isLoggedIn, comments.create);

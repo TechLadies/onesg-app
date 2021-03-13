@@ -8,24 +8,24 @@ exports.seed = function seedCommentsTable(knex) {
       // Inserts seed entries
       return knex(tableComments).insert([
         {
-          caseNumber: 'EF2020-11001',
+          caseId: 1,
           message: 'This is message #1 in case number EF2020-11001',
-          author: 'Angela',
+          staffId: 1,
         },
         {
-          caseNumber: 'EF2020-11001',
+          caseId: 2,
           message: 'This is message #2 in case number EF2020-11001',
-          author: 'Patrick',
+          staffId: 2,
         },
         {
-          caseNumber: 'EF2020-11002',
+          caseId: 1,
           message: 'This is message #1 in case number EF2020-11002',
-          author: 'Patrick',
+          staffId: 1,
         },
         {
-          caseNumber: 'EF2020-11002',
+          caseId: 2,
           message: 'This is message #2 in case number EF2020-11002',
-          author: 'Angela',
+          staffId: 2,
         },
       ]);
     });
