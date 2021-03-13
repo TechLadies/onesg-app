@@ -26,10 +26,13 @@ const {
 // GET /v1/beneficiaries
 router.get('/', isLoggedIn, beneficiaries.getAll);
 
-// GET /v1/beneficiaries:id
+// GET /v1/beneficiaries/:id
 router.get('/:id', isLoggedIn, beneficiaries.getBeneficiary);
 
-// POST /v1/beneficiaries:id
+// GET /v1/beneficiaries/:id/cases
+router.get('/:id/cases', isLoggedIn, beneficiaries.getBeneficiaryCases);
+
+// POST /v1/beneficiaries/:id
 router.post('/', isLoggedIn, beneficiaries.create);
 
 // PATCH /v1/beneficiaries/:id
