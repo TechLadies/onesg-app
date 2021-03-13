@@ -13,6 +13,7 @@ const staffs = require('./staffs');
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 const comments = require('./comments');
+const tags = require('./tags');
 
 module.exports = {
   beneficiaries,
@@ -22,4 +23,5 @@ module.exports = {
   requestTypes,
   search,
   comments,
+  tags,
 };
