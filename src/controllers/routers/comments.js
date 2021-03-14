@@ -20,7 +20,7 @@ const {
  * @param {Request} req
  * @param {Response} res
  */
-const getCommentsbyId = async (req, res, next) => {
+const getCommentsbyCaseId = async (req, res, next) => {
   const { id } = req.params;
   try {
     const cases = await Case.query().where('id', id);
@@ -28,8 +28,14 @@ const getCommentsbyId = async (req, res, next) => {
       return next(new ResourceNotFound(`Case ${id} does not exist`));
     }
     const commentById = await Comment.query()
-      .select('id', 'message', 'author', 'createdAt')
-      .where('id', id);
+      .select('id', 'caseId', 'message', 'staffId', 'createdAt')
+      .withGraphFetched('staffs(name)')
+      .modifiers({
+        name(builder) {
+          builder.select('username');
+        },
+      })
+      .where('caseId', id);
     return res.status(200).json({ comments: commentById });
   } catch (err) {
     //
@@ -56,12 +62,6 @@ const create = async (req, res, next) => {
   try {
     const comments = await Comment.query()
       .insertGraph(newComments)
-      .withGraphFetched('staffs(name)')
-      .modifiers({
-        name(builder) {
-          builder.select('username');
-        },
-      })
       .where('caseId', id);
     return res.status(201).json({ comments });
   } catch (err) {
@@ -78,6 +78,6 @@ const create = async (req, res, next) => {
 };
 
 module.exports = {
-  getCommentsbyId,
+  getCommentsbyCaseId,
   create,
 };

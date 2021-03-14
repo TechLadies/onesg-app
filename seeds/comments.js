@@ -9,22 +9,22 @@ exports.seed = function seedCommentsTable(knex) {
       return knex(tableComments).insert([
         {
           caseId: 1,
-          message: 'This is message #1 in case number EF2020-11001',
+          message: 'This is message #1 in case id 1',
           staffId: 1,
         },
         {
           caseId: 2,
-          message: 'This is message #2 in case number EF2020-11001',
+          message: 'This is message #1 in case id 2',
           staffId: 2,
         },
         {
           caseId: 1,
-          message: 'This is message #1 in case number EF2020-11002',
+          message: 'This is message #2 in case id 1',
           staffId: 1,
         },
         {
           caseId: 2,
-          message: 'This is message #2 in case number EF2020-11002',
+          message: 'This is message #2 in case id 2',
           staffId: 2,
         },
       ]);

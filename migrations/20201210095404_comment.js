@@ -19,7 +19,7 @@ exports.up = function makeCommentsTable(knex) {
       .integer('staffId')
       .references('id')
       .inTable(tableStaff)
-      .comment('Case this comment belongs to');
+      .comment('Staff this comment belongs to');
   });
 };
 
