@@ -48,8 +48,6 @@ function sanitizeRequests(json) {
   }
   if (json.requestStatus === '') {
     requests.requestStatus = 'UNDER_REVIEW';
-  } else {
-    requests.requestStatus = json.requestStatus.toUpperCase().trim();
   }
 
   return requests;
@@ -85,17 +83,13 @@ const create = async (req, res, next) => {
     if (err instanceof UniqueViolationError) {
       return next(new BadRequest(err.nativeError.detail));
     }
-
     // ForeignKeyViolationError for requesttypeid that is not present
     if (err instanceof ForeignKeyViolationError) {
       if (err.constraint === 'request_requesttypeid_foreign') {
         return next(new BadRequest(`Request type id is/are invalid`));
       }
     }
-
     // handles rest of the error
-    // from objection's documentation, the structure below should hold
-    // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
     return next(new BadRequest(err.nativeError.detail));
   }
 };
