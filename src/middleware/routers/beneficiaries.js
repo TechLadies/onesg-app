@@ -16,7 +16,7 @@ const isLoggedIn = require('../isLoggedIn');
 const router = express.Router();
 
 const {
-  router: { beneficiaries },
+  router: { beneficiaries, cases },
 } = require('../../controllers');
 
 /**
@@ -30,7 +30,7 @@ router.get('/', isLoggedIn, beneficiaries.getAll);
 router.get('/:id', isLoggedIn, beneficiaries.getBeneficiary);
 
 // GET /v1/beneficiaries/:id/cases
-router.get('/:id/cases', isLoggedIn, beneficiaries.getBeneficiaryCases);
+router.get('/:id/cases', isLoggedIn, cases.getCasesByBeneficiaryId);
 
 // POST /v1/beneficiaries/:id
 router.post('/', isLoggedIn, beneficiaries.create);
