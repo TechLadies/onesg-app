@@ -1,6 +1,7 @@
 'use strict';
 
 const { Model } = require('objection');
+const { Staff } = require('./staff');
 
 const tableComments = 'comment';
 class Comment extends Model {
@@ -14,8 +15,8 @@ class Comment extends Model {
       required: ['message'],
       properties: {
         message: { type: 'text' },
-        author: { type: 'string' },
-        caseNumber: { type: 'string' },
+        caseId: { type: 'integer' },
+        staffId: { type: 'integer' },
       },
     };
   }
@@ -26,8 +27,16 @@ class Comment extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/Case`,
         join: {
-          from: 'comment.caseNumber',
-          to: 'case.caseNumber',
+          from: 'comment.caseId',
+          to: 'case.id',
+        },
+      },
+      staffs: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Staff,
+        join: {
+          from: 'comment.staffId',
+          to: 'staff.id',
         },
       },
     };

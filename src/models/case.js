@@ -148,8 +148,8 @@ class Case extends Model {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Comment`,
         join: {
-          from: 'case.caseNumber',
-          to: 'comment.caseNumber',
+          from: 'case.id',
+          to: 'comment.caseId',
         },
       },
     };
