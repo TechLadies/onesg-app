@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { Model } = require('objection');
+const { Model, ValidationError } = require('objection');
 
 const tableTag = 'tag';
 class Tag extends Model {
@@ -18,6 +18,17 @@ class Tag extends Model {
         type: { type: 'string', maxLength: 25 },
       },
     };
+  }
+
+  $afterValidate(tag) {
+    super.$afterValidate(tag);
+
+    // validate tag name
+    if (tag.name === '' || tag.name === null || tag.name === undefined) {
+      throw new ValidationError({
+        message: `Empty name is not allowed`,
+      });
+    }
   }
 }
 
