@@ -32,6 +32,9 @@ function sanitize(json) {
       .join(' ')
       .trim();
   }
+  if (json.id) {
+    delete tag.id;
+  }
   return tag;
 }
 

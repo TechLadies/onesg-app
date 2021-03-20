@@ -15,14 +15,13 @@ class Tag extends Model {
       type: 'object',
       required: ['name'],
       properties: {
-        type: { type: 'string', maxLength: 25 },
+        name: { type: 'string', maxLength: 25 },
       },
     };
   }
 
   $afterValidate(tag) {
     super.$afterValidate(tag);
-
     // validate tag name
     if (tag.name === '' || tag.name === null || tag.name === undefined) {
       throw new ValidationError({
