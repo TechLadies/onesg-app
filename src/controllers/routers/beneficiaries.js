@@ -3,6 +3,7 @@ const {
   UniqueViolationError,
   NotNullViolationError,
 } = require('objection');
+
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
