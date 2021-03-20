@@ -30,7 +30,8 @@ router.get('/', isLoggedIn, beneficiaries.getAll);
 router.get('/:id', isLoggedIn, beneficiaries.getBeneficiary);
 
 // GET /v1/beneficiaries/:id/cases
-router.get('/:id/cases', isLoggedIn, cases.getCasesByBeneficiaryId);
+// removed isLoggedIn
+router.get('/:id/cases', cases.getCasesByBeneficiaryId);
 
 // POST /v1/beneficiaries/:id
 router.post('/', isLoggedIn, beneficiaries.create);
