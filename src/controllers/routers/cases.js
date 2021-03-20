@@ -7,15 +7,17 @@
 'use strict';
 
 const {
+  NotNullViolationError,
+  ValidationError,
+  UniqueViolationError,
   DataError,
   ForeignKeyViolationError,
-  ValidationError,
 } = require('objection');
 
-const { Case } = require('../../models');
+const { Beneficiary, Case } = require('../../models');
 
 const {
-  errors: { BadRequest, InvalidInput },
+  errors: { BadRequest, InvalidInput, ResourceNotFound },
 } = require('../../utils');
 
 /**
@@ -24,7 +26,7 @@ const {
  * @param {Object} json - Unsanitised case
  * @return {Object} cases - Sanitised case
  */
-function sanitizedCase(json) {
+function sanitizeCase(json) {
   const cases = json;
   if (json.caseStatus) {
     cases.caseStatus = json.caseStatus.toUpperCase().trim();
@@ -93,45 +95,32 @@ function sanitizedCase(json) {
  * @param {Object} json - Unsanitised query params
  * @return {Object} query - Sanitised query params
  */
-function sanitizedQuery(json) {
+function sanitizeQuery(json) {
   const query = json;
   if (json.include_entities && json.include_entities !== '') {
     const entities = ['beneficiary', 'referee', 'request', 'staff'];
     const queryInput = json.include_entities.replace(/\s/g, '').split(',');
-    const array = [];
 
+    let sanitizedEntities = '';
     // eslint-disable-next-line no-plusplus
     for (let x = 0; x < queryInput.length; x++) {
       if (entities.includes(queryInput[x]) === true) {
-        array.push(queryInput[x]);
+        // array.push(queryInput[x]);
+        sanitizedEntities = sanitizedEntities.concat(queryInput[x]);
+        sanitizedEntities = sanitizedEntities.concat(' ');
       }
     }
-
-    const queryArray = array.toString();
-
-    // if staff exists in include_entities
-    if (queryArray.includes('staff') === true) {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      // to remove 'staff' and replace with 'createdby' and 'updatedby'
-      query.include_entities = `[${queryArray
-        .replace(/\s/g, '')
-        .replace(',staff', '')},createdby,updatedby]`;
-    } else {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
-    }
-
-    // if request exists in include_entities
-    if (queryArray.includes('request') === true) {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      // to remove 'request' and replace with 'requests'
-      query.include_entities = `[${queryArray
-        .replace(/\s/g, '')
-        .replace(',request', '')},requests]`;
-    } else {
-      // to make include_entities in the [ ] format for .withGraphFetched, and remove in between spaces
-      query.include_entities = `[${queryArray.replace(/\s/g, '')}]`;
-    }
+    // to remove last space
+    sanitizedEntities = sanitizedEntities.trim();
+    // to replace staff and request based on relation name
+    sanitizedEntities = sanitizedEntities.replace(
+      'staff',
+      'createdby updatedby'
+    );
+    sanitizedEntities = sanitizedEntities.replace('request', 'requests');
+    // need to include g, else will only replace the first instance of space
+    sanitizedEntities = sanitizedEntities.replace(/ /g, ',');
+    query.include_entities = `[${sanitizedEntities}]`;
   }
 
   // to make status uppercase
@@ -242,7 +231,7 @@ function setDefault(json) {
  * @param {Response} res
  */
 const getAll = async (req, res, next) => {
-  const parsedQueries = sanitizedQuery(req.query);
+  const parsedQueries = sanitizeQuery(req.query);
 
   // to set the default values for with_paging, page, per_page and status
   setDefault(parsedQueries);
@@ -350,7 +339,7 @@ const getAll = async (req, res, next) => {
  * @param {Response} res
  */
 const create = async (req, res, next) => {
-  const newCase = sanitizedCase(req.body);
+  const newCase = sanitizeCase(req.body);
 
   try {
     return await Case.transaction(async (trx) => {
@@ -421,7 +410,108 @@ const create = async (req, res, next) => {
   }
 };
 
+/**
+ * Check if id is an int
+ */
+function isValidId(id) {
+  if (Number.isNaN(parseInt(id, 10))) {
+    return false;
+  }
+  return true;
+}
+
+function isBadRequest(json) {
+  if (String.isNaN(json)) {
+    return true;
+  }
+  // const query = json;
+  // if (json.include_entities && json.include_entities !== '') {
+  //   const entities = ['caseNumber', 'beneficiaryId', 'createdAt', 'createdBy'];
+  // }
+  return false;
+}
+
+/**
+ * Update existing case
+ * @param {Request} req
+ * @param {Response} res
+ */
+const update = async (req, res, next) => {
+  const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Case ${id} does not exist`));
+  }
+  if (isBadRequest(req.body)) {
+    return next(new BadRequest(`Bad request ${req.body}`));
+  }
+  // parse json request into Case object
+  const updateInfo = sanitizeCase(req.body);
+  try {
+    // query the database and update info
+    const caseDetail = await Case.query()
+      .select()
+      .patch(updateInfo)
+      .findById(id)
+      .returning('*');
+
+    // return ok -- 200 and return updated case details
+    return res.status(200).json({ caseDetail });
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return next(new InvalidInput(err.message));
+    }
+    if (err instanceof UniqueViolationError) {
+      return next(new BadRequest(err.nativeError.detail));
+    }
+    if (err instanceof NotNullViolationError) {
+      return next(new InvalidInput(`${err.nativeError.column} cannot be null`));
+    }
+    return next();
+  }
+};
+
+/**
+ * Retrieve related cases by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getCasesByBeneficiaryId = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    // get list of case numbers from Case table based on beneficiaryId
+    const results = await Case.query()
+      .select('caseNumber')
+      .where('beneficiaryId', id);
+
+    // convert a list of case numbers into an array
+    const caseNumbers = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < results.length; i++) {
+      const number = Object.values(results[i])[0];
+      caseNumbers.push(number);
+    }
+
+    const beneficiary = await Beneficiary.query()
+      .select('id', 'beneficiaryNumber')
+      .where('id', id);
+    const { beneficiaryNumber } = beneficiary[0];
+    const beneficiaryCases = { id, beneficiaryNumber, caseNumbers };
+
+    return res.status(200).json({ beneficiaryCases });
+  } catch (err) {
+    if (err instanceof TypeError) {
+      return next(new BadRequest(`Id ${id} is invalid`));
+    }
+    // handles rest of the error
+    // from objection's documentation, the structure below should hold
+    // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
+    return next(new BadRequest(err.nativeError.detail));
+  }
+};
+
 module.exports = {
   getAll,
   create,
+  update,
+  getCasesByBeneficiaryId,
 };
