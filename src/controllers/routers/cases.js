@@ -477,6 +477,9 @@ const update = async (req, res, next) => {
       .patch(updateInfo)
       .findById(id)
       .returning('*');
+    if (!caseDetail) {
+      return next(new BadRequest(`Case ${id} does not exist`));
+    }
 
     // return ok -- 200 and return updated case details
     return res.status(200).json({ caseDetail });
