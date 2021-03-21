@@ -14,7 +14,7 @@ const {
   ForeignKeyViolationError,
 } = require('objection');
 
-const { Case } = require('../../models');
+const { Beneficiary, Case } = require('../../models');
 
 const {
   errors: { BadRequest, InvalidInput, ResourceNotFound },
@@ -494,9 +494,49 @@ const update = async (req, res, next) => {
   }
 };
 
+/**
+ * Retrieve related cases by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getCasesByBeneficiaryId = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    // get list of case numbers from Case table based on beneficiaryId
+    const results = await Case.query()
+      .select('caseNumber')
+      .where('beneficiaryId', id);
+
+    // convert a list of case numbers into an array
+    const caseNumbers = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < results.length; i++) {
+      const number = Object.values(results[i])[0];
+      caseNumbers.push(number);
+    }
+
+    const beneficiary = await Beneficiary.query()
+      .select('id', 'beneficiaryNumber')
+      .where('id', id);
+    const { beneficiaryNumber } = beneficiary[0];
+    const beneficiaryCases = { id, beneficiaryNumber, caseNumbers };
+
+    return res.status(200).json({ beneficiaryCases });
+  } catch (err) {
+    if (err instanceof TypeError) {
+      return next(new BadRequest(`Id ${id} is invalid`));
+    }
+    // handles rest of the error
+    // from objection's documentation, the structure below should hold
+    // if there's need to change, do not send the whole err object as that could lead to disclosing sensitive details; also do not send err.message directly unless the error is of type ValidationError
+    return next(new BadRequest(err.nativeError.detail));
+  }
+};
+
 module.exports = {
   getAll,
   create,
   update,
   getById,
+  getCasesByBeneficiaryId,
 };
