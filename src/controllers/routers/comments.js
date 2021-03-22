@@ -52,7 +52,7 @@ const getCommentsbyCaseId = async (req, res, next) => {
 const create = async (req, res, next) => {
   const { id } = req.params;
   const staffId = req.user.id;
-  console.log(staffId);
+  // console.log(staffId);
   const caseId = parseInt(req.params.id, 10);
   const newComments = {
     message: xss(req.body.message),

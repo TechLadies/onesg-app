@@ -152,6 +152,9 @@ function sanitizeQuery(json) {
       case 'appliedon':
         sortKey = 'appliedOn';
         break;
+
+      // should it both be updatedby
+
       case 'updatedby':
         sortKey = 'updatedAt';
         break;
@@ -334,6 +337,37 @@ const getAll = async (req, res, next) => {
 };
 
 /**
+ * Check if id is an int
+ */
+function isValidId(id) {
+  if (Number.isNaN(parseInt(id, 10))) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Retrieve specific referee by id
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getById = async (req, res, next) => {
+  const { id } = req.params;
+  if (!isValidId(id)) {
+    return next(new ResourceNotFound(`Case ${id} does not exist`));
+  }
+  try {
+    const cases = await Case.query().findById(id);
+    if (!cases) {
+      return next(new ResourceNotFound(`Case ${id} does not exist`));
+    }
+    return res.status(200).json({ cases });
+  } catch (err) {
+    return next();
+  }
+};
+
+/**
  * Create new case
  * @param {Request} req
  * @param {Response} res
@@ -410,24 +444,14 @@ const create = async (req, res, next) => {
   }
 };
 
-/**
- * Check if id is an int
- */
-function isValidId(id) {
-  if (Number.isNaN(parseInt(id, 10))) {
-    return false;
-  }
-  return true;
-}
-
 function isBadRequest(json) {
-  if (String.isNaN(json)) {
-    return true;
-  }
-  // const query = json;
-  // if (json.include_entities && json.include_entities !== '') {
-  //   const entities = ['caseNumber', 'beneficiaryId', 'createdAt', 'createdBy'];
+  // if (String.isNaN(json)) {
+  //   return true;
   // }
+  // const query = json;
+  if (json.include_entities && json.include_entities !== '') {
+    // const entities = ['caseNumber', 'beneficiaryId', 'createdAt', 'createdBy'];
+  }
   return false;
 }
 
@@ -453,6 +477,9 @@ const update = async (req, res, next) => {
       .patch(updateInfo)
       .findById(id)
       .returning('*');
+    if (!caseDetail) {
+      return next(new BadRequest(`Case ${id} does not exist`));
+    }
 
     // return ok -- 200 and return updated case details
     return res.status(200).json({ caseDetail });
@@ -513,5 +540,6 @@ module.exports = {
   getAll,
   create,
   update,
+  getById,
   getCasesByBeneficiaryId,
 };
