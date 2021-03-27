@@ -26,6 +26,9 @@ router.get('/', cases.getAll);
 // POST /v1/cases
 router.post('/', cases.create);
 
+// GET /v1/cases/:id
+router.get('/:id', cases.getById);
+
 // PATCH /v1/cases/:id
 router.patch('/:id', cases.update);
 

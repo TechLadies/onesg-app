@@ -82,6 +82,7 @@ npx knex seed:run --specific=tag.js
 npx knex seed:run --specific=case.js
 npx knex seed:run --specific=requestType.js
 npx knex seed:run --specific=request.js
+npx knex seed:run --specific=comments.js
 ```
 
 Ensure that the database `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.

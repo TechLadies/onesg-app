@@ -170,7 +170,7 @@ const create = async (req, res, next) => {
  */
 const update = async (req, res, next) => {
   const { id } = req.params;
-  console.log(`requser`, req.user);
+  // console.log(`requser`, req.user);
   const authenticatedUser = req.user.id;
 
   const updateInfo = {
