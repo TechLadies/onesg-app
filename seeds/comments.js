@@ -27,6 +27,11 @@ exports.seed = function seedCommentsTable(knex) {
           message: 'This is message #2 in case id 2',
           staffId: 2,
         },
+        {
+          caseId: 1,
+          message: 'Link test: https://onesingapore.org/',
+          staffId: 2,
+        },
       ]);
     });
 };
