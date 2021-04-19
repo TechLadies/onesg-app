@@ -23,7 +23,7 @@ class RequestType extends Model {
   $afterValidate(json) {
     super.$afterValidate(json);
     const requests = json;
-    if (requests.type === '') {
+    if (requests.trim().length === 0) {
       throw new ValidationError({
         message: 'Request type cannot be empty',
       });
