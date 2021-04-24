@@ -13,6 +13,7 @@ const staffs = require('./staffs');
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 const comments = require('./comments');
+const tags = require('./tags');
 const requests = require('./requests');
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   requestTypes,
   search,
   comments,
+  tags,
   requests,
 };

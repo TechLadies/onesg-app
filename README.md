@@ -1,4 +1,5 @@
 # OneSG App
+
 This is an application that is made for [OneSG](http://onesingapore.org/), that aims to provide a centralised platform for users to access, create and update cases.
 
 The development of this application was done as part of [Techladies Bootcamp #6](https://github.com/TechLadies/bootcamp6-info). [Techladies](http://www.techladies.co/) is a community for women in Asia to connect, learn, and advance as programmers.
@@ -7,6 +8,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 <br/>
 
 ## Table of Contents
+
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Database Setup](#database-setup)
@@ -19,25 +21,32 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 <br/>
 
 ## Requirements
+
 - node v12.18.3
 - npm v6.14.6
-<br/>
-<br/>
+  <br/>
+  <br/>
 
 ## Project Structure
 
 ## Installation
+
 Code and setup instructions for frontend and backend can be accessed in their respective subdirectories.
+
 1. Install dependencies
+
 ```
 git clone https://github.com/TechLadies/onesg-app.git
 npm install
 ```
+
 2. Get development.js file from the coaches/team lead and put in config > env
 3. Run the application
+
 ```
 npm run dev
 ```
+
 4. Go to http://localhost:8080
 
 <br/>
@@ -46,38 +55,46 @@ npm run dev
 ## Database Setup
 
 1. Install PostgreSQL:
+
 ```
 npm install pg
 ```
 
 2. Create the database
+
 ```
 createdb onesg
 ```
 
 3. To run the migrations,
+
 ```
 npm run db-migrate
 ```
 
 4. Populate the tables with the seed data (in the following sequence due to foreign key restraints)
+
 ```
 npx knex seed:run --specific=staff.js
 npx knex seed:run --specific=beneficiaries.js
 npx knex seed:run --specific=referees.js
+npx knex seed:run --specific=tag.js
 npx knex seed:run --specific=case.js
 npx knex seed:run --specific=requestType.js
 npx knex seed:run --specific=request.js
 npx knex seed:run --specific=comments.js
 ```
 
-Ensure that the database  `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
+Ensure that the database `onesg` exists in the localhost, with the tables populated with the seeded data. You can download Postico or the Postgres.app to check.
 
 5. Install psql and pg_trgm
+
 ```
 \c onesg;
 ```
+
 psql;
+
 ```
 CREATE EXTENSION pg_trgm;
 ```
@@ -96,10 +113,8 @@ You should now have the generated public & private keys in a `keys` folder in ro
 
 <br/>
 
-
-
-
 ## Project Structure
+
 ```
 onesg-app
 +- config/ : configuration folder
@@ -128,6 +143,7 @@ onesg-app
 +- package.json
 +- README.md
 ```
+
 <br/>
 <br/>
 
@@ -136,16 +152,15 @@ onesg-app
 We use Heroku and Travis to run the build and deploy the app. The following are the corresponding branches and the app names and links
 
 - **Branch:** develop
-    - **App name:** onesg-backend-staging 
-    - **Link:** https://onesg-backend-staging.herokuapp.com/
+  - **App name:** onesg-backend-staging
+  - **Link:** https://onesg-backend-staging.herokuapp.com/
 - **Branch:** master
-    - **App name:** one-sg-backend
-    - **Link:** https://one-sg-backend.herokuapp.com/
-
-
+  - **App name:** one-sg-backend
+  - **Link:** https://one-sg-backend.herokuapp.com/
 
 ### Setting up Heroku App
-Create apps with the aforementioned app names. 
+
+Create apps with the aforementioned app names.
 Add the following config vars to respective apps' config var under Settings.
 
 ![Config Var](./images/configvar.png)
@@ -166,11 +181,11 @@ Create a `.travis.yml` file. Add the following block code to the file
 
 ![travis block](./images/travisyml.png)
 
-Generate your `api_key` with this code below: 
+Generate your `api_key` with this code below:
+
 ```
 travis encrypt \$(heroku auth:token) --add deploy.api_key --pro
 ```
-
 
 #### **Seeding the database**
 
@@ -193,9 +208,10 @@ heroku pg:psql
 create extension pg_trgm
 \q
 ```
+
 Save the file and commit your changes to GitHub.
 
-You should be able to see the build on Travis and the app on Heroku deployed. 
+You should be able to see the build on Travis and the app on Heroku deployed.
 
 Travis Build
 ![travisdeploy](./images/travisbuild.png)
@@ -206,13 +222,12 @@ Deployed on Heroku
 
 ## Login
 
-### Log in with email and password. 
+### Log in with email and password.
+
 For this project, the email and password for admin is hard-coded in POST request
 ![login](./images/login.png)
 
 ### Remain authenticated with Bearer Token
-Once bearer token is generated upon login. Put the bearer token under Headers with 'Authorisation' key to access pages. 
+
+Once bearer token is generated upon login. Put the bearer token under Headers with 'Authorisation' key to access pages.
 ![auth](./images/auth.png)
-
-
-
