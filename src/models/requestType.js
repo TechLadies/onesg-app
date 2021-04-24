@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { Model } = require('objection');
+const { ValidationError, Model } = require('objection');
 
 const tableRequestType = 'requestType';
 class RequestType extends Model {
@@ -18,6 +18,16 @@ class RequestType extends Model {
         type: { type: 'string', maxLength: 50 },
       },
     };
+  }
+
+  $afterValidate(json) {
+    super.$afterValidate(json);
+    const requests = json;
+    if (requests.trim().length === 0) {
+      throw new ValidationError({
+        message: 'Request type cannot be empty',
+      });
+    }
   }
 }
 

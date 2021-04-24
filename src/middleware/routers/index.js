@@ -19,6 +19,7 @@ const staffs = require('./staffs');
 const requestTypes = require('./requestTypes');
 const search = require('./search');
 const tags = require('./tags');
+const requests = require('./requests');
 
 const router = express.Router();
 
@@ -39,5 +40,6 @@ router.use('/v1/referees', referees);
 router.use('/v1/staffs', staffs);
 router.use('/v1/request-types', requestTypes);
 router.use('/v1/tags', tags);
+router.use('/v1/requests', requests);
 
 module.exports = router;
