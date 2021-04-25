@@ -15,6 +15,7 @@ The development of this application was done as part of [Techladies Bootcamp #6]
 - [Setup Keys for Passport](#setup-keys-for-passport)
 - [Project Structure](#project-structure)
 - [Deployment](#deployment)
+- [Manual Deployment](#manual-deployment)
 - [Login](#login)
 
 <br/>
@@ -192,9 +193,14 @@ travis encrypt \$(heroku auth:token) --add deploy.api_key --pro
 Run seeds in terminal. Change the app names after -a accordingly.
 
 ```
-heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
-heroku run knex seed:run --specific=referees.js -a onesg-backend-staging
-heroku run knex seed:run --specific=case.js -a onesg-backend-staging
+npx knex seed:run --specific=staff.js -a onesg-backend-staging
+npx knex seed:run --specific=beneficiaries.js -a onesg-backend-staging
+npx knex seed:run --specific=referees.js -a onesg-backend-staging
+npx knex seed:run --specific=tag.js -a onesg-backend-staging
+npx knex seed:run --specific=case.js -a onesg-backend-staging
+npx knex seed:run --specific=requestType.js -a onesg-backend-staging
+npx knex seed:run --specific=request.js -a onesg-backend-staging
+npx knex seed:run --specific=comments.js -a onesg-backend-staging
 
 ```
 
@@ -219,6 +225,49 @@ Travis Build
 Deployed on Heroku
 
 ![travisdeploy](./images/herokudeployed.png)
+
+## Manual Deployment
+
+Sometimes pushing codes to the `develop` or `master` branch does not trigger the Travis build process.
+One of the possible reasons is the team running out of Travis free plan credits.
+In such cases, you could manually deploy to Heroku from your terminal via the Heroku cli.
+
+> Install the Heroku cli, if you have not done so yet: https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+
+
+The steps shown are to deploy the `develop` branch to the heroku project `onesg-backend-staging`. To deploy `master` to `onesg-backend` follow the same steps, just change the respective project names and local branches.
+1. Log in to heroku
+```
+$ heroku login
+```
+2. Link to the heroku remote repository
+```
+$ heroku git:remote -a onesg-backend-staging
+```
+3. Verify that the link to the remote has been created
+```
+$ git remote -v
+```
+You should see:
+```
+> heroku https://git.heroku.com/onesg-backend-staging.git (fetch)
+> heroku https://git.heroku.com/onesg-backend-staging.git (push)
+```
+4. Rename the remote shortname from heroku to any alias you'd like. In this example, we'll use `heroku-onesg-be-staging`
+
+```
+$ git remote rename heroku heroku-onesg-be-staging
+```
+5. List your remotes (`git remote -v`) again, and you should see:
+```
+heroku-onesg-be-staging https://git.heroku.com/onesg-backend-staging.git (fetch)
+heroku-onesg-be-staging https://git.heroku.com/onesg-backend-staging.git (push)
+```
+6. Deploy your code
+```
+$ git push heroku-onesg-be-staging develop:master
+```
+7. Go to the staging site and test your updates.
 
 ## Login
 
